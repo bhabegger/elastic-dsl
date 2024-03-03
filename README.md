@@ -61,184 +61,184 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 
 | **Query Type**  | **Supported** | **Tests**                                                                                                                  |
 |-----------------|---------------|----------------------------------------------------------------------------------------------------------------------------|
-| Boolean         | [x]           | [ElasticSearchBoolQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchBoolQueryTest.java)                   |
-| Boosting        | [ ]           |                                                                                                                            |
-| Constant score  | [ ]           |                                                                                                                            |
-| Disjunction max | [ ]           |                                                                                                                            |
-| Function score  | [x]           | [ElasticSearchFunctionScoreQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchFunctionScoreQueryTest.java) |
+| Boolean         | ✅             | [ElasticSearchBoolQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchBoolQueryTest.java)                   |
+| Boosting        | 🔲            |                                                                                                                            |
+| Constant score  | 🔲            |                                                                                                                            |
+| Disjunction max | 🔲            |                                                                                                                            |
+| Function score  | ✅             | [ElasticSearchFunctionScoreQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchFunctionScoreQueryTest.java) |
 
 ### Full text queries
 | **Query Type**       | **Supported** | **Tests**                                                                                                                         |
 |----------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| Intervals            | [ ]           |                                                                                                                                   |
-| Match                | [x]           | [ElasticSearchFullTextQueryTest#matchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)       |
-| Match boolean prefix | [ ]           |                                                                                                                                   |
-| Match phrase         | [ ]           |                                                                                                                                   |
-| Match phrase prefix  | [x]           | [ElasticSearchFullTextQueryTest#matchPhraseQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java) |
-| Combined fields      | [ ]           |                                                                                                                                   |
-| Multi-match          | [ ]           |                                                                                                                                   |
-| Query string         | [ ]           |                                                                                                                                   |
-| Simple query string  | [ ]           |                                                                                                                                   |
+| Intervals            | 🔲            |                                                                                                                                   |
+| Match                | ✅             | [ElasticSearchFullTextQueryTest#matchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)       |
+| Match boolean prefix | 🔲            |                                                                                                                                   |
+| Match phrase         | 🔲            |                                                                                                                                   |
+| Match phrase prefix  | ✅             | [ElasticSearchFullTextQueryTest#matchPhraseQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java) |
+| Combined fields      | 🔲            |                                                                                                                                   |
+| Multi-match          | 🔲            |                                                                                                                                   |
+| Query string         | 🔲            |                                                                                                                                   |
+| Simple query string  | 🔲            |                                                                                                                                   |
 
 ### Geo queries
 | **Query Type**   | **Supported** | **Tests**                                                                                                           |
 |------------------|---------------|---------------------------------------------------------------------------------------------------------------------|
-| Geo-bounding box | [ ]           |                                                                                                                     |
-| Geo-distance     | [ ]           |                                                                                                                     |
-| Geo-grid         | [x]           | [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchGeoQueryTest.java) |
-| Geo-polygon      | [ ]           |                                                                                                                     |
-| Geoshape         | [ ]           |                                                                                                                     |
+| Geo-bounding box | 🔲            |                                                                                                                     |
+| Geo-distance     | 🔲            |                                                                                                                     |
+| Geo-grid         | ✅             | [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchGeoQueryTest.java) |
+| Geo-polygon      | 🔲            |                                                                                                                     |
+| Geoshape         | 🔲            |                                                                                                                     |
 
 ### Joining queries
-| **Query Type**           | **Supported** |
-|--------------------------|---------------|
-| Nested                   | [ ]           |
-| Has child                | [ ]           |
-| Has parent               | [ ]           |
-| Parent ID                | [ ]           |
+| **Query Type** | **Supported** |
+|----------------|---------------|
+| Nested         | 🔲            |
+| Has child      | 🔲            |
+| Has parent     | 🔲            |
+| Parent ID      | 🔲            |
 
 ### Span queries
-| **Query Type**           | **Supported** |
-|--------------------------|---------------|
-| Span queries             | [ ]           |
-| Span containing          | [ ]           |
-| Span field masking       | [ ]           |
-| Span first               | [ ]           |
-| Span multi-term          | [ ]           |
-| Span near                | [ ]           |
-| Span not                 | [ ]           |
-| Span or                  | [ ]           |
-| Span term                | [ ]           |
-| Span within              | [ ]           |
+| **Query Type**     | **Supported** |
+|--------------------|---------------|
+| Span queries       | 🔲            |
+| Span containing    | 🔲            |
+| Span field masking | 🔲            |
+| Span first         | 🔲            |
+| Span multi-term    | 🔲            |
+| Span near          | 🔲            |
+| Span not           | 🔲            |
+| Span or            | 🔲            |
+| Span term          | 🔲            |
+| Span within        | 🔲            |
 
 ### Specialized queries
 | **Query Type**   | **Supported** | **Tests**                                                                                                                       |
 |------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------|
-| Distance feature | [ ]           |                                                                                                                                 |
-| More like this   | [ ]           |                                                                                                                                 |
-| Percolate        | [ ]           |                                                                                                                                 |
-| Knn              | [x]           | [ElasticSearchSpecializedQueryTest#knnQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchSpecializedQueryTest.java) |
-| Rank feature     | [ ]           |                                                                                                                                 |
-| Script           | [ ]           |                                                                                                                                 |
-| Script score     | [ ]           |                                                                                                                                 |
-| Wrapper          | [ ]           |                                                                                                                                 |
-| Pinned Query     | [ ]           |                                                                                                                                 |
-| Rule             | [ ]           |                                                                                                                                 |
+| Distance feature | 🔲            |                                                                                                                                 |
+| More like this   | 🔲            |                                                                                                                                 |
+| Percolate        | 🔲            |                                                                                                                                 |
+| Knn              | ✅             | [ElasticSearchSpecializedQueryTest#knnQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchSpecializedQueryTest.java) |
+| Rank feature     | 🔲            |                                                                                                                                 |
+| Script           | 🔲            |                                                                                                                                 |
+| Script score     | 🔲            |                                                                                                                                 |
+| Wrapper          | 🔲            |                                                                                                                                 |
+| Pinned Query     | 🔲            |                                                                                                                                 |
+| Rule             | 🔲            |                                                                                                                                 |
 
 ### Term-level queries
 | **Query Type** | **Supported** | **Tests**                                                                                                                      |
 |----------------|---------------|--------------------------------------------------------------------------------------------------------------------------------|
-| Exists         | [X]           | [ElasticSearchTermLevelQueryTest#existsQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java) |
-| Fuzzy          | [ ]           |                                                                                                                                |
-| IDs            | [ ]           |                                                                                                                                |
-| Prefix         | [x]           | [ElasticSearchTermLevelQueryTest#prefixQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java) |
-| Range          | [x]           | [ElasticSearchTermLevelQueryTest#rangeBoth](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)   |
-| Regexp         | [ ]           |                                                                                                                                |
-| Term           | [x]           | [ElasticSearchTermLevelQueryTest#termQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)   |
-| Terms          | [x]           | [ElasticSearchTermLevelQueryTest#termsQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)  |
-| Terms set      | [ ]           |                                                                                                                                |
-| Wildcard       | [ ]           |                                                                                                                                |
+| Exists         | ✅             | [ElasticSearchTermLevelQueryTest#existsQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java) |
+| Fuzzy          | 🔲            |                                                                                                                                |
+| IDs            | 🔲            |                                                                                                                                |
+| Prefix         | ✅             | [ElasticSearchTermLevelQueryTest#prefixQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java) |
+| Range          | ✅             | [ElasticSearchTermLevelQueryTest#rangeBoth](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)   |
+| Regexp         | 🔲            |                                                                                                                                |
+| Term           | ✅             | [ElasticSearchTermLevelQueryTest#termQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)   |
+| Terms          | ✅             | [ElasticSearchTermLevelQueryTest#termsQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)  |
+| Terms set      | 🔲            |                                                                                                                                |
+| Wildcard       | 🔲            |                                                                                                                                |
 
 ### Other queries
 | **Query Type**       | **Supported** | **Tests**                                                                                                                |
 |----------------------|---------------|--------------------------------------------------------------------------------------------------------------------------|
-| Shape                | [ ]           |                                                                                                                          |
-| Match All            | [x]           | [ElasticSearchOtherQueryTest#matchAllQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchOtherQueryTest.java) |
-| Text expansion query | [ ]           |                                                                                                                          |
+| Shape                | 🔲            |                                                                                                                          |
+| Match All            | ✅             | [ElasticSearchOtherQueryTest#matchAllQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchOtherQueryTest.java) |
+| Text expansion query | 🔲            |                                                                                                                          |
 
 ## Current aggregation support
 
 ### Bucket aggregations
 | **Aggregation Type**                 | **Supported** |
 |--------------------------------------|---------------|
-| Adjacency matrix                     | [ ]           |
-| Auto-interval date histogram         | [x]           |
-| Categorize text                      | [ ]           |
-| Children                             | [ ]           |
-| Composite                            | [ ]           |
-| Date histogram                       | [ ]           |
-| Date range                           | [ ]           |
-| Diversified sampler                  | [ ]           |
-| Filter                               | [ ]           |
-| Filters                              | [ ]           |
-| Frequent item sets                   | [ ]           |
-| Geo-distance                         | [ ]           |
-| Geohash grid                         | [x]           |
-| Geohex grid                          | [ ]           |
-| Geotile grid                         | [ ]           |
-| Global                               | [ ]           |
-| Histogram                            | [ ]           |
-| IP prefix                            | [ ]           |
-| IP range                             | [ ]           |
-| Missing                              | [ ]           |
-| Multi Terms                          | [ ]           |
-| Nested                               | [ ]           |
-| Parent                               | [ ]           |
-| Random sampler                       | [ ]           |
-| Range                                | [ ]           |
-| Rare terms                           | [ ]           |
-| Reverse nested                       | [ ]           |
-| Sampler                              | [ ]           |
-| Significant terms                    | [ ]           |
-| Significant text                     | [ ]           |
-| Terms                                | [x]           |
-| Time series                          | [ ]           |
-| Variable width histogram             | [ ]           |
-| Subtleties of bucketing range fields | [ ]           |
+| Adjacency matrix                     | 🔲            |
+| Auto-interval date histogram         | ✅             |
+| Categorize text                      | 🔲            |
+| Children                             | 🔲            |
+| Composite                            | 🔲            |
+| Date histogram                       | 🔲            |
+| Date range                           | 🔲            |
+| Diversified sampler                  | 🔲            |
+| Filter                               | 🔲            |
+| Filters                              | 🔲            |
+| Frequent item sets                   | 🔲            |
+| Geo-distance                         | 🔲            |
+| Geohash grid                         | ✅             |
+| Geohex grid                          | 🔲            |
+| Geotile grid                         | 🔲            |
+| Global                               | 🔲            |
+| Histogram                            | 🔲            |
+| IP prefix                            | 🔲            |
+| IP range                             | 🔲            |
+| Missing                              | 🔲            |
+| Multi Terms                          | 🔲            |
+| Nested                               | 🔲            |
+| Parent                               | 🔲            |
+| Random sampler                       | 🔲            |
+| Range                                | 🔲            |
+| Rare terms                           | 🔲            |
+| Reverse nested                       | 🔲            |
+| Sampler                              | 🔲            |
+| Significant terms                    | 🔲            |
+| Significant text                     | 🔲            |
+| Terms                                | ✅             |
+| Time series                          | 🔲            |
+| Variable width histogram             | 🔲            |
+| Subtleties of bucketing range fields | 🔲            |
                                                             
 ### Metrics aggregations
 | **Aggregation Type**      | **Supported** |
 |---------------------------|---------------|
-| Avg                       | [ ]           |
-| Boxplot                   | [ ]           |
-| Cardinality               | [ ]           |
-| Extended stats            | [ ]           |
-| Geo-bounds                | [ ]           |
-| Geo-centroid              | [ ]           |
-| Geo-line                  | [ ]           |
-| Cartesian-bounds          | [ ]           |
-| Cartesian-centroid        | [ ]           |
-| Matrix stats              | [ ]           |
-| Max                       | [x]           |
-| Median absolute deviation | [ ]           |
-| Min                       | [ ]           |
-| Percentile ranks          | [ ]           |
-| Percentiles               | [ ]           |
-| Rate                      | [ ]           |
-| Scripted metric           | [ ]           |
-| Stats                     | [x]           |
-| String stats              | [ ]           |
-| Sum                       | [x]           |
-| T-test                    | [ ]           |
-| Top hits                  | [x]           |
-| Top metrics               | [ ]           |
-| Value count               | [ ]           |
-| Weighted avg              | [ ]           |
+| Avg                       | 🔲            |
+| Boxplot                   | 🔲            |
+| Cardinality               | 🔲            |
+| Extended stats            | 🔲            |
+| Geo-bounds                | 🔲            |
+| Geo-centroid              | 🔲            |
+| Geo-line                  | 🔲            |
+| Cartesian-bounds          | 🔲            |
+| Cartesian-centroid        | 🔲            |
+| Matrix stats              | 🔲            |
+| Max                       | ✅             |
+| Median absolute deviation | 🔲            |
+| Min                       | 🔲            |
+| Percentile ranks          | 🔲            |
+| Percentiles               | 🔲            |
+| Rate                      | 🔲            |
+| Scripted metric           | 🔲            |
+| Stats                     | ✅             |
+| String stats              | 🔲            |
+| Sum                       | ✅             |
+| T-test                    | 🔲            |
+| Top hits                  | ✅             |
+| Top metrics               | 🔲            |
+| Value count               | 🔲            |
+| Weighted avg              | 🔲            |
 
 ### Pipeline aggregations
 | **Aggregation Type**   | **Supported** |
 |------------------------|---------------|
-| Average bucket         | [ ]           |
-| Bucket script          | [ ]           |
-| Bucket count K-S test  | [ ]           |
-| Bucket correlation     | [ ]           |
-| Bucket selector        | [ ]           |
-| Bucket sort            | [ ]           |
-| Change point           | [ ]           |
-| Cumulative cardinality | [ ]           |
-| Cumulative sum         | [ ]           |
-| Derivative             | [ ]           |
-| Extended stats bucket  | [ ]           |
-| Inference bucket       | [ ]           |
-| Max bucket             | [ ]           |
-| Min bucket             | [ ]           |
-| Moving function        | [ ]           |
-| Moving percentiles     | [ ]           |
-| Normalize              | [ ]           |
-| Percentiles bucket     | [ ]           |
-| Serial differencing    | [ ]           |
-| Stats bucket           | [ ]           |
-| Sum bucket             | [ ]           |
+| Average bucket         | 🔲            |
+| Bucket script          | 🔲            |
+| Bucket count K-S test  | 🔲            |
+| Bucket correlation     | 🔲            |
+| Bucket selector        | 🔲            |
+| Bucket sort            | 🔲            |
+| Change point           | 🔲            |
+| Cumulative cardinality | 🔲            |
+| Cumulative sum         | 🔲            |
+| Derivative             | 🔲            |
+| Extended stats bucket  | 🔲            |
+| Inference bucket       | 🔲            |
+| Max bucket             | 🔲            |
+| Min bucket             | 🔲            |
+| Moving function        | 🔲            |
+| Moving percentiles     | 🔲            |
+| Normalize              | 🔲            |
+| Percentiles bucket     | 🔲            |
+| Serial differencing    | 🔲            |
+| Stats bucket           | 🔲            |
+| Sum bucket             | 🔲            |
 
 ## Current query response support
 
