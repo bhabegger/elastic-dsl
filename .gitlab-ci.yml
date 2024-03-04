@@ -14,6 +14,7 @@ release-job:
   stage: release
   script:
     - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(echo $CI_COMMIT_BRANCH | sed -e s/^release[/]//)
-    - mvn -B deploy
+    - gpg --passphrase $GPG_PASSPHRASE --import $GPG_PRIVEKEY
+    - mvn -s $MAVEN_SETTINGS -B deploy -Dgpg.passphrase=$GPG_PASSPHRASE
   only:
     - /^release[/].*/
