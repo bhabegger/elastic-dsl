@@ -1,4 +1,4 @@
-image: maven:3.9.6-eclipse-temurin-17
+image: csanchez/maven:azulzulu-17
 stages:
   - build
   - release
@@ -13,6 +13,8 @@ build-job:
 release-job:
   stage: release
   script:
+    - apt-get update
+    - apt-get -y install gpg
     - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(echo $CI_COMMIT_BRANCH | sed -e s/^release[/]//)
     - gpg --passphrase $GPG_PASSPHRASE --import $GPG_PRIVEKEY
     - mvn -s $MAVEN_SETTINGS -B deploy -Dgpg.passphrase=$GPG_PASSPHRASE
