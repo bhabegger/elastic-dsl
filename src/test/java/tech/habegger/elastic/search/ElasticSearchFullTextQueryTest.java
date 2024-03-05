@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.search.ElasticMatchBoolPrefixClause.matchBoolPrefix;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticMatchPhraseClause.matchPhrase;
+import static tech.habegger.elastic.search.ElasticMatchPhrasePrefixClause.matchPhrasePrefix;
 import static tech.habegger.elastic.search.ElasticMultiMatchClause.MultiMatchType.most_fields;
 import static tech.habegger.elastic.search.ElasticMultiMatchClause.multiMatch;
 import static tech.habegger.elastic.search.ElasticSearchRequest.query;
@@ -55,6 +57,54 @@ class ElasticSearchFullTextQueryTest {
                 "query": {
                     "match_phrase": {
                         "title": "this is a test"
+                    }
+                }
+            }
+            """
+        );
+    }
+
+    @Test
+    void matchBoolPrefixQuery() throws JsonProcessingException {
+        // Given
+        var query = query(
+            matchBoolPrefix("title", "this is a t")
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+                "query": {
+                    "match_bool_prefix": {
+                        "title": "this is a t"
+                    }
+                }
+            }
+            """
+        );
+    }
+
+    @Test
+    void matchPhrasePrefixQuery() throws JsonProcessingException {
+        // Given
+        var query = query(
+            matchPhrasePrefix("title", "this is a t")
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+                "query": {
+                    "match_phrase_prefix": {
+                        "title": "this is a t"
                     }
                 }
             }

@@ -101,17 +101,17 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 | Function score  | ✅             | [ElasticSearchFunctionScoreQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchFunctionScoreQueryTest.java) |
 
 ### Full text queries
-| **Query Type**       | **Supported** | **Tests**                                                                                                                         |
-|----------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| Intervals            | 🔲            |                                                                                                                                   |
-| Match                | ✅             | [ElasticSearchFullTextQueryTest#matchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)       |
-| Match boolean prefix | 🔲            |                                                                                                                                   |
-| Match phrase         | 🔲            |                                                                                                                                   |
-| Match phrase prefix  | ✅             | [ElasticSearchFullTextQueryTest#matchPhraseQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java) |
-| Combined fields      | 🔲            |                                                                                                                                   |
-| Multi-match          | ✅             | [ElasticSearchFullTextQueryTest#multiMatchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)  |
-| Query string         | 🔲            |                                                                                                                                   |
-| Simple query string  | 🔲            |                                                                                                                                   |
+| **Query Type**       | **Supported** | **Tests**                                                                                                                               |
+|----------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| Intervals            | 🔲            |                                                                                                                                         |
+| Match                | ✅             | [ElasticSearchFullTextQueryTest#matchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)             |
+| Match boolean prefix | ✅             | [ElasticSearchFullTextQueryTest#matchPhrasePrefixQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java) |
+| Match phrase         | ✅             | [ElasticSearchFullTextQueryTest#matchBoolPrefixQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)   |
+| Match phrase prefix  | ✅             | [ElasticSearchFullTextQueryTest#matchPhraseQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)       |
+| Combined fields      | 🔲            |                                                                                                                                         |
+| Multi-match          | ✅             | [ElasticSearchFullTextQueryTest#multiMatchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)        |
+| Query string         | 🔲            |                                                                                                                                         |
+| Simple query string  | 🔲            |                                                                                                                                         |
 
 ### Geo queries
 | **Query Type**   | **Supported** | **Tests**                                                                                                           |
@@ -123,7 +123,7 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 | Geoshape         | 🔲            |                                                                                                                     |
 
 ### Joining queries
-| **Query Type** | **Supported** | **Tests***                                                                                               |
+| **Query Type** | **Supported** | **Tests**                                                                                                |
 |----------------|---------------|----------------------------------------------------------------------------------------------------------|
 | Nested         | ✅             | [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchJoinQueryTest.java) |
 | Has child      | 🔲            |                                                                                                          |
