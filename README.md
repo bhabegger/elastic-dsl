@@ -109,7 +109,7 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 | Match phrase         | 🔲            |                                                                                                                                   |
 | Match phrase prefix  | ✅             | [ElasticSearchFullTextQueryTest#matchPhraseQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java) |
 | Combined fields      | 🔲            |                                                                                                                                   |
-| Multi-match          | 🔲            |                                                                                                                                   |
+| Multi-match          | ✅             | [ElasticSearchFullTextQueryTest#multiMatchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)  |
 | Query string         | 🔲            |                                                                                                                                   |
 | Simple query string  | 🔲            |                                                                                                                                   |
 
