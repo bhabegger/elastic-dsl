@@ -123,12 +123,12 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 | Geoshape         | 🔲            |                                                                                                                     |
 
 ### Joining queries
-| **Query Type** | **Supported** |
-|----------------|---------------|
-| Nested         | 🔲            |
-| Has child      | 🔲            |
-| Has parent     | 🔲            |
-| Parent ID      | 🔲            |
+| **Query Type** | **Supported** | **Tests***                                                                                               |
+|----------------|---------------|----------------------------------------------------------------------------------------------------------|
+| Nested         | ✅             | [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchJoinQueryTest.java) |
+| Has child      | 🔲            |                                                                                                          |
+| Has parent     | 🔲            |                                                                                                          |
+| Parent ID      | 🔲            |                                                                                                          |
 
 ### Span queries
 | **Query Type**     | **Supported** |
