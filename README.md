@@ -48,6 +48,39 @@ var query = ElasticSearchRequest.query(
 );
 ```
 
+## Usage
+
+### At the maven dependency
+```
+<dependency>
+    <groupId>tech.habegger.elastic</groupId>
+    <artifactId>elastic-dsl</artifactId>
+    <version>0.0.1</version>
+</dependency> 
+```
+
+### Example
+
+Import the constructs you need (or let your IDE do it for you ;)):
+
+```
+import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
+import static tech.habegger.elastic.search.ElasticSearchRequest.query;
+import static tech.habegger.elastic.search.ElasticTermClause.term;
+```
+
+And just use the DSL:
+```
+var mapper = new ObjectMapper();
+var elasticQuery = query(
+    newBool()
+        .must(term("lastname", "habegger"))
+        .should(term("firstname", "benjamin"))
+    .build()
+);
+var queryAsString = mapper.writeValue(elasticQuery);
+```
+
 ## Advantages
 
 * Removes most of the JSON-related boiler plate
