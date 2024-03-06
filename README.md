@@ -101,34 +101,43 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 | Function score  | ✅             | [ElasticSearchFunctionScoreQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchFunctionScoreQueryTest.java) |
 
 ### Full text queries
-| **Query Type**       | **Supported** | **Tests**                                                                                                                               |
-|----------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| Intervals            | 🔲            |                                                                                                                                         |
-| Match                | ✅             | [ElasticSearchFullTextQueryTest#matchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)             |
-| Match boolean prefix | ✅             | [ElasticSearchFullTextQueryTest#matchPhrasePrefixQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java) |
-| Match phrase         | ✅             | [ElasticSearchFullTextQueryTest#matchBoolPrefixQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)   |
-| Match phrase prefix  | ✅             | [ElasticSearchFullTextQueryTest#matchPhraseQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)       |
-| Combined fields      | 🔲            |                                                                                                                                         |
-| Multi-match          | ✅             | [ElasticSearchFullTextQueryTest#multiMatchQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)        |
-| Query string         | 🔲            |                                                                                                                                         |
-| Simple query string  | 🔲            |                                                                                                                                         |
+
+See test class [ElasticSearchFullTextQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)
+
+| **Query Type**       | **Supported** | **Test method(s)**     |
+|----------------------|---------------|------------------------|
+| Intervals            | 🔲            |                        |
+| Match                | ✅             | matchQuery             |
+| Match boolean prefix | ✅             | matchPhrasePrefixQuery |
+| Match phrase         | ✅             | matchBoolPrefixQuery   |
+| Match phrase prefix  | ✅             | matchPhraseQuery       |
+| Combined fields      | ✅             | combinedFieldsQuery    |
+| Multi-match          | ✅             | multiMatchQuery        |
+| Query string         | 🔲            |                        |
+| Simple query string  | 🔲            |                        |
 
 ### Geo queries
-| **Query Type**   | **Supported** | **Tests**                                                                                                           |
-|------------------|---------------|---------------------------------------------------------------------------------------------------------------------|
-| Geo-bounding box | 🔲            |                                                                                                                     |
-| Geo-distance     | 🔲            |                                                                                                                     |
-| Geo-grid         | ✅             | [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchGeoQueryTest.java) |
-| Geo-polygon      | 🔲            |                                                                                                                     |
-| Geoshape         | 🔲            |                                                                                                                     |
+
+See test class [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchGeoQueryTest.java)
+
+| **Query Type**   | **Supported** | **Tests**    |
+|------------------|---------------|--------------|
+| Geo-bounding box | 🔲            |              |
+| Geo-distance     | 🔲            |              |
+| Geo-grid         | ✅             | geoHashQuery |
+| Geo-polygon      | 🔲            |              |
+| Geoshape         | 🔲            |              |
 
 ### Joining queries
-| **Query Type** | **Supported** | **Tests**                                                                                                |
-|----------------|---------------|----------------------------------------------------------------------------------------------------------|
-| Nested         | ✅             | [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchJoinQueryTest.java) |
-| Has child      | 🔲            |                                                                                                          |
-| Has parent     | 🔲            |                                                                                                          |
-| Parent ID      | 🔲            |                                                                                                          |
+
+See test class [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchJoinQueryTest.java)
+
+| **Query Type** | **Supported** | **Tests**   |
+|----------------|---------------|-------------|
+| Nested         | ✅             | nestedQuery |
+| Has child      | 🔲            |             |
+| Has parent     | 🔲            |             |
+| Parent ID      | 🔲            |             |
 
 ### Span queries
 | **Query Type**     | **Supported** |
@@ -145,39 +154,48 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 | Span within        | 🔲            |
 
 ### Specialized queries
-| **Query Type**   | **Supported** | **Tests**                                                                                                                       |
-|------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------|
-| Distance feature | 🔲            |                                                                                                                                 |
-| More like this   | 🔲            |                                                                                                                                 |
-| Percolate        | 🔲            |                                                                                                                                 |
-| Knn              | ✅             | [ElasticSearchSpecializedQueryTest#knnQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchSpecializedQueryTest.java) |
-| Rank feature     | 🔲            |                                                                                                                                 |
-| Script           | 🔲            |                                                                                                                                 |
-| Script score     | 🔲            |                                                                                                                                 |
-| Wrapper          | 🔲            |                                                                                                                                 |
-| Pinned Query     | 🔲            |                                                                                                                                 |
-| Rule             | 🔲            |                                                                                                                                 |
+
+See test class [ElasticSearchSpecializedQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchSpecializedQueryTest.java)
+
+| **Query Type**   | **Supported** | **Tests** |
+|------------------|---------------|-----------|
+| Distance feature | 🔲            |           |
+| More like this   | 🔲            |           |
+| Percolate        | 🔲            |           |
+| Knn              | ✅             | knnQuery  |
+| Rank feature     | 🔲            |           |
+| Script           | 🔲            |           |
+| Script score     | 🔲            |           |
+| Wrapper          | 🔲            |           |
+| Pinned Query     | 🔲            |           |
+| Rule             | 🔲            |           |
 
 ### Term-level queries
-| **Query Type** | **Supported** | **Tests**                                                                                                                      |
-|----------------|---------------|--------------------------------------------------------------------------------------------------------------------------------|
-| Exists         | ✅             | [ElasticSearchTermLevelQueryTest#existsQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java) |
-| Fuzzy          | 🔲            |                                                                                                                                |
-| IDs            | 🔲            |                                                                                                                                |
-| Prefix         | ✅             | [ElasticSearchTermLevelQueryTest#prefixQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java) |
-| Range          | ✅             | [ElasticSearchTermLevelQueryTest#rangeBoth](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)   |
-| Regexp         | 🔲            |                                                                                                                                |
-| Term           | ✅             | [ElasticSearchTermLevelQueryTest#termQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)   |
-| Terms          | ✅             | [ElasticSearchTermLevelQueryTest#termsQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)  |
-| Terms set      | 🔲            |                                                                                                                                |
-| Wildcard       | 🔲            |                                                                                                                                |
+
+See test class [ElasticSearchTermLevelQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)
+
+| **Query Type** | **Supported** | **Test method(s)**                              |
+|----------------|---------------|-------------------------------------------------|
+| Exists         | ✅             | existsQuery                                     |
+| Fuzzy          | 🔲            |                                                 |
+| IDs            | 🔲            |                                                 |
+| Prefix         | ✅             | prefixQuery                                     |
+| Range          | ✅             | rangeBoth, rangeQueryGteOnly, rangeQueryLteOnly |
+| Regexp         | 🔲            |                                                 |
+| Term           | ✅             | termQuery                                       |
+| Terms          | ✅             | termsQuery                                      |
+| Terms set      | 🔲            |                                                 |
+| Wildcard       | 🔲            |                                                 |
 
 ### Other queries
-| **Query Type**       | **Supported** | **Tests**                                                                                                                |
-|----------------------|---------------|--------------------------------------------------------------------------------------------------------------------------|
-| Shape                | 🔲            |                                                                                                                          |
-| Match All            | ✅             | [ElasticSearchOtherQueryTest#matchAllQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchOtherQueryTest.java) |
-| Text expansion query | 🔲            |                                                                                                                          |
+
+See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchOtherQueryTest.java)
+
+| **Query Type**       | **Supported** | **Tests**     |
+|----------------------|---------------|---------------|
+| Shape                | 🔲            |               |
+| Match All            | ✅             | matchAllQuery |
+| Text expansion query | 🔲            |               |
 
 ## Current aggregation support
 

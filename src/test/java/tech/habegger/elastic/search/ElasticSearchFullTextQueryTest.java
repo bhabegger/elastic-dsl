@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.search.ElasticCombinedFieldsClause.Operator.and;
+import static tech.habegger.elastic.search.ElasticCombinedFieldsClause.combinedFields;
 import static tech.habegger.elastic.search.ElasticMatchBoolPrefixClause.matchBoolPrefix;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticMatchPhraseClause.matchPhrase;
@@ -138,4 +140,92 @@ class ElasticSearchFullTextQueryTest {
         );
     }
 
+
+    @Test
+    void combinedFieldsQuery() throws JsonProcessingException {
+        // Given
+        var query = query(
+            combinedFields(
+                "database systems",
+                and,
+                "title", "abstract"
+            )
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "combined_fields" : {
+                  "query":      "database systems",
+                  "fields":     [ "title", "abstract"],
+                  "operator":   "and"
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void combinedFieldsQueryWithAndOperator() throws JsonProcessingException {
+        // Given
+        var query = query(
+                combinedFields(
+                        "database systems",
+                        "title", "abstract"
+                ).withAndOperator()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                          "query": {
+                            "combined_fields" : {
+                              "query":      "database systems",
+                              "fields":     [ "title", "abstract"],
+                              "operator":   "and"
+                            }
+                          }
+                        }
+                        """
+        );
+    }
+
+    @Test
+    void combinedFieldsQueryWithMinimumShouldMatch() throws JsonProcessingException {
+        // Given
+        var query = query(
+                combinedFields(
+                        "database systems",
+                        "title", "abstract"
+                ).withMinimumShouldMatch(2)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "combined_fields" : {
+                  "query":      "database systems",
+                  "fields":     [ "title", "abstract"],
+                  "minimum_should_match":   2
+                }
+              }
+            }
+            """
+        );
+    }
 }
