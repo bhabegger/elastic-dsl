@@ -92,13 +92,15 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 
 ### Compound queries
 
-| **Query Type**  | **Supported** | **Tests**                                                                                                                  |
-|-----------------|---------------|----------------------------------------------------------------------------------------------------------------------------|
-| Boolean         | ✅             | [ElasticSearchBoolQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchBoolQueryTest.java)                   |
-| Boosting        | 🔲            |                                                                                                                            |
-| Constant score  | 🔲            |                                                                                                                            |
-| Disjunction max | 🔲            |                                                                                                                            |
-| Function score  | ✅             | [ElasticSearchFunctionScoreQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchFunctionScoreQueryTest.java) |
+Set test class [ElasticSearchCompoundQueryTest.java](src/test/java/tech/habegger/elastic/search/ElasticSearchCompoundQueryTest.java)
+
+| **Query Type**  | **Supported** | **Tests**          |
+|-----------------|---------------|--------------------|
+| Boolean         | ✅             | bool*              |
+| Boosting        | ✅             | boostingQuery      |
+| Constant score  | 🔲            |                    |
+| Disjunction max | 🔲            |                    |
+| Function score  | ✅             | functionScoreQuery |
 
 ### Full text queries
 
