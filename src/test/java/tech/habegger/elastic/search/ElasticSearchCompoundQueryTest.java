@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.search.ElasticBoostingClause.boosting;
+import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
 import static tech.habegger.elastic.search.ElasticFunctionScoreClause.newFunctionScore;
 import static tech.habegger.elastic.search.ElasticRangeClause.range;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
@@ -262,6 +263,33 @@ class ElasticSearchCompoundQueryTest {
                     }
                   },
                   "negative_boost": 0.5
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void constantScoreQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            constantScore(term("user.id", "kimchy"), 1.2f)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "constant_score": {
+                  "filter": {
+                    "term": { "user.id": "kimchy" }
+                  },
+                  "boost": 1.2
                 }
               }
             }

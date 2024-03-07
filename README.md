@@ -98,7 +98,7 @@ Set test class [ElasticSearchCompoundQueryTest.java](src/test/java/tech/habegger
 |-----------------|---------------|--------------------|
 | Boolean         | ✅             | bool*              |
 | Boosting        | ✅             | boostingQuery      |
-| Constant score  | 🔲            |                    |
+| Constant score  | ✅             | constantScoreQuery |
 | Disjunction max | 🔲            |                    |
 | Function score  | ✅             | functionScoreQuery |
 
