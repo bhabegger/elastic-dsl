@@ -19,6 +19,7 @@ import static tech.habegger.elastic.search.ElasticRegexpClause.regexp;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
 import static tech.habegger.elastic.search.ElasticTermsSetClause.termsSet;
+import static tech.habegger.elastic.search.ElasticWildcardClause.wildcard;
 import static tech.habegger.elastic.search.RewriteMethod.*;
 import static tech.habegger.elastic.search.ScriptExpression.scriptInline;
 
@@ -548,6 +549,36 @@ class ElasticSearchTermLevelQueryTest {
                       "source": "Math.min(params.num_terms, doc['required_matches'].value)"
                     },
                     "boost": 1.0
+                  }
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void wildcardQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            wildcard("user.id", "ki*y")
+                .withBoost(1.0f)
+                .withRewrite(constant_score_blended)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "wildcard": {
+                  "user.id": {
+                    "value": "ki*y",
+                    "boost": 1.0,
+                    "rewrite": "constant_score_blended"
                   }
                 }
               }

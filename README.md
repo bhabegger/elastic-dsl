@@ -187,7 +187,7 @@ See test class [ElasticSearchTermLevelQueryTest](src/test/java/tech/habegger/ela
 | Term           | ✅             | termQuery                                       |
 | Terms          | ✅             | termsQuery                                      |
 | Terms set      | ✅             | termsSetQueryWithScript                         |
-| Wildcard       | 🔲            |                                                 |
+| Wildcard       | ✅             | wildcardQuery                                   |
 
 ### Other queries
 
