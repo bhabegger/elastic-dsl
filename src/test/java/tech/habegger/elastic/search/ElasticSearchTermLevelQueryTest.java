@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.search.ElasticExistsClause.exists;
 import static tech.habegger.elastic.search.ElasticFuzzyClause.fuzzy;
+import static tech.habegger.elastic.search.ElasticIdsClause.ids;
 import static tech.habegger.elastic.search.ElasticPrefixClause.prefix;
 import static tech.habegger.elastic.search.ElasticRangeClause.range;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
@@ -423,6 +424,31 @@ class ElasticSearchTermLevelQueryTest {
                   }
                 }
               }
+            }
+            """
+        );
+    }
+
+
+    @Test
+    void idsQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            ids("1", "4", "100")
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+                "query": {
+                    "ids" : {
+                        "values" : ["1", "4", "100"]
+                    }
+                }
             }
             """
         );

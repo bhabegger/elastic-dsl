@@ -180,7 +180,7 @@ See test class [ElasticSearchTermLevelQueryTest](src/test/java/tech/habegger/ela
 |----------------|---------------|-------------------------------------------------|
 | Exists         | ✅             | existsQuery                                     |
 | Fuzzy          | ✅             | fuzzySimple, fuzzyComplex                       |
-| IDs            | 🔲            |                                                 |
+| IDs            | ✅             | idsQuery                                        |
 | Prefix         | ✅             | prefixQuery                                     |
 | Range          | ✅             | rangeBoth, rangeQueryGteOnly, rangeQueryLteOnly |
 | Regexp         | 🔲            |                                                 |
