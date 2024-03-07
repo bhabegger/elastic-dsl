@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.search.ElasticExistsClause.exists;
+import static tech.habegger.elastic.search.ElasticFuzzyClause.fuzzy;
 import static tech.habegger.elastic.search.ElasticPrefixClause.prefix;
 import static tech.habegger.elastic.search.ElasticRangeClause.range;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
@@ -113,9 +114,9 @@ class ElasticSearchTermLevelQueryTest {
     @Test
     void rangeQueryGteOnly() throws JsonProcessingException {
         // Given
-        var query = ElasticSearchRequest.requestBuilder().withQuery(
+        var query = ElasticSearchRequest.query(
             range("birthdate", LocalDate.parse("2000-01-01"), null)
-        ).build();
+        );
 
         // When
         var actual = mapper.writeValueAsString(query);
@@ -364,4 +365,66 @@ class ElasticSearchTermLevelQueryTest {
         );
     }
 
+
+    @Test
+    void fuzzySimpleQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            fuzzy("user.id", "ki")
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "fuzzy": {
+                  "user.id": {
+                    "value": "ki"
+                  }
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void fuzzyComplexQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            fuzzy("user.id", "ki")
+                .withFuzziness(3,5)
+                .withMaxExpansions(50)
+                .withPrefixLength(0)
+                .withoutTranspositions()
+                .withRewrite(ElasticFuzzyClause.RewriteMethod.constant_score_blended)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "fuzzy": {
+                  "user.id": {
+                    "value": "ki",
+                    "fuzziness": "AUTO:3,5",
+                    "max_expansions": 50,
+                    "prefix_length": 0,
+                    "transpositions": false,
+                    "rewrite": "constant_score_blended"
+                  }
+                }
+              }
+            }
+            """
+        );
+    }
 }

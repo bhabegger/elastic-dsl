@@ -90,7 +90,7 @@ var queryAsString = mapper.writeValue(elasticQuery);
 
 This is an initial version of the DSL, therefore all query shapes are not yet supported. However there is a support for *custom* clauses to compensate a bit for the places where support is not there yet. But do feel free to propose a merge request to get the unsupported clauses ;)
 
-### Compound queries
+### [Compound queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/compound-queries.html)
 
 Set test class [ElasticSearchCompoundQueryTest.java](src/test/java/tech/habegger/elastic/search/ElasticSearchCompoundQueryTest.java)
 
@@ -102,7 +102,7 @@ Set test class [ElasticSearchCompoundQueryTest.java](src/test/java/tech/habegger
 | Disjunction max | ✅             | disjunctionMaxQuery |
 | Function score  | ✅             | functionScoreQuery  |
 
-### Full text queries
+### [Full text queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/full-text-queries.html)
 
 See test class [ElasticSearchFullTextQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchFullTextQueryTest.java)
 
@@ -118,7 +118,7 @@ See test class [ElasticSearchFullTextQueryTest](src/test/java/tech/habegger/elas
 | Query string         | 🔲            |                        |
 | Simple query string  | 🔲            |                        |
 
-### Geo queries
+### [Geo queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-queries.html)
 
 See test class [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchGeoQueryTest.java)
 
@@ -130,7 +130,7 @@ See test class [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habeg
 | Geo-polygon      | 🔲            |              |
 | Geoshape         | 🔲            |              |
 
-### Joining queries
+### [Joining queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/joining-queries.html)
 
 See test class [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchJoinQueryTest.java)
 
@@ -141,7 +141,7 @@ See test class [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/
 | Has parent     | 🔲            |             |
 | Parent ID      | 🔲            |             |
 
-### Span queries
+### [Span queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/span-queries.html)
 | **Query Type**     | **Supported** |
 |--------------------|---------------|
 | Span queries       | 🔲            |
@@ -155,7 +155,7 @@ See test class [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/
 | Span term          | 🔲            |
 | Span within        | 🔲            |
 
-### Specialized queries
+### [Specialized queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/specialized-queries.html)
 
 See test class [ElasticSearchSpecializedQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchSpecializedQueryTest.java)
 
@@ -172,14 +172,14 @@ See test class [ElasticSearchSpecializedQueryTest](src/test/java/tech/habegger/e
 | Pinned Query     | 🔲            |           |
 | Rule             | 🔲            |           |
 
-### Term-level queries
+### [Term-level queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/term-level-queries.html)
 
 See test class [ElasticSearchTermLevelQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchTermLevelQueryTest.java)
 
 | **Query Type** | **Supported** | **Test method(s)**                              |
 |----------------|---------------|-------------------------------------------------|
 | Exists         | ✅             | existsQuery                                     |
-| Fuzzy          | 🔲            |                                                 |
+| Fuzzy          | ✅             | fuzzySimple, fuzzyComplex                       |
 | IDs            | 🔲            |                                                 |
 | Prefix         | ✅             | prefixQuery                                     |
 | Range          | ✅             | rangeBoth, rangeQueryGteOnly, rangeQueryLteOnly |
@@ -193,11 +193,11 @@ See test class [ElasticSearchTermLevelQueryTest](src/test/java/tech/habegger/ela
 
 See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchOtherQueryTest.java)
 
-| **Query Type**       | **Supported** | **Tests**     |
-|----------------------|---------------|---------------|
-| Shape                | 🔲            |               |
-| Match All            | ✅             | matchAllQuery |
-| Text expansion query | 🔲            |               |
+| **Query Type**                                                                                              | **Supported** | **Tests**     |
+|-------------------------------------------------------------------------------------------------------------|---------------|---------------|
+| [Shape](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-shape-query.html)         | 🔲            |               |
+| [Match All](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html) | ✅             | matchAllQuery |
+| Text expansion query                                                                                        | 🔲            |               |
 
 ## Current aggregation support
 
