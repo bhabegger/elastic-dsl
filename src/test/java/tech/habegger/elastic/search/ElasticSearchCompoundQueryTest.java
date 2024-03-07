@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.search.ElasticBoostingClause.boosting;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
+import static tech.habegger.elastic.search.ElasticDisMaxClause.disMax;
 import static tech.habegger.elastic.search.ElasticFunctionScoreClause.newFunctionScore;
 import static tech.habegger.elastic.search.ElasticRangeClause.range;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
@@ -290,6 +291,37 @@ class ElasticSearchCompoundQueryTest {
                     "term": { "user.id": "kimchy" }
                   },
                   "boost": 1.2
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void disjunctionMaxQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            disMax(0.7f,
+                term("title", "Quick pets"),
+                term("body", "Quick pets")
+            )
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "dis_max": {
+                  "queries": [
+                    { "term": { "title": "Quick pets" } },
+                    { "term": { "body": "Quick pets" } }
+                  ],
+                  "tie_breaker": 0.7
                 }
               }
             }

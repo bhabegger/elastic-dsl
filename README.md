@@ -94,13 +94,13 @@ This is an initial version of the DSL, therefore all query shapes are not yet su
 
 Set test class [ElasticSearchCompoundQueryTest.java](src/test/java/tech/habegger/elastic/search/ElasticSearchCompoundQueryTest.java)
 
-| **Query Type**  | **Supported** | **Tests**          |
-|-----------------|---------------|--------------------|
-| Boolean         | ✅             | bool*              |
-| Boosting        | ✅             | boostingQuery      |
-| Constant score  | ✅             | constantScoreQuery |
-| Disjunction max | 🔲            |                    |
-| Function score  | ✅             | functionScoreQuery |
+| **Query Type**  | **Supported** | **Tests**           |
+|-----------------|---------------|---------------------|
+| Boolean         | ✅             | bool*               |
+| Boosting        | ✅             | boostingQuery       |
+| Constant score  | ✅             | constantScoreQuery  |
+| Disjunction max | ✅             | disjunctionMaxQuery |
+| Function score  | ✅             | functionScoreQuery  |
 
 ### Full text queries
 
