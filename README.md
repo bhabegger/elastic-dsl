@@ -186,7 +186,7 @@ See test class [ElasticSearchTermLevelQueryTest](src/test/java/tech/habegger/ela
 | Regexp         | ✅             | regexpQuerySimple, regexpQueryMultipleFlags     |
 | Term           | ✅             | termQuery                                       |
 | Terms          | ✅             | termsQuery                                      |
-| Terms set      | 🔲            |                                                 |
+| Terms set      | ✅             | termsSetQueryWithScript                         |
 | Wildcard       | 🔲            |                                                 |
 
 ### Other queries

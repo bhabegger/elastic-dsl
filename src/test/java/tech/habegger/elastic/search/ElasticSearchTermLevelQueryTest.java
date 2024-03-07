@@ -18,7 +18,9 @@ import static tech.habegger.elastic.search.ElasticRegexpClause.RegexpFlags.INTER
 import static tech.habegger.elastic.search.ElasticRegexpClause.regexp;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
+import static tech.habegger.elastic.search.ElasticTermsSetClause.termsSet;
 import static tech.habegger.elastic.search.RewriteMethod.*;
+import static tech.habegger.elastic.search.ScriptExpression.scriptInline;
 
 class ElasticSearchTermLevelQueryTest {
     ObjectMapper mapper = new ObjectMapper();
@@ -498,7 +500,37 @@ class ElasticSearchTermLevelQueryTest {
         // Given
         var query = ElasticSearchRequest.query(
                 regexp("user.id", "k.*y")
-                    .withFlags(COMPLEMENT, INTERSECTION)
+                        .withFlags(COMPLEMENT, INTERSECTION)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                            "query": {
+                                "regexp": {
+                                    "user.id": {
+                                        "value": "k.*y",
+                                        "flags": "COMPLEMENT|INTERSECTION"
+                                    }
+                                }
+                            }
+                        }
+                        """
+        );
+    }
+    @Test
+    void termsSetQueryWithScript() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            termsSet(
+                    "programming_languages",
+                scriptInline("Math.min(params.num_terms, doc['required_matches'].value)"),
+                "c++", "java", "php"
+            ).withBoost(1.0f)
         );
 
         // When
@@ -508,16 +540,20 @@ class ElasticSearchTermLevelQueryTest {
         assertThat(actual).isEqualToIgnoringWhitespace(
     """
             {
-                "query": {
-                    "regexp": {
-                        "user.id": {
-                            "value": "k.*y",
-                            "flags": "COMPLEMENT|INTERSECTION"
-                        }
-                    }
+              "query": {
+                "terms_set": {
+                  "programming_languages": {
+                    "terms": [ "c++", "java", "php" ],
+                    "minimum_should_match_script": {
+                      "source": "Math.min(params.num_terms, doc['required_matches'].value)"
+                    },
+                    "boost": 1.0
+                  }
                 }
+              }
             }
             """
         );
     }
+
 }
