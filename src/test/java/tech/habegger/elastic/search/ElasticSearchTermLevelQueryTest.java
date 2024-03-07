@@ -12,8 +12,13 @@ import static tech.habegger.elastic.search.ElasticFuzzyClause.fuzzy;
 import static tech.habegger.elastic.search.ElasticIdsClause.ids;
 import static tech.habegger.elastic.search.ElasticPrefixClause.prefix;
 import static tech.habegger.elastic.search.ElasticRangeClause.range;
+import static tech.habegger.elastic.search.ElasticRegexpClause.RegexpFlags.ALL;
+import static tech.habegger.elastic.search.ElasticRegexpClause.RegexpFlags.COMPLEMENT;
+import static tech.habegger.elastic.search.ElasticRegexpClause.RegexpFlags.INTERSECTION;
+import static tech.habegger.elastic.search.ElasticRegexpClause.regexp;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
+import static tech.habegger.elastic.search.RewriteMethod.*;
 
 class ElasticSearchTermLevelQueryTest {
     ObjectMapper mapper = new ObjectMapper();
@@ -402,7 +407,7 @@ class ElasticSearchTermLevelQueryTest {
                 .withMaxExpansions(50)
                 .withPrefixLength(0)
                 .withoutTranspositions()
-                .withRewrite(ElasticFuzzyClause.RewriteMethod.constant_score_blended)
+                .withRewrite(constant_score_blended)
         );
 
         // When
@@ -447,6 +452,68 @@ class ElasticSearchTermLevelQueryTest {
                 "query": {
                     "ids" : {
                         "values" : ["1", "4", "100"]
+                    }
+                }
+            }
+            """
+        );
+    }
+
+    @Test
+    void regexpQuerySimple() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            regexp("user.id", "k.*y")
+                .withFlags(ALL)
+                .withoutCaseSensitivity()
+                .withMaxDeterminizedStates(10000)
+                .withRewrite(constant_score_blended)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+                "query": {
+                    "regexp": {
+                        "user.id": {
+                            "value": "k.*y",
+                            "flags": "ALL",
+                            "case_insensitive": true,
+                            "max_determinized_states": 10000,
+                            "rewrite": "constant_score_blended"
+                        }
+                    }
+                }
+            }
+            """
+        );
+    }
+
+    @Test
+    void regexpQueryMultipleFlags() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+                regexp("user.id", "k.*y")
+                    .withFlags(COMPLEMENT, INTERSECTION)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+                "query": {
+                    "regexp": {
+                        "user.id": {
+                            "value": "k.*y",
+                            "flags": "COMPLEMENT|INTERSECTION"
+                        }
                     }
                 }
             }

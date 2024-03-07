@@ -183,7 +183,7 @@ See test class [ElasticSearchTermLevelQueryTest](src/test/java/tech/habegger/ela
 | IDs            | ✅             | idsQuery                                        |
 | Prefix         | ✅             | prefixQuery                                     |
 | Range          | ✅             | rangeBoth, rangeQueryGteOnly, rangeQueryLteOnly |
-| Regexp         | 🔲            |                                                 |
+| Regexp         | ✅             | regexpQuerySimple, regexpQueryMultipleFlags     |
 | Term           | ✅             | termQuery                                       |
 | Terms          | ✅             | termsQuery                                      |
 | Terms set      | 🔲            |                                                 |
