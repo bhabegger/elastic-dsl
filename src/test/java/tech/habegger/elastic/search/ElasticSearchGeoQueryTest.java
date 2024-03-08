@@ -10,7 +10,11 @@ import static tech.habegger.elastic.search.ElasticGeoBoundingBoxClause.geoBoundi
 import static tech.habegger.elastic.search.ElasticGeoDistanceClause.geoDistance;
 import static tech.habegger.elastic.search.ElasticGeoGridClause.geoGrid;
 import static tech.habegger.elastic.search.ElasticGeoPolygonClause.geoPolygon;
+import static tech.habegger.elastic.search.ElasticGeoShapeClause.GeoInlineShapeDefinition.geoEnvelop;
+import static tech.habegger.elastic.search.ElasticGeoShapeClause.GeoShapeRelation.within;
+import static tech.habegger.elastic.search.ElasticGeoShapeClause.geoShape;
 import static tech.habegger.elastic.search.ElasticMatchAllClause.matchAll;
+import static tech.habegger.elastic.search.FieldInstanceReference.dataPoint;
 import static tech.habegger.elastic.search.GeoCoord.geoCoord;
 
 class ElasticSearchGeoQueryTest {
@@ -183,6 +187,96 @@ class ElasticSearchGeoQueryTest {
                            }
                          }
                         """
+        );
+    }
+
+    @Test
+    void geoShapeInlineQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+                newBool()
+                    .must(matchAll())
+                    .filter(
+                        geoShape(
+                        "location",
+                            within,
+                            geoEnvelop(
+                                geoCoord(13f, 53f),
+                                geoCoord(14f, 52f)
+                            )
+                        )
+                    )
+                .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "bool": {
+                  "must": [{
+                    "match_all": {}
+                  }],
+                  "filter": [{
+                    "geo_shape": {
+                      "location": {
+                        "shape": {
+                          "type": "envelope",
+                          "coordinates": [ [ 13.0, 53.0 ], [ 14.0, 52.0 ] ]
+                        },
+                        "relation": "within"
+                      }
+                    }
+                  }]
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void geoShapeIndexQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            newBool()
+                .filter(
+                    geoShape(
+                    "location",
+                        dataPoint("shapes", "deu", "location")
+                    )
+                )
+                .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "bool": {
+                  "filter": [{
+                    "geo_shape": {
+                      "location": {
+                        "indexed_shape": {
+                          "index": "shapes",
+                          "id": "deu",
+                          "path": "location"
+                        }
+                      }
+                    }
+                  }]
+                }
+              }
+            }
+            """
         );
     }
 }
