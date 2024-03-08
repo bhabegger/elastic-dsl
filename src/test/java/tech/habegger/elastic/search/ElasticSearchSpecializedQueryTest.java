@@ -15,7 +15,9 @@ import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticMoreLikeThisClause.newMoreLikeThis;
 import static tech.habegger.elastic.search.ElasticPercolateClause.percolate;
 import static tech.habegger.elastic.search.ElasticRankFeatureClause.rankFeature;
+import static tech.habegger.elastic.search.ElasticScriptScoreClause.scriptScore;
 import static tech.habegger.elastic.search.GeoCoord.geoCoord;
+import static tech.habegger.elastic.search.ScriptExpression.scriptInline;
 
 class ElasticSearchSpecializedQueryTest {
 
@@ -308,6 +310,38 @@ class ElasticSearchSpecializedQueryTest {
                   }
                 }
                 """
+        );
+    }
+
+    @Test
+    void scriptScoreQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            scriptScore(
+                match("message", "elasticsearch"),
+                scriptInline("doc['my-int'].value / 10 ")
+            )
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "script_score": {
+                  "query": {
+                    "match": { "message": "elasticsearch" }
+                  },
+                  "script": {
+                    "source": "doc['my-int'].value / 10 "
+                  }
+                }
+              }
+            }
+            """
         );
     }
 
