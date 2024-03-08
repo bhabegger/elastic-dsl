@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticGeoBoundingBoxClause.geoBoundingBox;
+import static tech.habegger.elastic.search.ElasticGeoDistanceClause.geoDistance;
 import static tech.habegger.elastic.search.ElasticGeoGridClause.geoGrid;
 import static tech.habegger.elastic.search.ElasticMatchAllClause.matchAll;
 import static tech.habegger.elastic.search.GeoCoord.geoCoord;
@@ -83,6 +84,50 @@ class ElasticSearchGeoQueryTest {
                           "lat": 40.01,
                           "lon": -71.12
                         }
+                      }
+                    }
+                  }]
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void geoDistanceQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+                newBool()
+                    .must(matchAll())
+                    .filter(
+                            geoDistance(
+                                    "pin.location",
+                                    "200km",
+                                    geoCoord(40f, -70f)
+                            )
+                    )
+                    .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "bool": {
+                  "must": [{
+                    "match_all": {}
+                  }],
+                  "filter": [{
+                    "geo_distance": {
+                      "distance": "200km",
+                      "pin.location": {
+                        "lat": 40.0,
+                        "lon": -70.0
                       }
                     }
                   }]
