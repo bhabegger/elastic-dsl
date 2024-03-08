@@ -122,13 +122,13 @@ See test class [ElasticSearchFullTextQueryTest](src/test/java/tech/habegger/elas
 
 See test class [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habegger/elastic/search/ElasticSearchGeoQueryTest.java)
 
-| **Query Type**   | **Supported** | **Tests**    |
-|------------------|---------------|--------------|
-| Geo-bounding box | 🔲            |              |
-| Geo-distance     | 🔲            |              |
-| Geo-grid         | ✅             | geoHashQuery |
-| Geo-polygon      | 🔲            |              |
-| Geoshape         | 🔲            |              |
+| **Query Type**   | **Supported** | **Tests**      |
+|------------------|---------------|----------------|
+| Geo-bounding box | ✅             | geoBoundingBox |
+| Geo-distance     | 🔲            |                |
+| Geo-grid         | ✅             | geoHashQuery   |
+| Geo-polygon      | 🔲            |                |
+| Geoshape         | 🔲            |                |
 
 ### [Joining queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/joining-queries.html)
 
