@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticDistanceFeatureClause.distanceFeature;
@@ -11,6 +13,8 @@ import static tech.habegger.elastic.search.ElasticKnn.knn;
 import static tech.habegger.elastic.search.ElasticMatchAllClause.matchAll;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticMoreLikeThisClause.newMoreLikeThis;
+import static tech.habegger.elastic.search.ElasticPercolateClause.percolate;
+import static tech.habegger.elastic.search.ElasticRankFeatureClause.rankFeature;
 import static tech.habegger.elastic.search.GeoCoord.geoCoord;
 
 class ElasticSearchSpecializedQueryTest {
@@ -220,6 +224,90 @@ class ElasticSearchSpecializedQueryTest {
               }
             }
             """
+        );
+    }
+
+    @Test
+    void percolateQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            percolate(
+                "query",
+                Map.of("message", "A new bonsai tree in the office")
+            )
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "percolate": {
+                  "field": "query",
+                  "document": {
+                    "message": "A new bonsai tree in the office"
+                  }
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void rankFeatureQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            newBool()
+                .must(match("content", "2016"))
+                .should(rankFeature("pagerank"))
+                .should(rankFeature("url_length",0.1f))
+                .should(rankFeature("topics.sports", 0.4f))
+            .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+        """
+                {
+                  "query": {
+                    "bool": {
+                      "should": [
+                        {
+                          "rank_feature": {
+                            "field": "pagerank"
+                          }
+                        },
+                        {
+                          "rank_feature": {
+                            "field": "url_length",
+                            "boost": 0.1
+                          }
+                        },
+                        {
+                          "rank_feature": {
+                            "field": "topics.sports",
+                            "boost": 0.4
+                          }
+                        }
+                      ],
+                      "must": [
+                        {
+                          "match": {
+                            "content": "2016"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+                """
         );
     }
 
