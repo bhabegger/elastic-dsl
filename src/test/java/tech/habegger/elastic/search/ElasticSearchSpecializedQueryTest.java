@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
+import java.util.Base64;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,8 +15,11 @@ import static tech.habegger.elastic.search.ElasticMatchAllClause.matchAll;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticMoreLikeThisClause.newMoreLikeThis;
 import static tech.habegger.elastic.search.ElasticPercolateClause.percolate;
+import static tech.habegger.elastic.search.ElasticPinnedClause.newPinned;
 import static tech.habegger.elastic.search.ElasticRankFeatureClause.rankFeature;
 import static tech.habegger.elastic.search.ElasticScriptScoreClause.scriptScore;
+import static tech.habegger.elastic.search.ElasticTermClause.term;
+import static tech.habegger.elastic.search.ElasticWrapperClause.wrapper;
 import static tech.habegger.elastic.search.GeoCoord.geoCoord;
 import static tech.habegger.elastic.search.ScriptExpression.scriptInline;
 
@@ -337,6 +341,74 @@ class ElasticSearchSpecializedQueryTest {
                   },
                   "script": {
                     "source": "doc['my-int'].value / 10 "
+                  }
+                }
+              }
+            }
+            """
+        );
+    }
+
+    @Test
+    void wrapperQuery() throws JsonProcessingException {
+        // Given
+        var wrappedQuery = ElasticSearchRequest.query(term("user.id", "kimchy"));
+        var serializedWrappedQuery = mapper.writeValueAsString(wrappedQuery);
+        var encodedWrappedQuery = Base64.getEncoder().encodeToString(serializedWrappedQuery.getBytes());
+
+        var query = ElasticSearchRequest.query(
+            wrapper(encodedWrappedQuery)
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+            {
+              "query": {
+                "wrapper": {
+                  "query": "%s"
+                }
+              }
+            }
+            """.formatted(encodedWrappedQuery)
+        );
+    }
+
+    @Test
+    void pinnedQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            newPinned(match("description", "iphone"))
+                .pin("my-index-000001", "1")
+                .pin("4")
+            .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "pinned": {
+                  "docs": [
+                    {
+                      "_index": "my-index-000001",
+                      "_id": "1"
+                    },
+                    {
+                      "_id": "4"
+                    }
+                  ],
+                  "organic": {
+                    "match": {
+                      "description": "iphone"
+                    }
                   }
                 }
               }

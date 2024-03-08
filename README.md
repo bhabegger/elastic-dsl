@@ -168,8 +168,8 @@ See test class [ElasticSearchSpecializedQueryTest](src/test/java/tech/habegger/e
 | Rank feature     | ✅             | rankFeatureQuery                                           | Missing function object parameters |
 | Script           | 🔲            |                                                            |                                    |
 | Script score     | ✅             | scriptScoreQuery                                           |                                    |
-| Wrapper          | 🔲            |                                                            |                                    |
-| Pinned Query     | 🔲            |                                                            |                                    |
+| Wrapper          | ✅             | wrapperQuery                                               |                                    |
+| Pinned Query     | ✅             | pinnedQuery                                                |                                    |
 | Rule             | 🔲            |                                                            |                                    |
 
 ### [Term-level queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/term-level-queries.html)
