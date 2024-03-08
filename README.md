@@ -159,18 +159,18 @@ See test class [ElasticSearchJoinQueryTest](src/test/java/tech/habegger/elastic/
 
 See test class [ElasticSearchSpecializedQueryTest](src/test/java/tech/habegger/elastic/search/ElasticSearchSpecializedQueryTest.java)
 
-| **Query Type**   | **Supported** | **Tests** |
-|------------------|---------------|-----------|
-| Distance feature | 🔲            |           |
-| More like this   | 🔲            |           |
-| Percolate        | 🔲            |           |
-| Knn              | ✅             | knnQuery  |
-| Rank feature     | 🔲            |           |
-| Script           | 🔲            |           |
-| Script score     | 🔲            |           |
-| Wrapper          | 🔲            |           |
-| Pinned Query     | 🔲            |           |
-| Rule             | 🔲            |           |
+| **Query Type**   | **Supported** | **Tests**                                                  |
+|------------------|---------------|------------------------------------------------------------|
+| Distance feature | ✅             | distanceFeatureTemporalQuery, distanceFeatureDistanceQuery |
+| More like this   | 🔲            |                                                            |
+| Percolate        | 🔲            |                                                            |
+| Knn              | ✅             | knnQuery                                                   |
+| Rank feature     | 🔲            |                                                            |
+| Script           | 🔲            |                                                            |
+| Script score     | 🔲            |                                                            |
+| Wrapper          | 🔲            |                                                            |
+| Pinned Query     | 🔲            |                                                            |
+| Rule             | 🔲            |                                                            |
 
 ### [Term-level queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/term-level-queries.html)
 
