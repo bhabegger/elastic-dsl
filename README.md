@@ -162,7 +162,7 @@ See test class [ElasticSearchSpecializedQueryTest](src/test/java/tech/habegger/e
 | **Query Type**   | **Supported** | **Tests**                                                  |
 |------------------|---------------|------------------------------------------------------------|
 | Distance feature | ✅             | distanceFeatureTemporalQuery, distanceFeatureDistanceQuery |
-| More like this   | 🔲            |                                                            |
+| More like this   | ✅             | moreLikeThisQuery, moreLikeThisQueryWithInlineDoc          |
 | Percolate        | 🔲            |                                                            |
 | Knn              | ✅             | knnQuery                                                   |
 | Rank feature     | 🔲            |                                                            |

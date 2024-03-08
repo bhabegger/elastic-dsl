@@ -10,6 +10,7 @@ import static tech.habegger.elastic.search.ElasticDistanceFeatureClause.distance
 import static tech.habegger.elastic.search.ElasticKnn.knn;
 import static tech.habegger.elastic.search.ElasticMatchAllClause.matchAll;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
+import static tech.habegger.elastic.search.ElasticMoreLikeThisClause.newMoreLikeThis;
 import static tech.habegger.elastic.search.GeoCoord.geoCoord;
 
 class ElasticSearchSpecializedQueryTest {
@@ -126,4 +127,102 @@ class ElasticSearchSpecializedQueryTest {
         );
     }
 
+    @Test
+    void moreLikeThisQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+            newMoreLikeThis()
+                .fields("title", "description")
+                .like("imdb", "1")
+                .like("imdb", "2")
+                .like("and potentially some more text here as well")
+                .withMinTermFrequency(1)
+                .withMaxQueryTerms(12)
+            .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "more_like_this": {
+                  "fields": [ "title", "description" ],
+                  "like": [
+                    {
+                      "_index": "imdb",
+                      "_id": "1"
+                    },
+                    {
+                      "_index": "imdb",
+                      "_id": "2"
+                    },
+                    "and potentially some more text here as well"
+                  ],
+                  "max_query_terms": 12,
+                  "min_term_freq": 1
+                }
+              }
+            }
+            """
+        );
+    }
+    @Test
+    void moreLikeThisQueryWithInlineDoc() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+                newMoreLikeThis()
+                    .fields("name.first", "name.last")
+                    .like("marvel",
+                        new MyMarvelDoc(
+                            new MyNameRecord("Ben", "Grimm"),
+                        "You got no idea what I'd... what I'd give to be invisible."
+                        )
+                    )
+                    .like("marvel", "2")
+                    .withMinTermFrequency(1)
+                    .withMaxQueryTerms(12)
+                .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "query": {
+                "more_like_this": {
+                  "fields": [ "name.first", "name.last" ],
+                  "like": [
+                    {
+                      "_index": "marvel",
+                      "doc": {
+                        "name": {
+                          "first": "Ben",
+                          "last": "Grimm"
+                        },
+                        "_doc": "You got no idea what I'd... what I'd give to be invisible."
+                      }
+                    },
+                    {
+                      "_index": "marvel",
+                      "_id": "2"
+                    }
+                  ],
+                  "max_query_terms": 12,
+                  "min_term_freq": 1
+                }
+              }
+            }
+            """
+        );
+    }
+
+    record MyMarvelDoc(MyNameRecord name, String _doc) {}
+    record MyNameRecord(String first, String last) {}
 }
