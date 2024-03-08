@@ -127,7 +127,7 @@ See test class [ElasticSearchGeoQueryTest#geoHashQuery](src/test/java/tech/habeg
 | Geo-bounding box | ✅             | geoBoundingBoxQuery |
 | Geo-distance     | ✅             | geoDistanceQuery    |
 | Geo-grid         | ✅             | geoHashQuery        |
-| Geo-polygon      | 🔲            |                     |
+| Geo-polygon      | ✅             | geoPolygonQuery     |
 | Geoshape         | 🔲            |                     |
 
 ### [Joining queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/joining-queries.html)

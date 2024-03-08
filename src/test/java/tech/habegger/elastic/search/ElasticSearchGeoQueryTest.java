@@ -9,6 +9,7 @@ import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticGeoBoundingBoxClause.geoBoundingBox;
 import static tech.habegger.elastic.search.ElasticGeoDistanceClause.geoDistance;
 import static tech.habegger.elastic.search.ElasticGeoGridClause.geoGrid;
+import static tech.habegger.elastic.search.ElasticGeoPolygonClause.geoPolygon;
 import static tech.habegger.elastic.search.ElasticMatchAllClause.matchAll;
 import static tech.habegger.elastic.search.GeoCoord.geoCoord;
 
@@ -135,6 +136,53 @@ class ElasticSearchGeoQueryTest {
               }
             }
             """
+        );
+    }
+
+    @Test
+    void geoPolygonQuery() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.query(
+                newBool()
+                        .must(matchAll())
+                        .filter(
+                            geoPolygon(
+                                "person.location",
+                                geoCoord(40f, -70f),
+                                geoCoord(30f, -80f),
+                                geoCoord(20f, -90f)
+                            )
+                        )
+                        .build()
+        );
+
+        // When
+        var actual = mapper.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                           "query": {
+                             "bool": {
+                               "must": [{
+                                 "match_all": {}
+                               }],
+                               "filter": [{
+                                 "geo_polygon": {
+                                   "person.location": {
+                                     "points": [
+                                       { "lat": 40.0, "lon": -70.0 },
+                                       { "lat": 30.0, "lon": -80.0 },
+                                       { "lat": 20.0, "lon": -90.0 }
+                                     ]
+                                   }
+                                 }
+                               }]
+                             }
+                           }
+                         }
+                        """
         );
     }
 }
