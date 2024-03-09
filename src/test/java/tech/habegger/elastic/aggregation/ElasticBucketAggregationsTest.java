@@ -20,6 +20,7 @@ import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.Date
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.until;
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.dateRange;
 import static tech.habegger.elastic.aggregation.ElasticDiversifiedSamplerAggregation.diversifiedSampler;
+import static tech.habegger.elastic.aggregation.ElasticFiltersAggregation.newFilters;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
@@ -526,6 +527,42 @@ public class ElasticBucketAggregationsTest {
         );
     }
 
+
+    @Test
+    void filtersAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+                .withSize(0)
+                .aggregation("messages",
+                    newFilters()
+                        .filter("errors", match("body", "error"))
+                        .filter("warnings", match("body", "warning"))
+                    .build()
+                )
+                .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                          "size": 0,
+                          "aggregations" : {
+                            "messages" : {
+                              "filters" : {
+                                "filters" : {
+                                  "errors" :   { "match" : { "body" : "error"   }},
+                                  "warnings" : { "match" : { "body" : "warning" }}
+                                }
+                              }
+                            }
+                          }
+                        }
+                        """
+        );
+    }
     @Test
     void significantTermsAggregation() throws JsonProcessingException {
         // Given
