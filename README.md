@@ -208,42 +208,42 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 ## Current aggregation support
 
 ### [Bucket aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket.html)
-| **Aggregation Type**                 | **Supported** | **Tests**                   |
-|--------------------------------------|---------------|-----------------------------|
-| Adjacency matrix                     | ✅             | adjacencyMatrixAggregation  |
-| Auto-interval date histogram         | ✅             | autoDateHistogram*          |
-| Categorize text                      | 🔲            |                             |
-| Children                             | 🔲            |                             |
-| Composite                            | 🔲            |                             |
-| Date histogram                       | 🔲            |                             |
-| Date range                           | 🔲            |                             |
-| Diversified sampler                  | 🔲            |                             |
-| Filter                               | 🔲            |                             |
-| Filters                              | 🔲            |                             |
-| Frequent item sets                   | 🔲            |                             |
-| Geo-distance                         | 🔲            |                             |
-| Geohash grid                         | ✅             |                             |
-| Geohex grid                          | 🔲            |                             |
-| Geotile grid                         | 🔲            |                             |
-| Global                               | 🔲            |                             |
-| Histogram                            | 🔲            |                             |
-| IP prefix                            | 🔲            |                             |
-| IP range                             | 🔲            |                             |
-| Missing                              | 🔲            |                             |
-| Multi Terms                          | 🔲            |                             |
-| Nested                               | 🔲            |                             |
-| Parent                               | 🔲            |                             |
-| Random sampler                       | 🔲            |                             |
-| Range                                | 🔲            |                             |
-| Rare terms                           | 🔲            |                             |
-| Reverse nested                       | 🔲            |                             |
-| Sampler                              | 🔲            |                             |
-| Significant terms                    | ✅             | significantTermsAggregation |
-| Significant text                     | 🔲            |                             |
-| Terms                                | ✅             | termsAggregation            |
-| Time series                          | 🔲            |                             |
-| Variable width histogram             | 🔲            |                             |
-| Subtleties of bucketing range fields | 🔲            |                             |
+| **Aggregation Type**                 | **Supported** | **Tests**                        |
+|--------------------------------------|---------------|----------------------------------|
+| Adjacency matrix                     | ✅             | adjacencyMatrixAggregation       |
+| Auto-interval date histogram         | ✅             | autoDateHistogramAggregation,... |
+| Categorize text                      | ✅             | categorizeTextAggregation,...    |
+| Children                             | 🔲            |                                  |
+| Composite                            | 🔲            |                                  |
+| Date histogram                       | 🔲            |                                  |
+| Date range                           | 🔲            |                                  |
+| Diversified sampler                  | 🔲            |                                  |
+| Filter                               | 🔲            |                                  |
+| Filters                              | 🔲            |                                  |
+| Frequent item sets                   | 🔲            |                                  |
+| Geo-distance                         | 🔲            |                                  |
+| Geohash grid                         | ✅             |                                  |
+| Geohex grid                          | 🔲            |                                  |
+| Geotile grid                         | 🔲            |                                  |
+| Global                               | 🔲            |                                  |
+| Histogram                            | 🔲            |                                  |
+| IP prefix                            | 🔲            |                                  |
+| IP range                             | 🔲            |                                  |
+| Missing                              | 🔲            |                                  |
+| Multi Terms                          | 🔲            |                                  |
+| Nested                               | 🔲            |                                  |
+| Parent                               | 🔲            |                                  |
+| Random sampler                       | 🔲            |                                  |
+| Range                                | 🔲            |                                  |
+| Rare terms                           | 🔲            |                                  |
+| Reverse nested                       | 🔲            |                                  |
+| Sampler                              | 🔲            |                                  |
+| Significant terms                    | ✅             | significantTermsAggregation      |
+| Significant text                     | 🔲            |                                  |
+| Terms                                | ✅             | termsAggregation                 |
+| Time series                          | 🔲            |                                  |
+| Variable width histogram             | 🔲            |                                  |
+| Subtleties of bucketing range fields | 🔲            |                                  |
 
 ### [Metrics aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html)
 | **Aggregation Type**      | **Supported** |

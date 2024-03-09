@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.aggregation.ElasticAdjacencyMatrixAggregation.newAdjacencyMatrix;
 import static tech.habegger.elastic.aggregation.ElasticAutoDateHistogramAggregation.autoDateHistogram;
+import static tech.habegger.elastic.aggregation.ElasticCategorizeTextAggregation.categorizeText;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
@@ -49,6 +50,65 @@ public class ElasticBucketAggregationsTest {
               }
             }
             """
+        );
+    }
+
+    @Test
+    void categorizeTextAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+                .aggregation("categories",
+                        categorizeText("message")
+                )
+                .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                          "aggregations": {
+                            "categories": {
+                              "categorize_text": {
+                                "field": "message"
+                              }
+                            }
+                          }
+                        }
+                        """
+        );
+    }
+    @Test
+    void categorizeTextAggregationWithSimilarityThreshold() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+                .aggregation("categories",
+                        categorizeText("message")
+                            .withCategorizationFilters("\\w+\\_\\d{3}")
+                            .withSimilarityThreshold(11)
+                )
+                .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                          "aggregations": {
+                            "categories": {
+                              "categorize_text": {
+                                "field": "message",
+                                "categorization_filters": ["\\\\w+\\\\_\\\\d{3}"],
+                                "similarity_threshold": 11
+                              }
+                            }
+                          }
+                        }
+                        """
         );
     }
     @Test
