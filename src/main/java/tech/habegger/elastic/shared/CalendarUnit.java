@@ -1,16 +1,18 @@
 package tech.habegger.elastic.shared;
 
 @SuppressWarnings("unused")
-public enum TimeUnit {
-    milliseconds("ms"),
-    seconds("s"),
-    minutes("m"),
-    hours ("h"),
-    days ("d");
+public enum CalendarUnit {
+    minute("m"),
+    hour("h"),
+    day("d"),
+    week("w"),
+    month("M"),
+    quarter("q"),
+    year("y");
 
     private final String shortSymbol;
 
-    TimeUnit(String shortSymbol) {
+    CalendarUnit(String shortSymbol) {
         this.shortSymbol = shortSymbol;
     }
 

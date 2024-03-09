@@ -3,7 +3,7 @@ package tech.habegger.elastic.aggregation;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.habegger.elastic.shared.TimeUnit;
+import tech.habegger.elastic.shared.DateTimeUnit;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -35,7 +35,7 @@ public final class ElasticAutoDateHistogramAggregation extends ElasticAggregatio
            ));
     }
 
-    public ElasticAggregations withMinimumInterval(TimeUnit minimumInterval) {
+    public ElasticAggregations withMinimumInterval(DateTimeUnit minimumInterval) {
         return withBody((original) ->
             new AutoDateHistogramBody(
                 original.field,
@@ -76,7 +76,7 @@ public final class ElasticAutoDateHistogramAggregation extends ElasticAggregatio
             @JsonProperty("format")
             String format,
             @JsonProperty("minimum_interval")
-            TimeUnit minimumInterval,
+            DateTimeUnit minimumInterval,
             @JsonProperty("missing")
             String missing
     ) { }
