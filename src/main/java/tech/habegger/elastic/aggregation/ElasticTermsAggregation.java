@@ -2,12 +2,14 @@ package tech.habegger.elastic.aggregation;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
-import java.util.Objects;
+
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ElasticTermsAggregation extends ElasticAggregations {
+    @JsonProperty("terms")
     private final TermsBody terms;
 
     ElasticTermsAggregation(
@@ -17,25 +19,17 @@ public final class ElasticTermsAggregation extends ElasticAggregations {
         super(aggregations);
         this.terms = terms;
     }
-    public static ElasticAggregations termsAggregation(String field, int size, Map<String, ElasticAggregations> aggregations) {
+    public static ElasticAggregations termsAgg(String field, int size, Map<String, ElasticAggregations> aggregations) {
         return new ElasticTermsAggregation(new TermsBody(field, size), aggregations);
     }
-    public static ElasticAggregations termsAggregation(String field, int size) {
-        return termsAggregation(field, size, null);
+    public static ElasticAggregations termsAgg(String field, int size) {
+        return termsAgg(field, size, null);
     }
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ElasticTermsAggregation) obj;
-        return Objects.equals(this.terms, that.terms);
+    public static ElasticAggregations termsAgg(String field) {
+        return new ElasticTermsAggregation(new TermsBody(field, null), null);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(terms);
-    }
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private record TermsBody(String field, Integer size) {
     }
 }
