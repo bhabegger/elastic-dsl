@@ -19,8 +19,10 @@ import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.Date
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.since;
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.until;
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.dateRange;
+import static tech.habegger.elastic.aggregation.ElasticDiversifiedSamplerAggregation.diversifiedSampler;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
+import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
 import static tech.habegger.elastic.shared.DateTimeUnit.minute;
 
@@ -471,6 +473,51 @@ public class ElasticBucketAggregationsTest {
                                 ],
                                 "format": "MM-yyy",
                                 "keyed": true
+                              }
+                            }
+                          }
+                        }
+                        """
+        );
+    }
+
+
+    @Test
+    void diversifiedSamplerAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+                .withQuery(match("tags", "elasticsearch"))
+                .aggregation("my_unbiased_sample",
+                    diversifiedSampler("author", 200)
+                        .aggregation("keywords", significantTerms("tags").withExclude("elasticsearch"))
+                )
+                .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                          "query": {
+                            "match": {
+                              "tags": "elasticsearch"
+                            }
+                          },
+                          "aggregations": {
+                            "my_unbiased_sample": {
+                              "aggregations": {
+                                "keywords": {
+                                  "significant_terms": {
+                                    "field": "tags",
+                                    "exclude": [ "elasticsearch" ]
+                                  }
+                                }
+                              },
+                              "diversified_sampler": {
+                                "field": "author",
+                                "shard_size": 200
                               }
                             }
                           }
