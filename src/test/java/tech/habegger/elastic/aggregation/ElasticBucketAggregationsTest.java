@@ -6,6 +6,7 @@ import tech.habegger.elastic.search.ElasticSearchRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.TestUtils.MAPPER;
+import static tech.habegger.elastic.aggregation.ElasticAdjacencyMatrixAggregation.newAdjacencyMatrix;
 import static tech.habegger.elastic.aggregation.ElasticAutoDateHistogramAggregation.autoDateHistogram;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
@@ -13,6 +14,43 @@ import static tech.habegger.elastic.search.ElasticTermsClause.terms;
 import static tech.habegger.elastic.shared.TimeUnit.minute;
 
 public class ElasticBucketAggregationsTest {
+    @Test
+    void adjacencyMatrixAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("interactions",
+                newAdjacencyMatrix()
+                    .filter("grpA",terms("accounts", "hillary", "sidney"))
+                    .filter("grpB",terms("accounts", "donald", "mitt"))
+                    .filter("grpC",terms("accounts", "vladimir", "nigel"))
+                .build()
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+    """
+            {
+              "size": 0,
+              "aggregations" : {
+                "interactions" : {
+                  "adjacency_matrix" : {
+                    "filters" : {
+                      "grpA" : { "terms" : { "accounts" : ["hillary", "sidney"] }},
+                      "grpB" : { "terms" : { "accounts" : ["donald", "mitt"] }},
+                      "grpC" : { "terms" : { "accounts" : ["vladimir", "nigel"] }}
+                    }
+                  }
+                }
+              }
+            }
+            """
+        );
+    }
     @Test
     void autoDateHistogramAggregation() throws JsonProcessingException {
         // Given

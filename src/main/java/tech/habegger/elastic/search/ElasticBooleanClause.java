@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
+import static tech.habegger.elastic.shared.Helpers.nullIfEmpty;
+
 public record ElasticBooleanClause(BooleanBody bool) implements ElasticSearchClause {
     public static Builder newBool() {
         return new Builder();
@@ -63,12 +65,5 @@ public record ElasticBooleanClause(BooleanBody bool) implements ElasticSearchCla
             ));
         }
 
-        private static List<ElasticSearchClause> nullIfEmpty(List<ElasticSearchClause> clause) {
-            if(clause.isEmpty()) {
-                return null;
-            } else {
-                return clause;
-            }
-        }
     }
 }

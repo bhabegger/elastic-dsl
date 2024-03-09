@@ -210,7 +210,7 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 ### [Bucket aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket.html)
 | **Aggregation Type**                 | **Supported** | **Tests**                   |
 |--------------------------------------|---------------|-----------------------------|
-| Adjacency matrix                     | 🔲            |                             |
+| Adjacency matrix                     | ✅             | adjacencyMatrixAggregation  |
 | Auto-interval date histogram         | ✅             | autoDateHistogram*          |
 | Categorize text                      | 🔲            |                             |
 | Children                             | 🔲            |                             |
