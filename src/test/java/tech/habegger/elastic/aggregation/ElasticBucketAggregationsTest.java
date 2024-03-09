@@ -6,6 +6,7 @@ import tech.habegger.elastic.search.ElasticSearchRequest;
 import tech.habegger.elastic.shared.CalendarUnit;
 import tech.habegger.elastic.shared.TimeUnit;
 
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +15,10 @@ import static tech.habegger.elastic.aggregation.ElasticAdjacencyMatrixAggregatio
 import static tech.habegger.elastic.aggregation.ElasticAutoDateHistogramAggregation.autoDateHistogram;
 import static tech.habegger.elastic.aggregation.ElasticCategorizeTextAggregation.categorizeText;
 import static tech.habegger.elastic.aggregation.ElasticDateHistogramAggregation.dateHistogram;
+import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.between;
+import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.since;
+import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.until;
+import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.dateRange;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
@@ -350,6 +355,122 @@ public class ElasticBucketAggregationsTest {
                               "date_histogram": {
                                 "field": "date",
                                 "fixed_interval": "30d"
+                              }
+                            }
+                          }
+                        }
+                        """
+        );
+    }
+
+    @Test
+    void dateRangeAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+                .aggregation("range",
+                        dateRange("date",
+                                until("2016/02/01"),
+                                between("2016/02/01", "now/d"),
+                                since("now/d")
+                        ).withTimeZone(ZoneId.of("CET"))
+                )
+                .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                           "aggregations": {
+                               "range": {
+                                   "date_range": {
+                                       "field": "date",
+                                       "ranges": [
+                                          { "to": "2016/02/01" },
+                                          { "from": "2016/02/01", "to" : "now/d" },
+                                          { "from": "now/d" }
+                                      ],
+                                      "time_zone": "CET"
+                                  }
+                              }
+                           }
+                        }
+                        """
+        );
+    }
+
+    @Test
+    void dateRangeAggregationWithKeys() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+                .aggregation("range",
+                        dateRange("date",
+                                until("now-10M/M"),
+                                since("now-10M/M")
+                        )
+                        .withFormat("MM-yyy")
+                        .withKeys()
+                )
+                .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                          "aggregations": {
+                            "range": {
+                              "date_range": {
+                                "field": "date",
+                                "ranges": [
+                                  { "to": "now-10M/M" },
+                                  { "from": "now-10M/M" }
+                                ],
+                                "format": "MM-yyy",
+                                "keyed": true
+                              }
+                            }
+                          }
+                        }
+                        """
+        );
+    }
+
+    @Test
+    void dateRangeAggregationWithSpecifiedKeys() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+                .aggregation("range",
+                        dateRange("date",
+                                between("01-2015", "03-2015").withKey("quarter_01"),
+                                between("03-2015", "06-2015").withKey("quarter_02")
+                        )
+                        .withFormat("MM-yyy")
+                        .withKeys()
+                )
+                .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+                """
+                        {
+                          "aggregations": {
+                            "range": {
+                              "date_range": {
+                                "field": "date",
+                                "ranges": [
+                                  { "from": "01-2015", "to": "03-2015", "key": "quarter_01" },
+                                  { "from": "03-2015", "to": "06-2015", "key": "quarter_02" }
+                                ],
+                                "format": "MM-yyy",
+                                "keyed": true
                               }
                             }
                           }

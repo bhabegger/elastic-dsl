@@ -216,7 +216,7 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 | Children                             | 🔲            |                                                                       |
 | Composite                            | 🔲            |                                                                       |
 | Date histogram                       | ✅             | dateHistogramWithCalendarInterval, dateHistogramWithFixedInterval,... |
-| Date range                           | 🔲            |                                                                       |
+| Date range                           | ✅             | dateRangeAggregation, ...                                             |
 | Diversified sampler                  | 🔲            |                                                                       |
 | Filter                               | 🔲            |                                                                       |
 | Filters                              | 🔲            |                                                                       |
