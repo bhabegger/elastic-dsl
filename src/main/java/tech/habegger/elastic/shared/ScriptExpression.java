@@ -1,9 +1,10 @@
-package tech.habegger.elastic.search;
+package tech.habegger.elastic.shared;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ScriptExpression(
         ScriptLang lang,

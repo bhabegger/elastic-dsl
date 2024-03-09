@@ -2,12 +2,13 @@ package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import tech.habegger.elastic.shared.ArtificialDocument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static tech.habegger.elastic.search.DocumentReference.documentReference;
+import static tech.habegger.elastic.shared.DocumentReference.documentReference;
 
 public record ElasticMoreLikeThisClause(
     @JsonProperty("more_like_this")

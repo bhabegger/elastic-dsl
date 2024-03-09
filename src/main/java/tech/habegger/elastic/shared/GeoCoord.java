@@ -1,4 +1,4 @@
-package tech.habegger.elastic.search;
+package tech.habegger.elastic.shared;
 
 public record GeoCoord(float lat, float lon) {
     public static GeoCoord geoCoord(float lat, float lon) {

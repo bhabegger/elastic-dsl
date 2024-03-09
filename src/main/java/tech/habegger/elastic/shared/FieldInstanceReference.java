@@ -1,4 +1,4 @@
-package tech.habegger.elastic.search;
+package tech.habegger.elastic.shared;
 
 public record FieldInstanceReference(
         String index,

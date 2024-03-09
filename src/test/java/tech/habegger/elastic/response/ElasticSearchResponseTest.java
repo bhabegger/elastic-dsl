@@ -1,16 +1,13 @@
-package tech.habegger.elastic.search;
+package tech.habegger.elastic.response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import tech.habegger.elastic.response.ElasticSearchResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.TestUtils.MAPPER;
 
 public class ElasticSearchResponseTest {
-
-    ObjectMapper mapper = new ObjectMapper();
 
     @Test
     void simpleResponseUnmarshalling() throws JsonProcessingException {
@@ -48,7 +45,7 @@ public class ElasticSearchResponseTest {
         """;
 
         // When
-        ElasticSearchResponse<Person> actual = mapper.readValue(rawResponse, new TypeReference<>() {});
+        ElasticSearchResponse<Person> actual = MAPPER.readValue(rawResponse, new TypeReference<>() {});
 
         // Then
         assertThat(actual.getHits()).hasSize(1);

@@ -1,12 +1,12 @@
 package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.search.ElasticExistsClause.exists;
 import static tech.habegger.elastic.search.ElasticFuzzyClause.fuzzy;
 import static tech.habegger.elastic.search.ElasticIdsClause.ids;
@@ -20,11 +20,10 @@ import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
 import static tech.habegger.elastic.search.ElasticTermsSetClause.termsSet;
 import static tech.habegger.elastic.search.ElasticWildcardClause.wildcard;
-import static tech.habegger.elastic.search.RewriteMethod.*;
-import static tech.habegger.elastic.search.ScriptExpression.scriptInline;
+import static tech.habegger.elastic.search.RewriteMethod.constant_score_blended;
+import static tech.habegger.elastic.shared.ScriptExpression.scriptInline;
 
 class ElasticSearchTermLevelQueryTest {
-    ObjectMapper mapper = new ObjectMapper();
 
     @Test
     void termQuery() throws JsonProcessingException {
@@ -34,7 +33,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -57,7 +56,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -81,7 +80,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -104,7 +103,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -128,7 +127,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -154,7 +153,7 @@ class ElasticSearchTermLevelQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -180,7 +179,7 @@ class ElasticSearchTermLevelQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -210,7 +209,7 @@ class ElasticSearchTermLevelQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -251,7 +250,7 @@ class ElasticSearchTermLevelQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -295,7 +294,7 @@ class ElasticSearchTermLevelQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -346,7 +345,7 @@ class ElasticSearchTermLevelQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -383,7 +382,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -414,7 +413,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -446,7 +445,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -474,7 +473,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -505,7 +504,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -535,7 +534,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -567,7 +566,7 @@ class ElasticSearchTermLevelQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(

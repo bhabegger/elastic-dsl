@@ -1,13 +1,13 @@
 package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Base64;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticDistanceFeatureClause.distanceFeature;
 import static tech.habegger.elastic.search.ElasticKnn.knn;
@@ -20,14 +20,10 @@ import static tech.habegger.elastic.search.ElasticRankFeatureClause.rankFeature;
 import static tech.habegger.elastic.search.ElasticScriptScoreClause.scriptScore;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticWrapperClause.wrapper;
-import static tech.habegger.elastic.search.GeoCoord.geoCoord;
-import static tech.habegger.elastic.search.ScriptExpression.scriptInline;
+import static tech.habegger.elastic.shared.GeoCoord.geoCoord;
+import static tech.habegger.elastic.shared.ScriptExpression.scriptInline;
 
 class ElasticSearchSpecializedQueryTest {
-
-    ObjectMapper mapper = new ObjectMapper();
-
-
     @Test
     void knnQuery() throws JsonProcessingException {
         // Given
@@ -37,7 +33,7 @@ class ElasticSearchSpecializedQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -72,7 +68,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -110,7 +106,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -152,7 +148,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -199,7 +195,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -244,7 +240,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -276,7 +272,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -328,7 +324,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -353,7 +349,7 @@ class ElasticSearchSpecializedQueryTest {
     void wrapperQuery() throws JsonProcessingException {
         // Given
         var wrappedQuery = ElasticSearchRequest.query(term("user.id", "kimchy"));
-        var serializedWrappedQuery = mapper.writeValueAsString(wrappedQuery);
+        var serializedWrappedQuery = MAPPER.writeValueAsString(wrappedQuery);
         var encodedWrappedQuery = Base64.getEncoder().encodeToString(serializedWrappedQuery.getBytes());
 
         var query = ElasticSearchRequest.query(
@@ -361,7 +357,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -388,7 +384,7 @@ class ElasticSearchSpecializedQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(

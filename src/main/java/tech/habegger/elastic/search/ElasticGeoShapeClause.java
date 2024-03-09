@@ -2,6 +2,8 @@ package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import tech.habegger.elastic.shared.FieldInstanceReference;
+import tech.habegger.elastic.shared.GeoCoord;
 
 import java.util.Arrays;
 import java.util.List;

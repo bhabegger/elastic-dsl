@@ -1,10 +1,10 @@
 package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticGeoBoundingBoxClause.geoBoundingBox;
 import static tech.habegger.elastic.search.ElasticGeoDistanceClause.geoDistance;
@@ -14,12 +14,10 @@ import static tech.habegger.elastic.search.ElasticGeoShapeClause.GeoInlineShapeD
 import static tech.habegger.elastic.search.ElasticGeoShapeClause.GeoShapeRelation.within;
 import static tech.habegger.elastic.search.ElasticGeoShapeClause.geoShape;
 import static tech.habegger.elastic.search.ElasticMatchAllClause.matchAll;
-import static tech.habegger.elastic.search.FieldInstanceReference.dataPoint;
-import static tech.habegger.elastic.search.GeoCoord.geoCoord;
+import static tech.habegger.elastic.shared.FieldInstanceReference.dataPoint;
+import static tech.habegger.elastic.shared.GeoCoord.geoCoord;
 
 class ElasticSearchGeoQueryTest {
-
-    ObjectMapper mapper = new ObjectMapper();
 
 
     @Test
@@ -30,7 +28,7 @@ class ElasticSearchGeoQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -65,7 +63,7 @@ class ElasticSearchGeoQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -116,7 +114,7 @@ class ElasticSearchGeoQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -161,7 +159,7 @@ class ElasticSearchGeoQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -210,7 +208,7 @@ class ElasticSearchGeoQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -254,7 +252,7 @@ class ElasticSearchGeoQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(

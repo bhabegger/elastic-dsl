@@ -1,12 +1,12 @@
 package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.search.ElasticBoostingClause.boosting;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
 import static tech.habegger.elastic.search.ElasticDisMaxClause.disMax;
@@ -15,9 +15,6 @@ import static tech.habegger.elastic.search.ElasticRangeClause.range;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 
 class ElasticSearchCompoundQueryTest {
-
-    ObjectMapper mapper = new ObjectMapper();
-
     @Test
     void booleanWithMust() throws JsonProcessingException {
         // Given
@@ -29,7 +26,7 @@ class ElasticSearchCompoundQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -70,7 +67,7 @@ class ElasticSearchCompoundQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -114,7 +111,7 @@ class ElasticSearchCompoundQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -165,7 +162,7 @@ class ElasticSearchCompoundQueryTest {
         ).build();
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -204,7 +201,7 @@ class ElasticSearchCompoundQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -245,7 +242,7 @@ class ElasticSearchCompoundQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -279,7 +276,7 @@ class ElasticSearchCompoundQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -309,7 +306,7 @@ class ElasticSearchCompoundQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(

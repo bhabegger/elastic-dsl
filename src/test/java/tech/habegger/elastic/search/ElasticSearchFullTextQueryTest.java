@@ -1,10 +1,10 @@
 package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.search.ElasticCombinedFieldsClause.Operator.and;
 import static tech.habegger.elastic.search.ElasticCombinedFieldsClause.combinedFields;
 import static tech.habegger.elastic.search.ElasticMatchBoolPrefixClause.matchBoolPrefix;
@@ -17,8 +17,6 @@ import static tech.habegger.elastic.search.ElasticSearchRequest.query;
 
 class ElasticSearchFullTextQueryTest {
 
-    ObjectMapper mapper = new ObjectMapper();
-
     @Test
     void matchQuery() throws JsonProcessingException {
         // Given
@@ -27,7 +25,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -50,7 +48,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -74,7 +72,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -98,7 +96,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -122,7 +120,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -153,7 +151,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -182,7 +180,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -211,7 +209,7 @@ class ElasticSearchFullTextQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(

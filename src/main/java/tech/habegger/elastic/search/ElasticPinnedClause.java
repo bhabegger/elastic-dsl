@@ -1,9 +1,11 @@
 package tech.habegger.elastic.search;
 
+import tech.habegger.elastic.shared.DocumentReference;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static tech.habegger.elastic.search.DocumentReference.documentReference;
+import static tech.habegger.elastic.shared.DocumentReference.documentReference;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public record ElasticPinnedClause(PinnedBody pinned) implements ElasticSearchClause {

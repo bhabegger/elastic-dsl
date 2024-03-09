@@ -1,18 +1,16 @@
 package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import tech.habegger.elastic.search.ElasticNestedClause.ScoreMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.search.ElasticNestedClause.nested;
 import static tech.habegger.elastic.search.ElasticSearchRequest.query;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 
 class ElasticSearchJoinQueryTest {
-    ObjectMapper mapper = new ObjectMapper();
-
     @Test
     void nestedWithoutScoreMode() throws JsonProcessingException {
         // Given
@@ -21,7 +19,7 @@ class ElasticSearchJoinQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -50,7 +48,7 @@ class ElasticSearchJoinQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
@@ -80,7 +78,7 @@ class ElasticSearchJoinQueryTest {
         );
 
         // When
-        var actual = mapper.writeValueAsString(query);
+        var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(

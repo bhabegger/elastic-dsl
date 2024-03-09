@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.habegger.elastic.ElasticSearchSource;
 import tech.habegger.elastic.aggregation.ElasticAggregations;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ public record ElasticSearchRequest(
     public static Builder requestBuilder() {
         return new Builder();
     }
+    @SuppressWarnings("unused")
     public static class Builder {
         ElasticSearchClause query = null;
         ElasticKnn knn = null;
@@ -46,7 +48,7 @@ public record ElasticSearchRequest(
         Integer size = null;
 
         Double minScore = null;
-        Map<String, ElasticAggregations> aggregations = null;
+        Map<String, ElasticAggregations> aggregations = new HashMap<>();
 
         private Builder() {}
 
@@ -82,7 +84,7 @@ public record ElasticSearchRequest(
         }
 
         public Builder withAggregations(Map<String, ElasticAggregations> aggregations) {
-            this.aggregations = aggregations;
+            this.aggregations.putAll(aggregations);
             return this;
         }
 
@@ -94,6 +96,10 @@ public record ElasticSearchRequest(
             return new ElasticSearchRequest(query,knn,source,sort,from,size,minScore, aggregations);
         }
 
+        public Builder aggregation(String name, ElasticAggregations aggregation) {
+            this.aggregations.put(name,aggregation);
+            return this;
+        }
     }
 }
 
