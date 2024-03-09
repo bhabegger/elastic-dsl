@@ -1,3 +1,9 @@
+---------
+
+[TOC]
+
+---------
+
 # Elastic Query Java DSL
 
 This project provides a Java DSL library allowing to build elastic queries serializable to the Elastic JSON DSL using Jackson.
