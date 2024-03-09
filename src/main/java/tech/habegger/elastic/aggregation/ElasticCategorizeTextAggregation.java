@@ -20,7 +20,6 @@ public final class ElasticCategorizeTextAggregation extends ElasticAggregations 
             CategorizeTextBody categorizeText,
             Map<String, ElasticAggregations> aggregations
     ) {
-        super(aggregations);
         this.categorizeText = categorizeText;
     }
 

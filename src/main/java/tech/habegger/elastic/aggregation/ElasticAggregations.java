@@ -11,26 +11,14 @@ import java.util.Objects;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class ElasticAggregations {
-    final Map<String, ElasticAggregations> aggregations;
+    Map<String, ElasticAggregations> aggregations = null;
 
-    protected ElasticAggregations(Map<String, ElasticAggregations> aggregations) {
-        this.aggregations = aggregations;
-    }
-
-    public static Builder newAggregations() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private final Map<String, ElasticAggregations> aggregations = new HashMap<>();
-
-        public Builder add(String name, ElasticAggregations aggregation) {
-            aggregations.put(name, aggregation);
-            return this;
+    public ElasticAggregations aggregation(String name, ElasticAggregations aggregation) {
+        if(this.aggregations == null) {
+            this.aggregations = new HashMap<>();
         }
-        public Map<String, ElasticAggregations> build() {
-            return aggregations;
-        }
+        this.aggregations.put(name, aggregation);
+        return this;
     }
 
     @Override

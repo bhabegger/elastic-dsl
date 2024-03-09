@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Map;
-
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ElasticTermsAggregation extends ElasticAggregations {
@@ -13,20 +11,15 @@ public final class ElasticTermsAggregation extends ElasticAggregations {
     private final TermsBody terms;
 
     ElasticTermsAggregation(
-            TermsBody terms,
-            Map<String, ElasticAggregations> aggregations
+            TermsBody terms
     ) {
-        super(aggregations);
         this.terms = terms;
     }
-    public static ElasticAggregations termsAgg(String field, int size, Map<String, ElasticAggregations> aggregations) {
-        return new ElasticTermsAggregation(new TermsBody(field, size), aggregations);
-    }
     public static ElasticAggregations termsAgg(String field, int size) {
-        return termsAgg(field, size, null);
+        return new ElasticTermsAggregation(new TermsBody(field, size));
     }
     public static ElasticAggregations termsAgg(String field) {
-        return new ElasticTermsAggregation(new TermsBody(field, null), null);
+        return new ElasticTermsAggregation(new TermsBody(field, null));
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

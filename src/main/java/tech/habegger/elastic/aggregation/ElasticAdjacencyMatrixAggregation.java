@@ -16,10 +16,8 @@ public final class ElasticAdjacencyMatrixAggregation extends ElasticAggregations
 
     ElasticAdjacencyMatrixAggregation(
         @JsonProperty("adjacency_matrix")
-        AdjacencyMatrixBody adjacencyMatrix,
-        Map<String, ElasticAggregations> aggregations
+        AdjacencyMatrixBody adjacencyMatrix
     ) {
-        super(aggregations);
         this.adjacencyMatrix = adjacencyMatrix;
     }
 
@@ -29,20 +27,14 @@ public final class ElasticAdjacencyMatrixAggregation extends ElasticAggregations
 
     public static class Builder {
         private final Map<String, ElasticSearchClause> filters = new HashMap<>();
-        private Map<String, ElasticAggregations> aggregations;
+
         public ElasticAdjacencyMatrixAggregation build() {
-            return new ElasticAdjacencyMatrixAggregation(new AdjacencyMatrixBody(filters), aggregations);
+            return new ElasticAdjacencyMatrixAggregation(new AdjacencyMatrixBody(filters));
         }
         public Builder filter(String name, ElasticSearchClause clause) {
             this.filters.put(name, clause);
             return this;
         }
-
-        public Builder withAggregations(Map<String, ElasticAggregations> aggregations) {
-            this.aggregations = aggregations;
-            return this;
-        }
-
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

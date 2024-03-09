@@ -20,11 +20,9 @@ public final class ElasticDateHistogramAggregation extends ElasticAggregations {
 
     ElasticDateHistogramAggregation(
         @JsonProperty("date_histogram")
-        DateHistogramBody dateHistogram,
-        Map<String, ElasticAggregations> aggregations
+        DateHistogramBody dateHistogram
 
     ) {
-        super(aggregations);
         this.dateHistogram = dateHistogram;
     }
 
@@ -93,13 +91,12 @@ public final class ElasticDateHistogramAggregation extends ElasticAggregations {
                 ));
     }
     private ElasticDateHistogramAggregation withBody(Function<DateHistogramBody, DateHistogramBody> update) {
-        return new ElasticDateHistogramAggregation(update.apply(this.dateHistogram), this.aggregations);
+        return new ElasticDateHistogramAggregation(update.apply(this.dateHistogram));
     }
 
     private static ElasticDateHistogramAggregation dateHistogram(String field, String calendarInterval, String fixedInterval) {
         return new ElasticDateHistogramAggregation(
-                new DateHistogramBody(field, calendarInterval, fixedInterval,  null, null, null, null),
-                null
+            new DateHistogramBody(field, calendarInterval, fixedInterval,  null, null, null, null)
         );
     }
     public static ElasticDateHistogramAggregation dateHistogram(String field, CalendarUnit unit) {

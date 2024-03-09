@@ -8,7 +8,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
@@ -20,11 +19,9 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
 
     ElasticDateRangeAggregation(
         @JsonProperty("date_range")
-        DateRangeBody dateRange,
-        Map<String, ElasticAggregations> aggregations
+        DateRangeBody dateRange
 
     ) {
-        super(aggregations);
         this.dateRange = dateRange;
     }
 
@@ -104,13 +101,12 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
                 ));
     }
     private ElasticDateRangeAggregation withBody(Function<DateRangeBody, DateRangeBody> update) {
-        return new ElasticDateRangeAggregation(update.apply(this.dateRange), this.aggregations);
+        return new ElasticDateRangeAggregation(update.apply(this.dateRange));
     }
 
     public static ElasticDateRangeAggregation dateRange(String field, DateRange... ranges) {
         return new ElasticDateRangeAggregation(
-                new DateRangeBody(field, Arrays.asList(ranges),  null, null, null, null, null),
-                null
+                new DateRangeBody(field, Arrays.asList(ranges),  null, null, null, null, null)
         );
     }
     @JsonInclude(JsonInclude.Include.NON_NULL)

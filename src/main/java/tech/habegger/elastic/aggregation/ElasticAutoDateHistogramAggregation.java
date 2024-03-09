@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.habegger.elastic.shared.DateTimeUnit;
 
-import java.util.Map;
 import java.util.function.Function;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -16,11 +15,9 @@ public final class ElasticAutoDateHistogramAggregation extends ElasticAggregatio
 
     ElasticAutoDateHistogramAggregation(
         @JsonProperty("auto_date_histogram")
-        AutoDateHistogramBody autoDateHistogramAggregation,
-        Map<String, ElasticAggregations> aggregations
+        AutoDateHistogramBody autoDateHistogramAggregation
 
     ) {
-        super(aggregations);
         this.autoDateHistogramAggregation = autoDateHistogramAggregation;
     }
 
@@ -57,13 +54,12 @@ public final class ElasticAutoDateHistogramAggregation extends ElasticAggregatio
                 ));
     }
     private ElasticAutoDateHistogramAggregation withBody(Function<AutoDateHistogramBody, AutoDateHistogramBody> update) {
-        return new ElasticAutoDateHistogramAggregation(update.apply(this.autoDateHistogramAggregation), this.aggregations);
+        return new ElasticAutoDateHistogramAggregation(update.apply(this.autoDateHistogramAggregation));
     }
 
     public static ElasticAutoDateHistogramAggregation autoDateHistogram(String field, int buckets) {
         return new ElasticAutoDateHistogramAggregation(
-                new AutoDateHistogramBody(field, buckets, null, null, null),
-                null
+                new AutoDateHistogramBody(field, buckets, null, null, null)
         );
     }
 

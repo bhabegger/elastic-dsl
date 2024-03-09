@@ -14,7 +14,6 @@ public final class ElasticTopHitsAggregation extends ElasticAggregations {
     ElasticTopHitsAggregation(
         TopHitsBody topHits
     ) {
-        super(null);
         this.topHits = topHits;
     }
     public static ElasticAggregations topHitsAggregation(Integer size) {
