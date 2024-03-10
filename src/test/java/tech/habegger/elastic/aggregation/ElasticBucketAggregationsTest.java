@@ -28,9 +28,11 @@ import static tech.habegger.elastic.aggregation.ElasticGlobalAggregation.global;
 import static tech.habegger.elastic.aggregation.ElasticHistogramAggregation.histogram;
 import static tech.habegger.elastic.aggregation.ElasticIpPrefixAggregation.ipPrefix;
 import static tech.habegger.elastic.aggregation.ElasticIpRangeAggregation.ipRange;
+import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticMissingAggregation.missing;
 import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.multiTerms;
 import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.termSpec;
+import static tech.habegger.elastic.aggregation.ElasticNestedAggregation.nestedAgg;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
@@ -1531,6 +1533,49 @@ public class ElasticBucketAggregationsTest {
                             "missing": "Product Z"
                           }
                         ]
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void nestedAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(match("name", "led tv"))
+            .aggregation("resellers",
+                nestedAgg("resellers")
+                    .aggregation("min_price", min("resellers.price"))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "match": {
+                      "name": "led tv"
+                    }
+                  },
+                  "aggregations": {
+                    "resellers": {
+                      "aggregations": {
+                        "min_price": {
+                          "min": {
+                            "field": "resellers.price"
+                          }
+                        }
+                      },
+                      "nested": {
+                        "path": "resellers"
                       }
                     }
                   }
