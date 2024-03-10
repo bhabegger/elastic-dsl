@@ -7,6 +7,7 @@ import tech.habegger.elastic.search.ElasticSearchRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.aggregation.ElasticAvgAggregation.avg;
+import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlot;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
@@ -15,31 +16,6 @@ import static tech.habegger.elastic.aggregation.ElasticValueCountAggregation.val
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 
 public class ElasticMetricsAggregationsTest {
-    @Test
-    void sumAggregation() throws JsonProcessingException {
-        // Given
-        var query = ElasticSearchRequest.requestBuilder()
-            .withQuery(match("type", "hat"))
-            .aggregation("hat_prices", sum("price"))
-            .build();
-
-        // When
-        var actual = MAPPER.writeValueAsString(query);
-
-        // Then
-        assertThat(actual).isEqualToIgnoringWhitespace(
-            """
-                {
-                  "query": {
-                    "match": { "type": "hat" }
-                  },
-                  "aggregations": {
-                    "hat_prices": { "sum": { "field": "price" } }
-                  }
-                }
-                """
-        );
-    }
 
     @Test
     void avgAggregation() throws JsonProcessingException {
@@ -62,7 +38,65 @@ public class ElasticMetricsAggregationsTest {
                 """
         );
     }
+    @Test
+    void boxPlotAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("load_time_boxplot", boxPlot("load_time"))
+            .build();
 
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "load_time_boxplot": {
+                      "boxplot": {
+                        "field": "load_time"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void boxPlotAggregationWithCompression() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("load_time_boxplot",
+                boxPlot("load_time")
+                    .withCompression(200)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "load_time_boxplot": {
+                      "boxplot": {
+                        "field": "load_time",
+                        "compression": 200
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
     @Test
     void maxAggregation() throws JsonProcessingException {
         // Given
@@ -101,6 +135,32 @@ public class ElasticMetricsAggregationsTest {
                 {
                   "aggregations": {
                     "min_price": { "min": { "field": "price" } }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void sumAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(match("type", "hat"))
+            .aggregation("hat_prices", sum("price"))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "match": { "type": "hat" }
+                  },
+                  "aggregations": {
+                    "hat_prices": { "sum": { "field": "price" } }
                   }
                 }
                 """

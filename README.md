@@ -251,33 +251,33 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 
 See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elastic/aggregation/ElasticMetricsAggregationsTest.java)
 
-| **Aggregation Type**      | **Supported** | **Tests**             |
-|---------------------------|---------------|-----------------------|
-| Avg                       | ✅             | avgAggregation        |
-| Boxplot                   | 🔲            |                       |
-| Cardinality               | 🔲            |                       |
-| Extended stats            | 🔲            |                       |
-| Geo-bounds                | 🔲            |                       |
-| Geo-centroid              | 🔲            |                       |
-| Geo-line                  | 🔲            |                       |
-| Cartesian-bounds          | 🔲            |                       |
-| Cartesian-centroid        | 🔲            |                       |
-| Matrix stats              | 🔲            |                       |
-| Max                       | ✅             | maxAggregation        |
-| Median absolute deviation | 🔲            |                       |
-| Min                       | ✅             | minAggregation        |
-| Percentile ranks          | 🔲            |                       |
-| Percentiles               | 🔲            |                       |
-| Rate                      | 🔲            |                       |
-| Scripted metric           | 🔲            |                       |
-| Stats                     | ✅             |                       |
-| String stats              | 🔲            | sumAggregation        |
-| Sum                       | ✅             |                       |
-| T-test                    | 🔲            |                       |
-| Top hits                  | ✅             |                       |
-| Top metrics               | 🔲            |                       |
-| Value count               | ✅             | valueCountAggregation |
-| Weighted avg              | 🔲            |                       |
+| **Aggregation Type**      | **Supported** | **Tests**              |
+|---------------------------|---------------|------------------------|
+| Avg                       | ✅             | avgAggregation         |
+| Boxplot                   | ✅             | boxPlotAggregation,... |
+| Cardinality               | 🔲            |                        |
+| Extended stats            | 🔲            |                        |
+| Geo-bounds                | 🔲            |                        |
+| Geo-centroid              | 🔲            |                        |
+| Geo-line                  | 🔲            |                        |
+| Cartesian-bounds          | 🔲            |                        |
+| Cartesian-centroid        | 🔲            |                        |
+| Matrix stats              | 🔲            |                        |
+| Max                       | ✅             | maxAggregation         |
+| Median absolute deviation | 🔲            |                        |
+| Min                       | ✅             | minAggregation         |
+| Percentile ranks          | 🔲            |                        |
+| Percentiles               | 🔲            |                        |
+| Rate                      | 🔲            |                        |
+| Scripted metric           | 🔲            |                        |
+| Stats                     | ✅             |                        |
+| String stats              | 🔲            | sumAggregation         |
+| Sum                       | ✅             |                        |
+| T-test                    | 🔲            |                        |
+| Top hits                  | ✅             |                        |
+| Top metrics               | 🔲            |                        |
+| Value count               | ✅             | valueCountAggregation  |
+| Weighted avg              | 🔲            |                        |
 
 ### [Pipeline aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-pipeline.html)
 | **Aggregation Type**   | **Supported** |
