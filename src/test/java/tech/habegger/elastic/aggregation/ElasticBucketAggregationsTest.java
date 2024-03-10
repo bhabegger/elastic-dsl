@@ -27,6 +27,7 @@ import static tech.habegger.elastic.aggregation.ElasticGeotileGridAggregation.ge
 import static tech.habegger.elastic.aggregation.ElasticGlobalAggregation.global;
 import static tech.habegger.elastic.aggregation.ElasticHistogramAggregation.histogram;
 import static tech.habegger.elastic.aggregation.ElasticIpPrefixAggregation.ipPrefix;
+import static tech.habegger.elastic.aggregation.ElasticIpRangeAggregation.ipRange;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
@@ -39,6 +40,7 @@ import static tech.habegger.elastic.shared.DistanceType.plane;
 import static tech.habegger.elastic.shared.DistanceUnit.kilometers;
 import static tech.habegger.elastic.shared.GeoCoord.geoCoord;
 import static tech.habegger.elastic.shared.GeoRect.geoRect;
+import static tech.habegger.elastic.shared.IpRange.mask;
 
 public class ElasticBucketAggregationsTest {
     @Test
@@ -1324,6 +1326,118 @@ public class ElasticBucketAggregationsTest {
                 """
         );
     }
+
+    @Test
+    void ipRangeAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(10)
+            .aggregation("ip_ranges",
+                ipRange("ip",
+                    IpRange.to("10.0.0.5"),
+                    IpRange.from("10.0.0.5")
+                )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 10,
+                  "aggregations": {
+                    "ip_ranges": {
+                      "ip_range": {
+                        "field": "ip",
+                        "ranges": [
+                          { "to": "10.0.0.5" },
+                          { "from": "10.0.0.5" }
+                        ]
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+    @Test
+    void ipRangeAggregationWithMasks() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("ip_ranges",
+                ipRange("ip",
+                    mask("10.0.0.0/25"),
+                    mask("10.0.0.127/25")
+                )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "ip_ranges": {
+                      "ip_range": {
+                        "field": "ip",
+                        "ranges": [
+                          { "mask": "10.0.0.0/25" },
+                          { "mask": "10.0.0.127/25" }
+                        ]
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void ipRangeAggregationWithKeyed() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("ip_ranges",
+                ipRange("ip",
+                    IpRange.to("10.0.0.5"),
+                    IpRange.from("10.0.0.5")
+                ).withKeyed()
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "ip_ranges": {
+                      "ip_range": {
+                        "field": "ip",
+                        "ranges": [
+                          { "to": "10.0.0.5" },
+                          { "from": "10.0.0.5" }
+                        ],
+                        "keyed": true
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
 
     @Test
     void significantTermsAggregation() throws JsonProcessingException {

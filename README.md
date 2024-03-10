@@ -231,7 +231,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Global                               | ✅             | globalAggregation                                                     |           |
 | Histogram                            | ✅             | histogramAggregation,...                                              |           |
 | IP prefix                            | ✅             | ipPrefixAggregation,...                                               |           |
-| IP range                             | 🔲            |                                                                       |           |
+| IP range                             | ✅             | ipRangeAggregation,...                                                |           |
 | Missing                              | 🔲            |                                                                       |           |
 | Multi Terms                          | 🔲            |                                                                       |           |
 | Nested                               | 🔲            |                                                                       |           |
