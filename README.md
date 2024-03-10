@@ -242,7 +242,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Reverse nested               | 🔲            |                                                                       |           |
 | Sampler                      | ✅             | samplerAggregation                                                    |           |
 | Significant terms            | ✅             | significantTermsAggregation                                           |           |
-| Significant text             | 🔲            |                                                                       |           |
+| Significant text             | ✅             | significantTextAggregation                                            |           |
 | Terms                        | ✅             | termsAggregation                                                      |           |
 | Time series                  | ✅             | timeSeriesAggregation                                                 |           |
 | Variable width histogram     | 🔲            |                                                                       |           |

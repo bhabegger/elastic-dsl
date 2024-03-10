@@ -37,6 +37,7 @@ import static tech.habegger.elastic.aggregation.ElasticRangeAggregation.rangeAgg
 import static tech.habegger.elastic.aggregation.ElasticRareTermsAggregation.rareTerms;
 import static tech.habegger.elastic.aggregation.ElasticSamplerAggregation.sampler;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
+import static tech.habegger.elastic.aggregation.ElasticSignificantTextAggregation.significantText;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.aggregation.ElasticTimeSeriesAggregation.timeSeries;
 import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
@@ -1814,6 +1815,54 @@ public class ElasticBucketAggregationsTest {
                 """
         );
     }
+
+    @Test
+    void significantTextAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(
+                match("content", "elasticsearch")
+            )
+            .aggregation("sample",
+                sampler(100)
+                    .aggregation("keywords",
+                        significantText("content").withFilterDuplicateText()
+                    )
+            )
+        .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "match": {
+                      "content": "elasticsearch"
+                    }
+                  },
+                  "aggregations": {
+                    "sample": {
+                      "aggregations": {
+                        "keywords": {
+                          "significant_text": {
+                            "field": "content",
+                            "filter_duplicate_text": true
+                          }
+                        }
+                      },
+                      "sampler": {
+                        "shard_size": 100
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
 
     @Test
     void termsAggregation() throws JsonProcessingException {
