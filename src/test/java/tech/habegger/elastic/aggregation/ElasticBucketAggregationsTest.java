@@ -34,6 +34,7 @@ import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.mul
 import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.termSpec;
 import static tech.habegger.elastic.aggregation.ElasticNestedAggregation.nestedAgg;
 import static tech.habegger.elastic.aggregation.ElasticRangeAggregation.rangeAgg;
+import static tech.habegger.elastic.aggregation.ElasticRareTermsAggregation.rareTerms;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
@@ -1653,6 +1654,66 @@ public class ElasticBucketAggregationsTest {
                           { "from": 200.0 }
                         ],
                         "keyed": true
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void rareTermsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("genres",
+                rareTerms("genre")
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "genres": {
+                      "rare_terms": {
+                        "field": "genre"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void rareTermsAggregationWithFiltering() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("genres",
+                rareTerms("genre")
+                    .withInclude("swi*")
+                    .withExclude("electro*")
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "genres": {
+                      "rare_terms": {
+                        "field": "genre",
+                        "include": [ "swi*" ],
+                        "exclude": [ "electro*" ]
                       }
                     }
                   }

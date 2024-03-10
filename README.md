@@ -238,7 +238,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Parent                               | 🔲            |                                                                       |           |
 | Random sampler                       | 🔲            |                                                                       |           |
 | Range                                | ✅             | rangeAggregation,...                                                  |           |
-| Rare terms                           | 🔲            |                                                                       |           |
+| Rare terms                           | ✅             | rareTermsAggregation,...                                              |           |
 | Reverse nested                       | 🔲            |                                                                       |           |
 | Sampler                              | 🔲            |                                                                       |           |
 | Significant terms                    | ✅             | significantTermsAggregation                                           |           |
@@ -246,7 +246,6 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Terms                                | ✅             | termsAggregation                                                      |           |
 | Time series                          | 🔲            |                                                                       |           |
 | Variable width histogram             | 🔲            |                                                                       |           |
-| Subtleties of bucketing range fields | 🔲            |                                                                       |           |
 
 ### [Metrics aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html)
 
