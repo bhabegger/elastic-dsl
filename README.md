@@ -228,7 +228,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Geohash grid                         | ✅             | geoHashGridAggregation,...                                            |           |
 | Geohex grid                          | ✅             | geoHexGridAggregation,...                                             |           |
 | Geotile grid                         | ✅             | geoTileGridAggregation,...                                            |           |
-| Global                               | 🔲            |                                                                       |           |
+| Global                               | ✅             | globalAggregation                                                     |           |
 | Histogram                            | 🔲            |                                                                       |           |
 | IP prefix                            | 🔲            |                                                                       |           |
 | IP range                             | 🔲            |                                                                       |           |
@@ -254,7 +254,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 
 | **Aggregation Type**      | **Supported** | **Tests**             |
 |---------------------------|---------------|-----------------------|
-| Avg                       | ✅            | avgAggregation        |
+| Avg                       | ✅             | avgAggregation        |
 | Boxplot                   | 🔲            |                       |
 | Cardinality               | 🔲            |                       |
 | Extended stats            | 🔲            |                       |
@@ -266,7 +266,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Matrix stats              | 🔲            |                       |
 | Max                       | ✅             | maxAggregation        |
 | Median absolute deviation | 🔲            |                       |
-| Min                       | ✅            | minAggregation        |
+| Min                       | ✅             | minAggregation        |
 | Percentile ranks          | 🔲            |                       |
 | Percentiles               | 🔲            |                       |
 | Rate                      | 🔲            |                       |
@@ -277,7 +277,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | T-test                    | 🔲            |                       |
 | Top hits                  | ✅             |                       |
 | Top metrics               | 🔲            |                       |
-| Value count               | ✅            | valueCountAggregation |
+| Value count               | ✅             | valueCountAggregation |
 | Weighted avg              | 🔲            |                       |
 
 ### [Pipeline aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-pipeline.html)
