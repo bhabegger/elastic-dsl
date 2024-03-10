@@ -38,6 +38,7 @@ import static tech.habegger.elastic.aggregation.ElasticRareTermsAggregation.rare
 import static tech.habegger.elastic.aggregation.ElasticSamplerAggregation.sampler;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
+import static tech.habegger.elastic.aggregation.ElasticTimeSeriesAggregation.timeSeries;
 import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
@@ -1833,6 +1834,32 @@ public class ElasticBucketAggregationsTest {
                   "aggregations": {
                     "genres": {
                       "terms": { "field": "genre" }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void timesSeriesAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("ts",
+                timeSeries(5000)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "ts": {
+                      "time_series": { "size": 5000 }
                     }
                   }
                 }

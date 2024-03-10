@@ -244,7 +244,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Significant terms            | ✅             | significantTermsAggregation                                           |           |
 | Significant text             | 🔲            |                                                                       |           |
 | Terms                        | ✅             | termsAggregation                                                      |           |
-| Time series                  | 🔲            |                                                                       |           |
+| Time series                  | ✅             | timeSeriesAggregation                                                 |           |
 | Variable width histogram     | 🔲            |                                                                       |           |
 
 ### [Metrics aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html)
