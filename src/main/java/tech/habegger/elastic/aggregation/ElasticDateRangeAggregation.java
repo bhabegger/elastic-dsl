@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import tech.habegger.elastic.shared.DateRange;
+
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -76,7 +78,7 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticAggregations withKeys() {
+    public ElasticAggregations withKeyed() {
         return withBody((original) ->
                 new DateRangeBody(
                         original.field,
@@ -126,21 +128,4 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
             @JsonProperty("keyed")
             Boolean keyed
     ) { }
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public record DateRange(String from, String to, String key) {
-        public static DateRange between(String from, String to) {
-            return new DateRange(from, to, null);
-        }
-        public static DateRange since(String from) {
-            return new DateRange(from, null, null);
-        }
-        public static DateRange until(String to) {
-            return new DateRange(null, to, null);
-        }
-
-        public DateRange withKey(String key) {
-            return new DateRange(this.from, this.to, key);
-        }
-    }
 }

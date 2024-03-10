@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import tech.habegger.elastic.search.ElasticSearchRequest;
 import tech.habegger.elastic.shared.CalendarUnit;
+import tech.habegger.elastic.shared.DateRange;
+import tech.habegger.elastic.shared.Range;
 import tech.habegger.elastic.shared.TimeUnit;
 
 import java.time.ZoneId;
@@ -15,20 +17,21 @@ import static tech.habegger.elastic.aggregation.ElasticAdjacencyMatrixAggregatio
 import static tech.habegger.elastic.aggregation.ElasticAutoDateHistogramAggregation.autoDateHistogram;
 import static tech.habegger.elastic.aggregation.ElasticCategorizeTextAggregation.categorizeText;
 import static tech.habegger.elastic.aggregation.ElasticDateHistogramAggregation.dateHistogram;
-import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.between;
-import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.since;
-import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.DateRange.until;
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.dateRange;
 import static tech.habegger.elastic.aggregation.ElasticDiversifiedSamplerAggregation.diversifiedSampler;
 import static tech.habegger.elastic.aggregation.ElasticFiltersAggregation.newFilters;
 import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.FieldSpec.field;
 import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.frequentItemSets;
+import static tech.habegger.elastic.aggregation.ElasticGeoDistanceAggregation.geoDistance;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
 import static tech.habegger.elastic.shared.DateTimeUnit.minute;
+import static tech.habegger.elastic.shared.DistanceType.plane;
+import static tech.habegger.elastic.shared.DistanceUnit.kilometers;
+import static tech.habegger.elastic.shared.GeoCoord.geoCoord;
 
 public class ElasticBucketAggregationsTest {
     @Test
@@ -375,9 +378,9 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("range",
                 dateRange("date",
-                    until("2016/02/01"),
-                    between("2016/02/01", "now/d"),
-                    since("now/d")
+                    DateRange.until("2016/02/01"),
+                    DateRange.between("2016/02/01", "now/d"),
+                    DateRange.since("now/d")
                 ).withTimeZone(ZoneId.of("CET"))
             )
             .build();
@@ -413,11 +416,11 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("range",
                 dateRange("date",
-                    until("now-10M/M"),
-                    since("now-10M/M")
+                    DateRange.until("now-10M/M"),
+                    DateRange.since("now-10M/M")
                 )
                     .withFormat("MM-yyy")
-                    .withKeys()
+                    .withKeyed()
             )
             .build();
 
@@ -452,11 +455,11 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("range",
                 dateRange("date",
-                    between("01-2015", "03-2015").withKey("quarter_01"),
-                    between("03-2015", "06-2015").withKey("quarter_02")
+                    DateRange.between("01-2015", "03-2015").withKey("quarter_01"),
+                    DateRange.between("03-2015", "06-2015").withKey("quarter_02")
                 )
                     .withFormat("MM-yyy")
-                    .withKeys()
+                    .withKeyed()
             )
             .build();
 
@@ -684,6 +687,141 @@ public class ElasticBucketAggregationsTest {
                             "geoip.continent_name": "Europe"
                           }
                         }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoDistanceAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("rings",
+                geoDistance("location", geoCoord(4.894f, 52.3760f),
+                    Range.to(100),
+                    Range.between(100, 300),
+                    Range.from(300)
+                )
+                    .withUnit(kilometers)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "rings": {
+                      "geo_distance": {
+                        "field": "location",
+                        "origin": {
+                          "lat" : 4.894,
+                          "lon" : 52.376
+                        },
+                        "ranges": [
+                          { "to": 100 },
+                          { "from": 100, "to": 300 },
+                          { "from": 300 }
+                        ],
+                        "unit": "km"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoDistanceAggregationWithDistanceType() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("rings",
+                geoDistance("location", geoCoord(4.894f, 52.3760f),
+                    Range.to(100),
+                    Range.between(100, 300),
+                    Range.from(300)
+                )
+                    .withUnit(kilometers)
+                    .withDistanceType(plane)
+
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "rings": {
+                      "geo_distance": {
+                        "field": "location",
+                        "origin": {
+                          "lat" : 4.894,
+                          "lon" : 52.376
+                        },
+                        "ranges": [
+                          { "to": 100 },
+                          { "from": 100, "to": 300 },
+                          { "from": 300 }
+                        ],
+                        "distance_type": "plane",
+                        "unit": "km"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoDistanceAggregationWithKeyed() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("rings_around_amsterdam",
+                geoDistance("location", geoCoord(4.894f, 52.3760f),
+                    Range.to(100000).withKey("first_ring"),
+                    Range.between(100000, 300000).withKey("second_ring"),
+                    Range.from(300000).withKey("third_ring")
+                )
+                    .withKeyed()
+
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "rings_around_amsterdam": {
+                      "geo_distance": {
+                        "field": "location",
+                        "origin": {
+                          "lat" : 4.894,
+                          "lon" : 52.376
+                        },
+                        "ranges": [
+                          { "to": 100000, "key": "first_ring" },
+                          { "from": 100000, "to": 300000, "key": "second_ring" },
+                          { "from": 300000, "key": "third_ring" }
+                        ],
+                        "keyed": true
                       }
                     }
                   }
