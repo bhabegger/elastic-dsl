@@ -233,7 +233,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | IP prefix                            | ✅             | ipPrefixAggregation,...                                               |           |
 | IP range                             | ✅             | ipRangeAggregation,...                                                |           |
 | Missing                              | ✅             | missingAggregation                                                    |           |
-| Multi Terms                          | 🔲            |                                                                       |           |
+| Multi Terms                          | ✅             | multiTermsAggregation,...                                             |           |
 | Nested                               | 🔲            |                                                                       |           |
 | Parent                               | 🔲            |                                                                       |           |
 | Random sampler                       | 🔲            |                                                                       |           |

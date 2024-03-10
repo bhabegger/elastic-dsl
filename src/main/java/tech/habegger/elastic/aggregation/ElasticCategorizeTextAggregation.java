@@ -17,18 +17,17 @@ public final class ElasticCategorizeTextAggregation extends ElasticAggregations 
     private final CategorizeTextBody categorizeText;
 
     ElasticCategorizeTextAggregation(
-            CategorizeTextBody categorizeText,
-            Map<String, ElasticAggregations> aggregations
+            CategorizeTextBody categorizeText
     ) {
         this.categorizeText = categorizeText;
     }
 
     public ElasticCategorizeTextAggregation withAggregations(Map<String, ElasticAggregations> aggregations) {
-        return new ElasticCategorizeTextAggregation(categorizeText, aggregations);
+        return new ElasticCategorizeTextAggregation(categorizeText);
     }
 
     private ElasticCategorizeTextAggregation withBody(Function<CategorizeTextBody, CategorizeTextBody> update) {
-        return new ElasticCategorizeTextAggregation(update.apply(this.categorizeText), this.aggregations);
+        return new ElasticCategorizeTextAggregation(update.apply(this.categorizeText));
     }
 
     public ElasticCategorizeTextAggregation withCategorizationFilters(String... categorizationFilters) {
@@ -128,8 +127,7 @@ public final class ElasticCategorizeTextAggregation extends ElasticAggregations 
                 null,
                 null,
                 null
-            ),
-            null
+            )
         );
     }
 

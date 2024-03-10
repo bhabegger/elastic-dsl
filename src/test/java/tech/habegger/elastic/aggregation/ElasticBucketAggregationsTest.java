@@ -29,6 +29,8 @@ import static tech.habegger.elastic.aggregation.ElasticHistogramAggregation.hist
 import static tech.habegger.elastic.aggregation.ElasticIpPrefixAggregation.ipPrefix;
 import static tech.habegger.elastic.aggregation.ElasticIpRangeAggregation.ipRange;
 import static tech.habegger.elastic.aggregation.ElasticMissingAggregation.missing;
+import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.multiTerms;
+import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.termSpec;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
@@ -1462,6 +1464,76 @@ public class ElasticBucketAggregationsTest {
                             "missing": { "field": "price" }
                         }
                     }
+                }
+                """
+        );
+    }
+
+
+
+    @Test
+    void multiTermsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("genres_and_products",
+                multiTerms("genre", "product")
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "genres_and_products": {
+                      "multi_terms": {
+                        "terms": [{
+                          "field": "genre"
+                        }, {
+                          "field": "product"
+                        }]
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void multiTermsAggregationWithMissing() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("genres_and_products",
+                multiTerms(termSpec("genre"), termSpec("product").withMissing("Product Z"))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "genres_and_products": {
+                      "multi_terms": {
+                        "terms": [
+                          {
+                            "field": "genre"
+                          },
+                          {
+                            "field": "product",
+                            "missing": "Product Z"
+                          }
+                        ]
+                      }
+                    }
+                  }
                 }
                 """
         );
