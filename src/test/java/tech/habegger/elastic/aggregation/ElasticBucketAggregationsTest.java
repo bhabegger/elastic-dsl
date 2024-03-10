@@ -17,6 +17,7 @@ import static tech.habegger.elastic.aggregation.ElasticCategorizeTextAggregation
 import static tech.habegger.elastic.aggregation.ElasticDateHistogramAggregation.dateHistogram;
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.dateRange;
 import static tech.habegger.elastic.aggregation.ElasticDiversifiedSamplerAggregation.diversifiedSampler;
+import static tech.habegger.elastic.aggregation.ElasticFilterAggregation.filter;
 import static tech.habegger.elastic.aggregation.ElasticFiltersAggregation.newFilters;
 import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.FieldSpec.field;
 import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.frequentItemSets;
@@ -553,7 +554,43 @@ public class ElasticBucketAggregationsTest {
         );
     }
 
+    @Test
+    void filterAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("avg_price",
+                avg("price")
 
+            )
+            .aggregation("t_shirts",
+                filter(term("type", "t-shirt"))
+                .aggregation("avg_price",
+                    avg("price")
+
+                )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "avg_price": { "avg": { "field": "price" } },
+                    "t_shirts": {
+                      "aggregations": {
+                        "avg_price": { "avg": { "field": "price" } }
+                      },
+                      "filter": { "term": { "type": "t-shirt" } }
+                    }
+                  }
+                }
+                """
+        );
+    }
     @Test
     void filtersAggregation() throws JsonProcessingException {
         // Given

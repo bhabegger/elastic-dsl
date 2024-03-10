@@ -221,7 +221,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Date histogram               | ✅             | dateHistogramWithCalendarInterval, dateHistogramWithFixedInterval,... |           |
 | Date range                   | ✅             | dateRangeAggregation, ...                                             |           |
 | Diversified sampler          | ✅             | diversifiedSamplerAggregation                                         |           |
-| Filter                       | 🔲            |                                                                       |           |
+| Filter                       | ✅             | filterAggregation                                                     |           |
 | Filters                      | ✅             | filtersAggregation                                                    |           |
 | Frequent item sets           | ✅             | frequentItemSetsAggregation,...                                       |           |
 | Geo-distance                 | ✅             | geoDistanceAggregation,...                                            |           |

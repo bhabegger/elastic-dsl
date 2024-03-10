@@ -2,6 +2,7 @@ package tech.habegger.elastic.search;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import tech.habegger.elastic.ElasticSearchSource;
 import tech.habegger.elastic.aggregation.ElasticAggregations;
 
@@ -20,6 +21,7 @@ public record ElasticSearchRequest(
     Integer size,
     @JsonProperty("min_score")
     Double minScore,
+    @JsonPropertyOrder(alphabetic = true)
     Map<String, ElasticAggregations> aggregations) {
     public static ElasticSearchRequest query(ElasticSearchClause clause, int pageSize) {
         return ElasticSearchRequest.requestBuilder()
