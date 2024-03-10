@@ -211,41 +211,41 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 
 See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elastic/aggregation/ElasticBucketAggregationsTest.java)
 
-| **Aggregation Type**                 | **Supported** | **Tests**                                                             | **Notes** |
-|--------------------------------------|---------------|-----------------------------------------------------------------------|-----------|
-| Adjacency matrix                     | ✅             | adjacencyMatrixAggregation                                            |           |
-| Auto-interval date histogram         | ✅             | autoDateHistogramAggregation,...                                      |           |
-| Categorize text                      | ✅             | categorizeTextAggregation,...                                         |           |
-| Children                             | 🔲            |                                                                       |           |
-| Composite                            | 🔲            |                                                                       |           |
-| Date histogram                       | ✅             | dateHistogramWithCalendarInterval, dateHistogramWithFixedInterval,... |           |
-| Date range                           | ✅             | dateRangeAggregation, ...                                             |           |
-| Diversified sampler                  | ✅             | diversifiedSamplerAggregation                                         |           |
-| Filter                               | 🔲            |                                                                       |           |
-| Filters                              | ✅             | filtersAggregation                                                    |           |
-| Frequent item sets                   | ✅             | frequentItemSetsAggregation,...                                       |           |
-| Geo-distance                         | ✅             | geoDistanceAggregation,...                                            |           |
-| Geohash grid                         | ✅             | geoHashGridAggregation,...                                            |           |
-| Geohex grid                          | ✅             | geoHexGridAggregation,...                                             |           |
-| Geotile grid                         | ✅             | geoTileGridAggregation,...                                            |           |
-| Global                               | ✅             | globalAggregation                                                     |           |
-| Histogram                            | ✅             | histogramAggregation,...                                              |           |
-| IP prefix                            | ✅             | ipPrefixAggregation,...                                               |           |
-| IP range                             | ✅             | ipRangeAggregation,...                                                |           |
-| Missing                              | ✅             | missingAggregation                                                    |           |
-| Multi Terms                          | ✅             | multiTermsAggregation,...                                             |           |
-| Nested                               | ✅             | nestedAggregation                                                     |           |
-| Parent                               | 🔲            |                                                                       |           |
-| Random sampler                       | 🔲            |                                                                       |           |
-| Range                                | ✅             | rangeAggregation,...                                                  |           |
-| Rare terms                           | ✅             | rareTermsAggregation,...                                              |           |
-| Reverse nested                       | 🔲            |                                                                       |           |
-| Sampler                              | 🔲            |                                                                       |           |
-| Significant terms                    | ✅             | significantTermsAggregation                                           |           |
-| Significant text                     | 🔲            |                                                                       |           |
-| Terms                                | ✅             | termsAggregation                                                      |           |
-| Time series                          | 🔲            |                                                                       |           |
-| Variable width histogram             | 🔲            |                                                                       |           |
+| **Aggregation Type**         | **Supported** | **Tests**                                                             | **Notes** |
+|------------------------------|---------------|-----------------------------------------------------------------------|-----------|
+| Adjacency matrix             | ✅             | adjacencyMatrixAggregation                                            |           |
+| Auto-interval date histogram | ✅             | autoDateHistogramAggregation,...                                      |           |
+| Categorize text              | ✅             | categorizeTextAggregation,...                                         |           |
+| Children                     | 🔲            |                                                                       |           |
+| Composite                    | 🔲            |                                                                       |           |
+| Date histogram               | ✅             | dateHistogramWithCalendarInterval, dateHistogramWithFixedInterval,... |           |
+| Date range                   | ✅             | dateRangeAggregation, ...                                             |           |
+| Diversified sampler          | ✅             | diversifiedSamplerAggregation                                         |           |
+| Filter                       | 🔲            |                                                                       |           |
+| Filters                      | ✅             | filtersAggregation                                                    |           |
+| Frequent item sets           | ✅             | frequentItemSetsAggregation,...                                       |           |
+| Geo-distance                 | ✅             | geoDistanceAggregation,...                                            |           |
+| Geohash grid                 | ✅             | geoHashGridAggregation,...                                            |           |
+| Geohex grid                  | ✅             | geoHexGridAggregation,...                                             |           |
+| Geotile grid                 | ✅             | geoTileGridAggregation,...                                            |           |
+| Global                       | ✅             | globalAggregation                                                     |           |
+| Histogram                    | ✅             | histogramAggregation,...                                              |           |
+| IP prefix                    | ✅             | ipPrefixAggregation,...                                               |           |
+| IP range                     | ✅             | ipRangeAggregation,...                                                |           |
+| Missing                      | ✅             | missingAggregation                                                    |           |
+| Multi Terms                  | ✅             | multiTermsAggregation,...                                             |           |
+| Nested                       | ✅             | nestedAggregation                                                     |           |
+| Parent                       | 🔲            |                                                                       |           |
+| Random sampler               | 🔲            |                                                                       |           |
+| Range                        | ✅             | rangeAggregation,...                                                  |           |
+| Rare terms                   | ✅             | rareTermsAggregation,...                                              |           |
+| Reverse nested               | 🔲            |                                                                       |           |
+| Sampler                      | ✅             | samplerAggregation                                                    |           |
+| Significant terms            | ✅             | significantTermsAggregation                                           |           |
+| Significant text             | 🔲            |                                                                       |           |
+| Terms                        | ✅             | termsAggregation                                                      |           |
+| Time series                  | 🔲            |                                                                       |           |
+| Variable width histogram     | 🔲            |                                                                       |           |
 
 ### [Metrics aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html)
 

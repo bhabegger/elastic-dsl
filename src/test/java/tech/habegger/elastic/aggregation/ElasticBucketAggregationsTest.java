@@ -35,8 +35,10 @@ import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.ter
 import static tech.habegger.elastic.aggregation.ElasticNestedAggregation.nestedAgg;
 import static tech.habegger.elastic.aggregation.ElasticRangeAggregation.rangeAgg;
 import static tech.habegger.elastic.aggregation.ElasticRareTermsAggregation.rareTerms;
+import static tech.habegger.elastic.aggregation.ElasticSamplerAggregation.sampler;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
+import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticRangeClause.range;
@@ -1714,6 +1716,64 @@ public class ElasticBucketAggregationsTest {
                         "field": "genre",
                         "include": [ "swi*" ],
                         "exclude": [ "electro*" ]
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+
+    @Test
+    void samplerAggregationWithFiltering() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(
+                newBool()
+                    .should(match("tags", "kibana"))
+                    .should(match("tags", "javascript"))
+                    .minimumShouldMatch(1)
+                .build()
+            )
+            .aggregation("sample",
+                sampler(200)
+                    .aggregation("keywords",
+                        significantTerms("tags")
+                            .withExclude("kibana", "javascript")
+                    )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "bool": {
+                      "should": [
+                        { "match": { "tags":"kibana" } },
+                        { "match": { "tags":"javascript" } }
+                      ],
+                      "minimum_should_match": 1
+                    }
+                  },
+                  "aggregations": {
+                    "sample": {
+                      "aggregations": {
+                        "keywords": {
+                          "significant_terms": {
+                            "field": "tags",
+                            "exclude": [ "kibana", "javascript" ]
+                          }
+                        }
+                      },
+                      "sampler": {
+                        "shard_size": 200
                       }
                     }
                   }
