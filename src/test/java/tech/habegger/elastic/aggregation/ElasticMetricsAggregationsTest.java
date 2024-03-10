@@ -9,6 +9,7 @@ import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.aggregation.ElasticAvgAggregation.avg;
 import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlot;
 import static tech.habegger.elastic.aggregation.ElasticCardinalityAggregation.cardinality;
+import static tech.habegger.elastic.aggregation.ElasticExtendedStatsAggregation.extendedStats;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
@@ -121,6 +122,39 @@ public class ElasticMetricsAggregationsTest {
                       "cardinality": {
                         "field": "type",
                         "precision_threshold": 100
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void extendedStatsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("grades_stats",
+                extendedStats("grade")
+                    .withSigma(3.0)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "grades_stats": {
+                      "extended_stats": {
+                        "field": "grade",
+                        "sigma": 3.0
                       }
                     }
                   }
