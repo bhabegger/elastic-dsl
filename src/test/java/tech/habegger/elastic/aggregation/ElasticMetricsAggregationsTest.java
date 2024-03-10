@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.aggregation.ElasticAvgAggregation.avg;
 import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlot;
+import static tech.habegger.elastic.aggregation.ElasticCardinalityAggregation.cardinality;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
@@ -97,6 +98,37 @@ public class ElasticMetricsAggregationsTest {
                 """
         );
     }
+
+    @Test
+    void cardinalityAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("type_count",
+                cardinality("type")
+                    .withPrecisionThreshold(100)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "type_count": {
+                      "cardinality": {
+                        "field": "type",
+                        "precision_threshold": 100
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
     @Test
     void maxAggregation() throws JsonProcessingException {
         // Given

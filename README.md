@@ -255,7 +255,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 |---------------------------|---------------|------------------------|
 | Avg                       | ✅             | avgAggregation         |
 | Boxplot                   | ✅             | boxPlotAggregation,... |
-| Cardinality               | 🔲            |                        |
+| Cardinality               | ✅             | cardinalityAggregation |
 | Extended stats            | 🔲            |                        |
 | Geo-bounds                | 🔲            |                        |
 | Geo-centroid              | 🔲            |                        |
