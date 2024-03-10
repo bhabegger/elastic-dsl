@@ -232,7 +232,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Histogram                            | ✅             | histogramAggregation,...                                              |           |
 | IP prefix                            | ✅             | ipPrefixAggregation,...                                               |           |
 | IP range                             | ✅             | ipRangeAggregation,...                                                |           |
-| Missing                              | 🔲            |                                                                       |           |
+| Missing                              | ✅             | missingAggregation                                                    |           |
 | Multi Terms                          | 🔲            |                                                                       |           |
 | Nested                               | 🔲            |                                                                       |           |
 | Parent                               | 🔲            |                                                                       |           |

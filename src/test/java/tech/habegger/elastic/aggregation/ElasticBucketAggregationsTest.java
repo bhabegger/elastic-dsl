@@ -28,6 +28,7 @@ import static tech.habegger.elastic.aggregation.ElasticGlobalAggregation.global;
 import static tech.habegger.elastic.aggregation.ElasticHistogramAggregation.histogram;
 import static tech.habegger.elastic.aggregation.ElasticIpPrefixAggregation.ipPrefix;
 import static tech.habegger.elastic.aggregation.ElasticIpRangeAggregation.ipRange;
+import static tech.habegger.elastic.aggregation.ElasticMissingAggregation.missing;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
@@ -1433,6 +1434,34 @@ public class ElasticBucketAggregationsTest {
                       }
                     }
                   }
+                }
+                """
+        );
+    }
+
+    @Test
+    void missingAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("products_without_a_price",
+                missing("price")
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                    "size": 0,
+                    "aggregations": {
+                        "products_without_a_price": {
+                            "missing": { "field": "price" }
+                        }
+                    }
                 }
                 """
         );
