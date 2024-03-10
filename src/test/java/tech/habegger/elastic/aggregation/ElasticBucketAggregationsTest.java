@@ -26,6 +26,7 @@ import static tech.habegger.elastic.aggregation.ElasticGeohexGridAggregation.geo
 import static tech.habegger.elastic.aggregation.ElasticGeotileGridAggregation.geotileGrid;
 import static tech.habegger.elastic.aggregation.ElasticGlobalAggregation.global;
 import static tech.habegger.elastic.aggregation.ElasticHistogramAggregation.histogram;
+import static tech.habegger.elastic.aggregation.ElasticIpPrefixAggregation.ipPrefix;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
@@ -1218,6 +1219,104 @@ public class ElasticBucketAggregationsTest {
                         "field": "quantity",
                         "interval": 10.0,
                         "missing": 0.0
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void ipPrefixAggregationWithIpV6() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("ipv6-subnets",
+                ipPrefix("ipv6", 64)
+                    .withIpV6()
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "ipv6-subnets": {
+                      "ip_prefix": {
+                        "field": "ipv6",
+                        "prefix_length": 64,
+                        "is_ipv6": true
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void ipPrefixAggregationWithAppendPrefixLength() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("ipv4-subnets",
+                ipPrefix("ipv4", 24)
+                    .withAppendPrefixLength()
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "ipv4-subnets": {
+                      "ip_prefix": {
+                        "field": "ipv4",
+                        "prefix_length": 24,
+                        "append_prefix_length": true
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void ipPrefixAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("ipv4-subnets",
+                ipPrefix("ipv4", 24)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "ipv4-subnets": {
+                      "ip_prefix": {
+                        "field": "ipv4",
+                        "prefix_length": 24
                       }
                     }
                   }
