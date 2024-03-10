@@ -237,7 +237,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Nested                               | ✅             | nestedAggregation                                                     |           |
 | Parent                               | 🔲            |                                                                       |           |
 | Random sampler                       | 🔲            |                                                                       |           |
-| Range                                | 🔲            |                                                                       |           |
+| Range                                | ✅             | rangeAggregation,...                                                  |           |
 | Rare terms                           | 🔲            |                                                                       |           |
 | Reverse nested                       | 🔲            |                                                                       |           |
 | Sampler                              | 🔲            |                                                                       |           |

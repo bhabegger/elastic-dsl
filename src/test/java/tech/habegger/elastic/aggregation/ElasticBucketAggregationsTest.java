@@ -33,6 +33,7 @@ import static tech.habegger.elastic.aggregation.ElasticMissingAggregation.missin
 import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.multiTerms;
 import static tech.habegger.elastic.aggregation.ElasticMultiTermsAggregation.termSpec;
 import static tech.habegger.elastic.aggregation.ElasticNestedAggregation.nestedAgg;
+import static tech.habegger.elastic.aggregation.ElasticRangeAggregation.rangeAgg;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
@@ -716,9 +717,9 @@ public class ElasticBucketAggregationsTest {
             .withSize(0)
             .aggregation("rings",
                 geoDistance("location", geoCoord(4.894f, 52.3760f),
-                    Range.to(100),
-                    Range.between(100, 300),
-                    Range.from(300)
+                    Range.to(100f),
+                    Range.between(100f, 300f),
+                    Range.from(300f)
                 )
                     .withUnit(kilometers)
             )
@@ -741,9 +742,9 @@ public class ElasticBucketAggregationsTest {
                           "lon" : 52.376
                         },
                         "ranges": [
-                          { "to": 100 },
-                          { "from": 100, "to": 300 },
-                          { "from": 300 }
+                          { "to": 100.0 },
+                          { "from": 100.0, "to": 300.0 },
+                          { "from": 300.0 }
                         ],
                         "unit": "km"
                       }
@@ -760,9 +761,9 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("rings",
                 geoDistance("location", geoCoord(4.894f, 52.3760f),
-                    Range.to(100),
-                    Range.between(100, 300),
-                    Range.from(300)
+                    Range.to(100f),
+                    Range.between(100f, 300f),
+                    Range.from(300f)
                 )
                     .withUnit(kilometers)
                     .withDistanceType(plane)
@@ -786,9 +787,9 @@ public class ElasticBucketAggregationsTest {
                           "lon" : 52.376
                         },
                         "ranges": [
-                          { "to": 100 },
-                          { "from": 100, "to": 300 },
-                          { "from": 300 }
+                          { "to": 100.0 },
+                          { "from": 100.0, "to": 300.0 },
+                          { "from": 300.0 }
                         ],
                         "distance_type": "plane",
                         "unit": "km"
@@ -806,9 +807,9 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("rings_around_amsterdam",
                 geoDistance("location", geoCoord(4.894f, 52.3760f),
-                    Range.to(100000).withKey("first_ring"),
-                    Range.between(100000, 300000).withKey("second_ring"),
-                    Range.from(300000).withKey("third_ring")
+                    Range.to(100000f).withKey("first_ring"),
+                    Range.between(100000f, 300000f).withKey("second_ring"),
+                    Range.from(300000f).withKey("third_ring")
                 )
                     .withKeyed()
 
@@ -831,9 +832,9 @@ public class ElasticBucketAggregationsTest {
                           "lon" : 52.376
                         },
                         "ranges": [
-                          { "to": 100000, "key": "first_ring" },
-                          { "from": 100000, "to": 300000, "key": "second_ring" },
-                          { "from": 300000, "key": "third_ring" }
+                          { "to": 100000.0, "key": "first_ring" },
+                          { "from": 100000.0, "to": 300000.0, "key": "second_ring" },
+                          { "from": 300000.0, "key": "third_ring" }
                         ],
                         "keyed": true
                       }
@@ -1584,6 +1585,81 @@ public class ElasticBucketAggregationsTest {
         );
     }
 
+
+    @Test
+    void rangeAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("price_ranges",
+                rangeAgg("price",
+                    Range.to(100.0f),
+                    Range.between(100.f, 200.0f),
+                    Range.from(200.0f)
+                )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "price_ranges": {
+                      "range": {
+                        "field": "price",
+                        "ranges": [
+                          { "to": 100.0 },
+                          { "from": 100.0, "to": 200.0 },
+                          { "from": 200.0 }
+                        ]
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void rangeAggregationWithKeyed() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("price_ranges",
+                rangeAgg("price",
+                    Range.to(100.0f),
+                    Range.between(100.f, 200.0f),
+                    Range.from(200.0f)
+                ).withKeyed()
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "price_ranges": {
+                      "range": {
+                        "field": "price",
+                        "ranges": [
+                          { "to": 100.0 },
+                          { "from": 100.0, "to": 200.0 },
+                          { "from": 200.0 }
+                        ],
+                        "keyed": true
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
 
     @Test
     void significantTermsAggregation() throws JsonProcessingException {
