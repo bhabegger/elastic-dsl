@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.aggregation.ElasticAdjacencyMatrixAggregation.newAdjacencyMatrix;
 import static tech.habegger.elastic.aggregation.ElasticAutoDateHistogramAggregation.autoDateHistogram;
+import static tech.habegger.elastic.aggregation.ElasticAvgAggregation.avg;
 import static tech.habegger.elastic.aggregation.ElasticCategorizeTextAggregation.categorizeText;
 import static tech.habegger.elastic.aggregation.ElasticDateHistogramAggregation.dateHistogram;
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.dateRange;
@@ -23,6 +24,7 @@ import static tech.habegger.elastic.aggregation.ElasticGeoDistanceAggregation.ge
 import static tech.habegger.elastic.aggregation.ElasticGeohashGridAggregation.geohashGrid;
 import static tech.habegger.elastic.aggregation.ElasticGeohexGridAggregation.geohexGrid;
 import static tech.habegger.elastic.aggregation.ElasticGeotileGridAggregation.geotileGrid;
+import static tech.habegger.elastic.aggregation.ElasticGlobalAggregation.global;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
@@ -1042,6 +1044,42 @@ public class ElasticBucketAggregationsTest {
                         }
                       }
                     }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void globalAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(match("type", "t-shirt"))
+            .aggregation("all_products",
+                global()
+                    .aggregation("avg_price", avg("price"))
+            )
+            .aggregation("t_shirts", avg("price"))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "match": { "type": "t-shirt" }
+                  },
+                  "aggregations": {
+                    "all_products": {
+                      "aggregations": {
+                        "avg_price": { "avg": { "field": "price" } }
+                      },
+                      "global": {}
+                    },
+                    "t_shirts": { "avg": { "field": "price" } }
                   }
                 }
                 """
