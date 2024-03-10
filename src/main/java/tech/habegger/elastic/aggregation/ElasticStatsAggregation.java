@@ -17,10 +17,10 @@ public final class ElasticStatsAggregation extends ElasticAggregations {
         this.stats = stats;
     }
 
-    public static ElasticAggregations statsAggregation(String field) {
-        return new ElasticStatsAggregation(new StatsBody(field));
+    public static ElasticAggregations stats(String field, Integer missing) {
+        return new ElasticStatsAggregation(new StatsBody(field, missing));
     }
-
-    private record StatsBody(String script) {
+    public static ElasticAggregations stats(String field) {
+        return new ElasticStatsAggregation(new StatsBody(field, null));
     }
 }

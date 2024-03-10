@@ -9,17 +9,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class ElasticMaxAggregation extends ElasticAggregations {
 
     @JsonProperty("max")
-    private final MaxBody max;
+    private final StatsBody max;
 
     ElasticMaxAggregation(
-            MaxBody max
+        StatsBody max
     ) {
         this.max = max;
     }
 
-    public static ElasticAggregations maxAggregation(String field) {
-        return new ElasticMaxAggregation(new MaxBody(field));
+    public static ElasticAggregations max(String field) {
+        return new ElasticMaxAggregation(new StatsBody(field, null));
     }
-    private record MaxBody(String field) {
+    public static ElasticAggregations max(String field, Integer missing) {
+        return new ElasticMaxAggregation(new StatsBody(field, missing));
     }
 }

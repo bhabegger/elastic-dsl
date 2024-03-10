@@ -208,6 +208,9 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 ## Current aggregation support
 
 ### [Bucket aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket.html)
+
+See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elastic/aggregation/ElasticBucketAggregationsTest.java)
+
 | **Aggregation Type**                 | **Supported** | **Tests**                                                             | **Notes** |
 |--------------------------------------|---------------|-----------------------------------------------------------------------|-----------|
 | Adjacency matrix                     | ✅             | adjacencyMatrixAggregation                                            |           |
@@ -246,33 +249,36 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 | Subtleties of bucketing range fields | 🔲            |                                                                       |           |
 
 ### [Metrics aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html)
-| **Aggregation Type**      | **Supported** |
-|---------------------------|---------------|
-| Avg                       | 🔲            |
-| Boxplot                   | 🔲            |
-| Cardinality               | 🔲            |
-| Extended stats            | 🔲            |
-| Geo-bounds                | 🔲            |
-| Geo-centroid              | 🔲            |
-| Geo-line                  | 🔲            |
-| Cartesian-bounds          | 🔲            |
-| Cartesian-centroid        | 🔲            |
-| Matrix stats              | 🔲            |
-| Max                       | ✅             |
-| Median absolute deviation | 🔲            |
-| Min                       | 🔲            |
-| Percentile ranks          | 🔲            |
-| Percentiles               | 🔲            |
-| Rate                      | 🔲            |
-| Scripted metric           | 🔲            |
-| Stats                     | ✅             |
-| String stats              | 🔲            |
-| Sum                       | ✅             |
-| T-test                    | 🔲            |
-| Top hits                  | ✅             |
-| Top metrics               | 🔲            |
-| Value count               | 🔲            |
-| Weighted avg              | 🔲            |
+
+See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elastic/aggregation/ElasticMetricsAggregationsTest.java)
+
+| **Aggregation Type**      | **Supported** | **Tests**             |
+|---------------------------|---------------|-----------------------|
+| Avg                       | ✅            | avgAggregation        |
+| Boxplot                   | 🔲            |                       |
+| Cardinality               | 🔲            |                       |
+| Extended stats            | 🔲            |                       |
+| Geo-bounds                | 🔲            |                       |
+| Geo-centroid              | 🔲            |                       |
+| Geo-line                  | 🔲            |                       |
+| Cartesian-bounds          | 🔲            |                       |
+| Cartesian-centroid        | 🔲            |                       |
+| Matrix stats              | 🔲            |                       |
+| Max                       | ✅             | maxAggregation        |
+| Median absolute deviation | 🔲            |                       |
+| Min                       | ✅            | minAggregation        |
+| Percentile ranks          | 🔲            |                       |
+| Percentiles               | 🔲            |                       |
+| Rate                      | 🔲            |                       |
+| Scripted metric           | 🔲            |                       |
+| Stats                     | ✅             |                       |
+| String stats              | 🔲            | sumAggregation        |
+| Sum                       | ✅             |                       |
+| T-test                    | 🔲            |                       |
+| Top hits                  | ✅             |                       |
+| Top metrics               | 🔲            |                       |
+| Value count               | ✅            | valueCountAggregation |
+| Weighted avg              | 🔲            |                       |
 
 ### [Pipeline aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-pipeline.html)
 | **Aggregation Type**   | **Supported** |

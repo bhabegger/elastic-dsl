@@ -9,18 +9,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class ElasticSumAggregation extends ElasticAggregations {
 
     @JsonProperty("sum")
-    private final SumBody sum;
+    private final StatsBody sum;
 
     ElasticSumAggregation(
-            SumBody sum
+            StatsBody sum
     ) {
         this.sum = sum;
     }
-
-    public static ElasticAggregations sumAggregation(String field) {
-        return new ElasticSumAggregation(new SumBody(field));
+    public static ElasticAggregations sum(String field) {
+        return new ElasticSumAggregation(new StatsBody(field, null));
     }
 
-    private record SumBody(String field) {
+    public static ElasticAggregations sum(String field, Integer missing) {
+        return new ElasticSumAggregation(new StatsBody(field, missing));
     }
 }
