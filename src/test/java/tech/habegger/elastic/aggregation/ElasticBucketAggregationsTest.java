@@ -3,10 +3,7 @@ package tech.habegger.elastic.aggregation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import tech.habegger.elastic.search.ElasticSearchRequest;
-import tech.habegger.elastic.shared.CalendarUnit;
-import tech.habegger.elastic.shared.DateRange;
-import tech.habegger.elastic.shared.Range;
-import tech.habegger.elastic.shared.TimeUnit;
+import tech.habegger.elastic.shared.*;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -23,6 +20,7 @@ import static tech.habegger.elastic.aggregation.ElasticFiltersAggregation.newFil
 import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.FieldSpec.field;
 import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.frequentItemSets;
 import static tech.habegger.elastic.aggregation.ElasticGeoDistanceAggregation.geoDistance;
+import static tech.habegger.elastic.aggregation.ElasticGeohashGridAggregation.geohashGrid;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
@@ -32,6 +30,7 @@ import static tech.habegger.elastic.shared.DateTimeUnit.minute;
 import static tech.habegger.elastic.shared.DistanceType.plane;
 import static tech.habegger.elastic.shared.DistanceUnit.kilometers;
 import static tech.habegger.elastic.shared.GeoCoord.geoCoord;
+import static tech.habegger.elastic.shared.GeoRect.geoRect;
 
 public class ElasticBucketAggregationsTest {
     @Test
@@ -822,6 +821,78 @@ public class ElasticBucketAggregationsTest {
                           { "from": 300000, "key": "third_ring" }
                         ],
                         "keyed": true
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoHashGridAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("large-grid",
+                geohashGrid("location", 3)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "large-grid": {
+                      "geohash_grid": {
+                        "field": "location",
+                        "precision": 3
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoHashGridAggregationWithBoundingBox() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("tiles-in-bounds",
+                geohashGrid("location", 8)
+                    .withBounds(geoRect(
+                        4.21875f, 53.4375f,
+                        5.625f, 52.03125f
+                    ))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "tiles-in-bounds": {
+                      "geohash_grid": {
+                        "field": "location",
+                        "precision": 8,
+                        "bounds": {
+                          "top_left": {
+                              "lat" : 4.21875,
+                              "lon" : 53.4375
+                          },
+                          "bottom_right": {
+                              "lat" : 5.625,
+                              "lon" : 52.03125
+                          }
+                        }
                       }
                     }
                   }

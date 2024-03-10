@@ -222,7 +222,7 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 | Filters                              | ✅             | filtersAggregation                                                    |           |
 | Frequent item sets                   | ✅             | frequentItemSetsAggregation,...                                       |           |
 | Geo-distance                         | ✅             | geoDistanceAggregation,...                                            |           |
-| Geohash grid                         | ✅             |                                                                       |           |
+| Geohash grid                         | ✅             | geoHashGrid                                                           |           |
 | Geohex grid                          | 🔲            |                                                                       |           |
 | Geotile grid                         | 🔲            |                                                                       |           |
 | Global                               | 🔲            |                                                                       |           |
