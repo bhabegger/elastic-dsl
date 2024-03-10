@@ -19,4 +19,12 @@ public class Helpers {
             return clause;
         }
     }
+
+
+    public static String nullOrString(Object obj) {
+        if(obj == null) {
+            return null;
+        }
+        return String.valueOf(obj);
+    }
 }

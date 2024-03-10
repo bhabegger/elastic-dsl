@@ -25,9 +25,12 @@ import static tech.habegger.elastic.aggregation.ElasticGeohashGridAggregation.ge
 import static tech.habegger.elastic.aggregation.ElasticGeohexGridAggregation.geohexGrid;
 import static tech.habegger.elastic.aggregation.ElasticGeotileGridAggregation.geotileGrid;
 import static tech.habegger.elastic.aggregation.ElasticGlobalAggregation.global;
+import static tech.habegger.elastic.aggregation.ElasticHistogramAggregation.histogram;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
+import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
+import static tech.habegger.elastic.search.ElasticRangeClause.range;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
 import static tech.habegger.elastic.shared.DateTimeUnit.minute;
@@ -1086,6 +1089,142 @@ public class ElasticBucketAggregationsTest {
         );
     }
 
+    @Test
+    void histogramAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("prices",
+                histogram("price", 50.0f)
+            )
+        .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "prices": {
+                      "histogram": {
+                        "field": "price",
+                        "interval": 50.0
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void histogramAggregationWithExtendedBounds() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(constantScore(range("price", null, 500)))
+            .aggregation("prices",
+                histogram("price", 50f)
+                    .withExtendedBounds(0,500)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "constant_score": { "filter": { "range": { "price": { "lte": "500" } } } }
+                  },
+                  "aggregations": {
+                    "prices": {
+                      "histogram": {
+                        "field": "price",
+                        "interval": 50.0,
+                        "extended_bounds": {
+                          "min": 0.0,
+                          "max": 500.0
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void histogramAggregationWithHardBounds() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(constantScore(range("price", null, 500)))
+            .aggregation("prices",
+                histogram("price", 50f)
+                    .withHardBounds(100,200)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "constant_score": { "filter": { "range": { "price": { "lte": "500" } } } }
+                  },
+                  "aggregations": {
+                    "prices": {
+                      "histogram": {
+                        "field": "price",
+                        "interval": 50.0,
+                        "hard_bounds": {
+                          "min": 100.0,
+                          "max": 200.0
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void histogramAggregationWitMissing() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("quantity",
+                histogram("quantity", 10f)
+                    .withMissing(0f)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "quantity": {
+                      "histogram": {
+                        "field": "quantity",
+                        "interval": 10.0,
+                        "missing": 0.0
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
 
     @Test
     void significantTermsAggregation() throws JsonProcessingException {

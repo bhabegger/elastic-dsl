@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Map;
 
+import static tech.habegger.elastic.shared.Helpers.nullOrString;
+
 @SuppressWarnings({"FieldCanBeLocal","unused"})
 public class ElasticRangeClause implements ElasticSearchClause {
 
@@ -15,6 +17,9 @@ public class ElasticRangeClause implements ElasticSearchClause {
 
     ElasticRangeClause(Map<String, RangeBody> range) {
         this.range = range;
+    }
+    public static ElasticRangeClause range(String field, Integer from, Integer to) {
+        return new ElasticRangeClause(Map.of(field, new RangeBody(nullOrString(from), nullOrString(to))));
     }
     public static ElasticRangeClause range(String field, String from, String to) {
         return new ElasticRangeClause(Map.of(field, new RangeBody(from, to)));

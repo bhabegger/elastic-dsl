@@ -229,7 +229,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Geohex grid                          | ✅             | geoHexGridAggregation,...                                             |           |
 | Geotile grid                         | ✅             | geoTileGridAggregation,...                                            |           |
 | Global                               | ✅             | globalAggregation                                                     |           |
-| Histogram                            | 🔲            |                                                                       |           |
+| Histogram                            | ✅             | histogramAggregation,...                                              |           |
 | IP prefix                            | 🔲            |                                                                       |           |
 | IP range                             | 🔲            |                                                                       |           |
 | Missing                              | 🔲            |                                                                       |           |
