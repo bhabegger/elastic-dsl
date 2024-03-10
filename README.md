@@ -220,7 +220,7 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 | Diversified sampler                  | ✅             | diversifiedSamplerAggregation                                         |           |
 | Filter                               | 🔲            |                                                                       |           |
 | Filters                              | ✅             | filtersAggregation                                                    |           |
-| Frequent item sets                   | 🔲            |                                                                       |           |
+| Frequent item sets                   | ✅             | frequentItemSetsAggregation,...                                       |           |
 | Geo-distance                         | 🔲            |                                                                       |           |
 | Geohash grid                         | ✅             |                                                                       |           |
 | Geohex grid                          | 🔲            |                                                                       |           |

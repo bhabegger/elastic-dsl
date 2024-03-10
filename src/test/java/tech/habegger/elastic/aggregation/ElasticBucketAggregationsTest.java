@@ -21,9 +21,12 @@ import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.Date
 import static tech.habegger.elastic.aggregation.ElasticDateRangeAggregation.dateRange;
 import static tech.habegger.elastic.aggregation.ElasticDiversifiedSamplerAggregation.diversifiedSampler;
 import static tech.habegger.elastic.aggregation.ElasticFiltersAggregation.newFilters;
+import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.FieldSpec.field;
+import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.frequentItemSets;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
+import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.search.ElasticTermsClause.terms;
 import static tech.habegger.elastic.shared.DateTimeUnit.minute;
 
@@ -32,37 +35,37 @@ public class ElasticBucketAggregationsTest {
     void adjacencyMatrixAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .withSize(0)
-                .aggregation("interactions",
-                        newAdjacencyMatrix()
-                                .filter("grpA", terms("accounts", "hillary", "sidney"))
-                                .filter("grpB", terms("accounts", "donald", "mitt"))
-                                .filter("grpC", terms("accounts", "vladimir", "nigel"))
-                                .build()
-                )
-                .build();
+            .withSize(0)
+            .aggregation("interactions",
+                newAdjacencyMatrix()
+                    .filter("grpA", terms("accounts", "hillary", "sidney"))
+                    .filter("grpB", terms("accounts", "donald", "mitt"))
+                    .filter("grpC", terms("accounts", "vladimir", "nigel"))
+                    .build()
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
-                """
-                        {
-                          "size": 0,
-                          "aggregations" : {
-                            "interactions" : {
-                              "adjacency_matrix" : {
-                                "filters" : {
-                                  "grpA" : { "terms" : { "accounts" : ["hillary", "sidney"] }},
-                                  "grpB" : { "terms" : { "accounts" : ["donald", "mitt"] }},
-                                  "grpC" : { "terms" : { "accounts" : ["vladimir", "nigel"] }}
-                                }
-                              }
-                            }
-                          }
+            """
+                {
+                  "size": 0,
+                  "aggregations" : {
+                    "interactions" : {
+                      "adjacency_matrix" : {
+                        "filters" : {
+                          "grpA" : { "terms" : { "accounts" : ["hillary", "sidney"] }},
+                          "grpB" : { "terms" : { "accounts" : ["donald", "mitt"] }},
+                          "grpC" : { "terms" : { "accounts" : ["vladimir", "nigel"] }}
                         }
-                        """
+                      }
+                    }
+                  }
+                }
+                """
         );
     }
 
@@ -70,27 +73,27 @@ public class ElasticBucketAggregationsTest {
     void categorizeTextAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("categories",
-                        categorizeText("message")
-                )
-                .build();
+            .aggregation("categories",
+                categorizeText("message")
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "categories": {
+                      "categorize_text": {
+                        "field": "message"
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "categories": {
-                              "categorize_text": {
-                                "field": "message"
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -98,31 +101,31 @@ public class ElasticBucketAggregationsTest {
     void categorizeTextAggregationWithSimilarityThreshold() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("categories",
-                        categorizeText("message")
-                                .withCategorizationFilters("\\w+\\_\\d{3}")
-                                .withSimilarityThreshold(11)
-                )
-                .build();
+            .aggregation("categories",
+                categorizeText("message")
+                    .withCategorizationFilters("\\w+\\_\\d{3}")
+                    .withSimilarityThreshold(11)
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "categories": {
+                      "categorize_text": {
+                        "field": "message",
+                        "categorization_filters": ["\\\\w+\\\\_\\\\d{3}"],
+                        "similarity_threshold": 11
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "categories": {
-                              "categorize_text": {
-                                "field": "message",
-                                "categorization_filters": ["\\\\w+\\\\_\\\\d{3}"],
-                                "similarity_threshold": 11
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -130,26 +133,26 @@ public class ElasticBucketAggregationsTest {
     void autoDateHistogramAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("sales_over_time", autoDateHistogram("date", 10))
-                .build();
+            .aggregation("sales_over_time", autoDateHistogram("date", 10))
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                   "aggregations": {
+                     "sales_over_time": {
+                       "auto_date_histogram": {
+                         "field": "date",
+                         "buckets": 10
+                       }
+                     }
+                   }
+                 }
                 """
-                        {
-                           "aggregations": {
-                             "sales_over_time": {
-                               "auto_date_histogram": {
-                                 "field": "date",
-                                 "buckets": 10
-                               }
-                             }
-                           }
-                         }
-                        """
         );
     }
 
@@ -157,30 +160,30 @@ public class ElasticBucketAggregationsTest {
     void autoDateHistogramAggregationWithFormat() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("sales_over_time",
-                        autoDateHistogram("date", 10)
-                                .withFormat("yyyy-MM-dd")
-                )
-                .build();
+            .aggregation("sales_over_time",
+                autoDateHistogram("date", 10)
+                    .withFormat("yyyy-MM-dd")
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                   "aggregations": {
+                     "sales_over_time": {
+                       "auto_date_histogram": {
+                         "field": "date",
+                         "buckets": 10,
+                         "format": "yyyy-MM-dd"
+                       }
+                     }
+                   }
+                 }
                 """
-                        {
-                           "aggregations": {
-                             "sales_over_time": {
-                               "auto_date_histogram": {
-                                 "field": "date",
-                                 "buckets": 10,
-                                 "format": "yyyy-MM-dd"
-                               }
-                             }
-                           }
-                         }
-                        """
         );
     }
 
@@ -188,30 +191,30 @@ public class ElasticBucketAggregationsTest {
     void autoDateHistogramAggregationWithMinimumInterval() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("sale_date",
-                        autoDateHistogram("date", 10)
-                                .withMinimumInterval(minute)
-                )
-                .build();
+            .aggregation("sale_date",
+                autoDateHistogram("date", 10)
+                    .withMinimumInterval(minute)
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "sale_date": {
+                      "auto_date_histogram": {
+                        "field": "date",
+                        "buckets": 10,
+                        "minimum_interval": "minute"
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "sale_date": {
-                              "auto_date_histogram": {
-                                "field": "date",
-                                "buckets": 10,
-                                "minimum_interval": "minute"
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -219,30 +222,30 @@ public class ElasticBucketAggregationsTest {
     void autoDateHistogramAggregationWithMissing() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("sale_date",
-                        autoDateHistogram("date", 10)
-                                .withMissing("2000/01/01")
-                )
-                .build();
+            .aggregation("sale_date",
+                autoDateHistogram("date", 10)
+                    .withMissing("2000/01/01")
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "sale_date": {
+                      "auto_date_histogram": {
+                        "field": "date",
+                        "buckets": 10,
+                        "missing": "2000/01/01"
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "sale_date": {
-                              "auto_date_histogram": {
-                                "field": "date",
-                                "buckets": 10,
-                                "missing": "2000/01/01"
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -250,28 +253,28 @@ public class ElasticBucketAggregationsTest {
     void dateHistogramAggregationWithCalendarInterval() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("sales_over_time",
-                        dateHistogram("date", CalendarUnit.month)
-                )
-                .build();
+            .aggregation("sales_over_time",
+                dateHistogram("date", CalendarUnit.month)
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "sales_over_time": {
+                      "date_histogram": {
+                        "field": "date",
+                        "calendar_interval": "month"
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "sales_over_time": {
-                              "date_histogram": {
-                                "field": "date",
-                                "calendar_interval": "month"
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -279,30 +282,30 @@ public class ElasticBucketAggregationsTest {
     void dateHistogramAggregationWithFormat() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("sales_over_time",
-                        dateHistogram("date", CalendarUnit.month)
-                                .withFormat("yyyy-MM-dd")
-                )
-                .build();
+            .aggregation("sales_over_time",
+                dateHistogram("date", CalendarUnit.month)
+                    .withFormat("yyyy-MM-dd")
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "sales_over_time": {
+                      "date_histogram": {
+                        "field": "date",
+                        "calendar_interval": "month",
+                        "format": "yyyy-MM-dd"
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "sales_over_time": {
-                              "date_histogram": {
-                                "field": "date",
-                                "calendar_interval": "month",
-                                "format": "yyyy-MM-dd"
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -310,30 +313,30 @@ public class ElasticBucketAggregationsTest {
     void dateHistogramAggregationWithTimezone() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("by_day",
-                        dateHistogram("date", CalendarUnit.day)
-                                .withTimeZone(ZoneOffset.ofHours(-1))
-                )
-                .build();
+            .aggregation("by_day",
+                dateHistogram("date", CalendarUnit.day)
+                    .withTimeZone(ZoneOffset.ofHours(-1))
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "by_day": {
+                      "date_histogram": {
+                        "field":     "date",
+                        "calendar_interval":  "day",
+                        "time_zone": "-01:00"
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "by_day": {
-                              "date_histogram": {
-                                "field":     "date",
-                                "calendar_interval":  "day",
-                                "time_zone": "-01:00"
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -341,28 +344,28 @@ public class ElasticBucketAggregationsTest {
     void dateHistogramAggregationWithFixedInterval() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("sales_over_time",
-                        dateHistogram("date", 30, TimeUnit.days)
-                )
-                .build();
+            .aggregation("sales_over_time",
+                dateHistogram("date", 30, TimeUnit.days)
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "sales_over_time": {
+                      "date_histogram": {
+                        "field": "date",
+                        "fixed_interval": "30d"
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "sales_over_time": {
-                              "date_histogram": {
-                                "field": "date",
-                                "fixed_interval": "30d"
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -370,37 +373,37 @@ public class ElasticBucketAggregationsTest {
     void dateRangeAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("range",
-                        dateRange("date",
-                                until("2016/02/01"),
-                                between("2016/02/01", "now/d"),
-                                since("now/d")
-                        ).withTimeZone(ZoneId.of("CET"))
-                )
-                .build();
+            .aggregation("range",
+                dateRange("date",
+                    until("2016/02/01"),
+                    between("2016/02/01", "now/d"),
+                    since("now/d")
+                ).withTimeZone(ZoneId.of("CET"))
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                   "aggregations": {
+                       "range": {
+                           "date_range": {
+                               "field": "date",
+                               "ranges": [
+                                  { "to": "2016/02/01" },
+                                  { "from": "2016/02/01", "to" : "now/d" },
+                                  { "from": "now/d" }
+                              ],
+                              "time_zone": "CET"
+                          }
+                      }
+                   }
+                }
                 """
-                        {
-                           "aggregations": {
-                               "range": {
-                                   "date_range": {
-                                       "field": "date",
-                                       "ranges": [
-                                          { "to": "2016/02/01" },
-                                          { "from": "2016/02/01", "to" : "now/d" },
-                                          { "from": "now/d" }
-                                      ],
-                                      "time_zone": "CET"
-                                  }
-                              }
-                           }
-                        }
-                        """
         );
     }
 
@@ -408,38 +411,38 @@ public class ElasticBucketAggregationsTest {
     void dateRangeAggregationWithKeys() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("range",
-                        dateRange("date",
-                                until("now-10M/M"),
-                                since("now-10M/M")
-                        )
-                        .withFormat("MM-yyy")
-                        .withKeys()
+            .aggregation("range",
+                dateRange("date",
+                    until("now-10M/M"),
+                    since("now-10M/M")
                 )
-                .build();
+                    .withFormat("MM-yyy")
+                    .withKeys()
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "range": {
+                      "date_range": {
+                        "field": "date",
+                        "ranges": [
+                          { "to": "now-10M/M" },
+                          { "from": "now-10M/M" }
+                        ],
+                        "format": "MM-yyy",
+                        "keyed": true
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "range": {
-                              "date_range": {
-                                "field": "date",
-                                "ranges": [
-                                  { "to": "now-10M/M" },
-                                  { "from": "now-10M/M" }
-                                ],
-                                "format": "MM-yyy",
-                                "keyed": true
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -447,38 +450,38 @@ public class ElasticBucketAggregationsTest {
     void dateRangeAggregationWithSpecifiedKeys() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("range",
-                        dateRange("date",
-                                between("01-2015", "03-2015").withKey("quarter_01"),
-                                between("03-2015", "06-2015").withKey("quarter_02")
-                        )
-                        .withFormat("MM-yyy")
-                        .withKeys()
+            .aggregation("range",
+                dateRange("date",
+                    between("01-2015", "03-2015").withKey("quarter_01"),
+                    between("03-2015", "06-2015").withKey("quarter_02")
                 )
-                .build();
+                    .withFormat("MM-yyy")
+                    .withKeys()
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "range": {
+                      "date_range": {
+                        "field": "date",
+                        "ranges": [
+                          { "from": "01-2015", "to": "03-2015", "key": "quarter_01" },
+                          { "from": "03-2015", "to": "06-2015", "key": "quarter_02" }
+                        ],
+                        "format": "MM-yyy",
+                        "keyed": true
+                      }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "range": {
-                              "date_range": {
-                                "field": "date",
-                                "ranges": [
-                                  { "from": "01-2015", "to": "03-2015", "key": "quarter_01" },
-                                  { "from": "03-2015", "to": "06-2015", "key": "quarter_02" }
-                                ],
-                                "format": "MM-yyy",
-                                "keyed": true
-                              }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -487,43 +490,43 @@ public class ElasticBucketAggregationsTest {
     void diversifiedSamplerAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .withQuery(match("tags", "elasticsearch"))
-                .aggregation("my_unbiased_sample",
-                    diversifiedSampler("author", 200)
-                        .aggregation("keywords", significantTerms("tags").withExclude("elasticsearch"))
-                )
-                .build();
+            .withQuery(match("tags", "elasticsearch"))
+            .aggregation("my_unbiased_sample",
+                diversifiedSampler("author", 200)
+                    .aggregation("keywords", significantTerms("tags").withExclude("elasticsearch"))
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
-                """
-                        {
-                          "query": {
-                            "match": {
-                              "tags": "elasticsearch"
-                            }
-                          },
-                          "aggregations": {
-                            "my_unbiased_sample": {
-                              "aggregations": {
-                                "keywords": {
-                                  "significant_terms": {
-                                    "field": "tags",
-                                    "exclude": [ "elasticsearch" ]
-                                  }
-                                }
-                              },
-                              "diversified_sampler": {
-                                "field": "author",
-                                "shard_size": 200
-                              }
-                            }
+            """
+                {
+                  "query": {
+                    "match": {
+                      "tags": "elasticsearch"
+                    }
+                  },
+                  "aggregations": {
+                    "my_unbiased_sample": {
+                      "aggregations": {
+                        "keywords": {
+                          "significant_terms": {
+                            "field": "tags",
+                            "exclude": [ "elasticsearch" ]
                           }
                         }
-                        """
+                      },
+                      "diversified_sampler": {
+                        "field": "author",
+                        "shard_size": 200
+                      }
+                    }
+                  }
+                }
+                """
         );
     }
 
@@ -532,66 +535,193 @@ public class ElasticBucketAggregationsTest {
     void filtersAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .withSize(0)
-                .aggregation("messages",
-                    newFilters()
-                        .filter("errors", match("body", "error"))
-                        .filter("warnings", match("body", "warning"))
+            .withSize(0)
+            .aggregation("messages",
+                newFilters()
+                    .filter("errors", match("body", "error"))
+                    .filter("warnings", match("body", "warning"))
                     .build()
-                )
-                .build();
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
-                """
-                        {
-                          "size": 0,
-                          "aggregations" : {
-                            "messages" : {
-                              "filters" : {
-                                "filters" : {
-                                  "errors" :   { "match" : { "body" : "error"   }},
-                                  "warnings" : { "match" : { "body" : "warning" }}
-                                }
-                              }
-                            }
-                          }
+            """
+                {
+                  "size": 0,
+                  "aggregations" : {
+                    "messages" : {
+                      "filters" : {
+                        "filters" : {
+                          "errors" :   { "match" : { "body" : "error"   }},
+                          "warnings" : { "match" : { "body" : "warning" }}
                         }
-                        """
+                      }
+                    }
+                  }
+                }
+                """
         );
     }
+
+    @Test
+    void frequentItemSetAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("items",
+                frequentItemSets("my_field_1", "my_field_2")
+                    .withMinimumSetSize(3)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                    "aggregations" : {
+                        "items" : {
+                            "frequent_item_sets": {
+                                "fields": [
+                                    {"field": "my_field_1"},
+                                    {"field": "my_field_2"}
+                                ],
+                                "minimum_set_size": 3
+                            }
+                        }
+                    }
+                }
+                """
+        );
+    }
+
+    @Test
+    void frequentItemSetAggregationWithExclusions() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("my_agg",
+                frequentItemSets(
+                    field("category.keyword"),
+                    field("geoip.city_name").exclude("other")
+                )
+                    .withMinimumSetSize(3)
+                    .withSize(3)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                   "size":0,
+                   "aggregations":{
+                      "my_agg":{
+                         "frequent_item_sets":{
+                            "fields":[
+                               {
+                                  "field":"category.keyword"
+                               },
+                               {
+                                  "field":"geoip.city_name",
+                                  "exclude": [ "other" ]
+                               }
+                            ],
+                            "minimum_set_size":3,
+                            "size":3
+                         }
+                      }
+                   }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void frequentItemSetAggregationWithFilter() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("my_agg",
+                frequentItemSets(
+                    field("category.keyword"),
+                    field("geoip.city_name")
+                )
+                    .withMinimumSetSize(3)
+                    .withSize(3)
+                    .withFilter(term("geoip.continent_name", "Europe"))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "my_agg": {
+                      "frequent_item_sets": {
+                        "fields": [
+                          { "field": "category.keyword" },
+                          { "field": "geoip.city_name" }
+                        ],
+                        "minimum_set_size": 3,
+                        "size": 3,
+                        "filter": {
+                          "term": {
+                            "geoip.continent_name": "Europe"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
     @Test
     void significantTermsAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .withQuery(
-                        terms("force", "British Transport Police")
-                )
-                .aggregation("significant_crime_types",
-                        significantTerms("crime_type")
-                )
-                .build();
+            .withQuery(
+                terms("force", "British Transport Police")
+            )
+            .aggregation("significant_crime_types",
+                significantTerms("crime_type")
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "terms": { "force": [ "British Transport Police" ] }
+                  },
+                  "aggregations": {
+                    "significant_crime_types": {
+                      "significant_terms": { "field": "crime_type" }
+                    }
+                  }
+                }
                 """
-                        {
-                          "query": {
-                            "terms": { "force": [ "British Transport Police" ] }
-                          },
-                          "aggregations": {
-                            "significant_crime_types": {
-                              "significant_terms": { "field": "crime_type" }
-                            }
-                          }
-                        }
-                        """
         );
     }
 
@@ -599,25 +729,25 @@ public class ElasticBucketAggregationsTest {
     void termsAggregation() throws JsonProcessingException {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
-                .aggregation("genres",
-                        termsAgg("genre")
-                )
-                .build();
+            .aggregation("genres",
+                termsAgg("genre")
+            )
+            .build();
 
         // When
         var actual = MAPPER.writeValueAsString(query);
 
         // Then
         assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "genres": {
+                      "terms": { "field": "genre" }
+                    }
+                  }
+                }
                 """
-                        {
-                          "aggregations": {
-                            "genres": {
-                              "terms": { "field": "genre" }
-                            }
-                          }
-                        }
-                        """
         );
     }
 }
