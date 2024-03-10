@@ -21,6 +21,8 @@ import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregati
 import static tech.habegger.elastic.aggregation.ElasticFrequentItemSetsAggregation.frequentItemSets;
 import static tech.habegger.elastic.aggregation.ElasticGeoDistanceAggregation.geoDistance;
 import static tech.habegger.elastic.aggregation.ElasticGeohashGridAggregation.geohashGrid;
+import static tech.habegger.elastic.aggregation.ElasticGeohexGridAggregation.geohexGrid;
+import static tech.habegger.elastic.aggregation.ElasticGeotileGridAggregation.geotileGrid;
 import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregation.significantTerms;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
@@ -881,6 +883,151 @@ public class ElasticBucketAggregationsTest {
                   "aggregations": {
                     "tiles-in-bounds": {
                       "geohash_grid": {
+                        "field": "location",
+                        "precision": 8,
+                        "bounds": {
+                          "top_left": {
+                              "lat" : 4.21875,
+                              "lon" : 53.4375
+                          },
+                          "bottom_right": {
+                              "lat" : 5.625,
+                              "lon" : 52.03125
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoHexGridAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("large-grid",
+                geohexGrid("location", 3)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "large-grid": {
+                      "geohex_grid": {
+                        "field": "location",
+                        "precision": 3
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoHexGridAggregationWithBoundingBox() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("tiles-in-bounds",
+                geohexGrid("location", 8)
+                    .withBounds(geoRect(
+                        4.21875f, 53.4375f,
+                        5.625f, 52.03125f
+                    ))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "tiles-in-bounds": {
+                      "geohex_grid": {
+                        "field": "location",
+                        "precision": 8,
+                        "bounds": {
+                          "top_left": {
+                              "lat" : 4.21875,
+                              "lon" : 53.4375
+                          },
+                          "bottom_right": {
+                              "lat" : 5.625,
+                              "lon" : 52.03125
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void geoTileGridAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("large-grid",
+                geotileGrid("location", 3)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "large-grid": {
+                      "geotile_grid": {
+                        "field": "location",
+                        "precision": 3
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void geoTileGridAggregationWithBoundingBox() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("tiles-in-bounds",
+                geotileGrid("location", 8)
+                    .withBounds(geoRect(
+                        4.21875f, 53.4375f,
+                        5.625f, 52.03125f
+                    ))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "tiles-in-bounds": {
+                      "geotile_grid": {
                         "field": "location",
                         "precision": 8,
                         "bounds": {
