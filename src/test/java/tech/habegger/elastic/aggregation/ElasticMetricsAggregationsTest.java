@@ -17,6 +17,7 @@ import static tech.habegger.elastic.aggregation.ElasticGeoCentroidAggregation.ge
 import static tech.habegger.elastic.aggregation.ElasticGeoLineAggregation.geoLine;
 import static tech.habegger.elastic.aggregation.ElasticMatrixStatsAggregation.matrixStats;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
+import static tech.habegger.elastic.aggregation.ElasticMedianAbsoluteDeviationAggregation.medianAbsoluteDeviation;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
 import static tech.habegger.elastic.aggregation.ElasticSumAggregation.sum;
@@ -376,6 +377,37 @@ public class ElasticMetricsAggregationsTest {
                 {
                   "aggregations": {
                     "max_price": { "max": { "field": "price" } }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void medianAbsoluteDeviationAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("review_variability",
+                medianAbsoluteDeviation("rating")
+                    .withCompression(100))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "review_variability": {
+                      "median_absolute_deviation": {
+                        "field": "rating",
+                        "compression": 100
+                      }
+                    }
                   }
                 }
                 """
