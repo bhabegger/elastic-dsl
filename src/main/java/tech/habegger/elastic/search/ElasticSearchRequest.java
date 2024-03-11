@@ -3,9 +3,12 @@ package tech.habegger.elastic.search;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import tech.habegger.elastic.ElasticSearchSource;
+import tech.habegger.elastic.shared.OrderSpec;
+import tech.habegger.elastic.shared.SortSpec;
+import tech.habegger.elastic.shared.SourceSpec;
 import tech.habegger.elastic.aggregation.ElasticAggregations;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +18,8 @@ public record ElasticSearchRequest(
     ElasticSearchClause query,
     ElasticKnn knn,
     @JsonProperty("_source")
-    ElasticSearchSource source,
-    List<?> sort,
+    SourceSpec source,
+    List<Map<String, OrderSpec>> sort,
     Integer from,
     Integer size,
     @JsonProperty("min_score")
@@ -44,8 +47,8 @@ public record ElasticSearchRequest(
     public static class Builder {
         ElasticSearchClause query = null;
         ElasticKnn knn = null;
-        ElasticSearchSource source = null;
-        List<?> sort = null;
+        SourceSpec source = null;
+        List<SortSpec> sort = null;
         Integer from = null;
         Integer size = null;
 
@@ -62,15 +65,20 @@ public record ElasticSearchRequest(
             this.knn = knn;
             return this;
         }
-        public Builder withSource(ElasticSearchSource source) {
+        public Builder withSource(SourceSpec source) {
             this.source = source;
             return this;
         }
-        public Builder withSort(List<?> sort) {
+
+        public Builder withSort(String... sort) {
+            this.sort = Arrays.stream(sort).map(SortSpec::sort).toList();
+            return this;
+        }
+        public Builder withSort(List<SortSpec> sort) {
             this.sort = sort;
             return this;
         }
-        public Builder withSort(Object... sort) {
+        public Builder withSort(SortSpec... sort) {
             this.sort = List.of(sort);
             return this;
         }
@@ -95,7 +103,7 @@ public record ElasticSearchRequest(
             return this;
         }
         public ElasticSearchRequest build() {
-            return new ElasticSearchRequest(query,knn,source,sort,from,size,minScore, aggregations);
+            return new ElasticSearchRequest(query,knn,source,SortSpec.toOutput(sort),from,size,minScore, aggregations);
         }
 
         public Builder aggregation(String name, ElasticAggregations aggregation) {

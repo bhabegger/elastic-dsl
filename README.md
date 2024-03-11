@@ -274,7 +274,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | String stats              | ✅             | stringStatsAggregation,...        |
 | Sum                       | ✅             | sumAggregation                    |
 | T-test                    | ✅             | tTestAggregation,...              |
-| Top hits                  | ✅             |                                   |
+| Top hits                  | ✅             | topHitsAggregation                |
 | Top metrics               | 🔲            |                                   |
 | Value count               | ✅             | valueCountAggregation             |
 | Weighted avg              | 🔲            |                                   |

@@ -33,9 +33,12 @@ import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.TTestTyp
 import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.TTestType.paired;
 import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.tTest;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
+import static tech.habegger.elastic.aggregation.ElasticTopHitsAggregation.topHits;
 import static tech.habegger.elastic.aggregation.ElasticValueCountAggregation.valueCount;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
+import static tech.habegger.elastic.shared.SortSpec.desc;
+import static tech.habegger.elastic.shared.SourceSpec.include;
 import static tech.habegger.elastic.shared.TDigestSpec.ExecutionHint.high_accuracy;
 
 public class ElasticMetricsAggregationsTest {
@@ -883,6 +886,57 @@ public class ElasticMetricsAggregationsTest {
                           }
                         },
                         "type": "heteroscedastic"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void topHitsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("top_tags",
+                termsAgg("type", 3)
+                    .aggregation("top_sales_hits",
+                        topHits(1)
+                            .withSort(desc("date"))
+                            .withSource(include("date", "price"))
+                    )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "top_tags": {
+                      "aggregations": {
+                        "top_sales_hits": {
+                          "top_hits": {
+                            "size": 1,
+                            "sort": [
+                              {
+                                "date": {
+                                  "order": "desc"
+                                }
+                              }
+                            ],
+                            "_source": {
+                              "includes": [ "date", "price" ]
+                            }
+                          }
+                        }
+                      },
+                      "terms": {
+                        "field": "type",
+                        "size": 3
                       }
                     }
                   }
