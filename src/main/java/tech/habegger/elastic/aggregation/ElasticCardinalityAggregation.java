@@ -3,7 +3,6 @@ package tech.habegger.elastic.aggregation;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.habegger.elastic.shared.ExecutionHint;
 
 import java.util.function.Function;
 
@@ -66,6 +65,7 @@ public final class ElasticCardinalityAggregation extends ElasticAggregations {
         String missing
     ) {}
 
+    @SuppressWarnings("unused")
     public enum CardinalityExecutionHint {
         direct,
         global_ordinals,

@@ -20,11 +20,13 @@ import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMedianAbsoluteDeviationAggregation.medianAbsoluteDeviation;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticPercentileRanksAggregation.percentileRanks;
+import static tech.habegger.elastic.aggregation.ElasticPercentilesAggregation.percentiles;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
 import static tech.habegger.elastic.aggregation.ElasticSumAggregation.sum;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.aggregation.ElasticValueCountAggregation.valueCount;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
+import static tech.habegger.elastic.shared.TDigestSpec.ExecutionHint.high_accuracy;
 
 public class ElasticMetricsAggregationsTest {
 
@@ -438,6 +440,110 @@ public class ElasticMetricsAggregationsTest {
                       "percentile_ranks": {
                         "field": "load_time",
                         "values": [ 500.0, 600.0 ]
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void percentilesAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("load_time_outlier",
+                percentiles("load_time")
+                    .withTDigest(200)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "load_time_outlier": {
+                      "percentiles": {
+                        "field": "load_time",
+                        "tdigest": {
+                          "compression": 200
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void percentilesAggregationWithExecutionHint() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("load_time_outlier",
+                percentiles("load_time")
+                    .withTDigest(high_accuracy)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "load_time_outlier": {
+                      "percentiles": {
+                        "field": "load_time",
+                        "tdigest": {
+                          "execution_hint": "high_accuracy"
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void percentilesAggregationWithHDR() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("load_time_outlier",
+                percentiles("load_time", 95.0, 99.0, 99.9)
+                    .withHdr(3)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "load_time_outlier": {
+                      "percentiles": {
+                        "field": "load_time",
+                        "percents": [ 95.0, 99.0, 99.9 ],
+                        "hdr": {
+                          "number_of_significant_value_digits": 3
+                        }
                       }
                     }
                   }

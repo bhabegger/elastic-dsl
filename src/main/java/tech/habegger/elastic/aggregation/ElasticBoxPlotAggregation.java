@@ -3,7 +3,7 @@ package tech.habegger.elastic.aggregation;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import tech.habegger.elastic.shared.ExecutionHint;
+import tech.habegger.elastic.shared.TDigestSpec;
 
 import java.util.function.Function;
 
@@ -32,7 +32,7 @@ public final class ElasticBoxPlotAggregation extends ElasticAggregations {
         ));
     }
 
-    public ElasticBoxPlotAggregation withExecutionHint(ExecutionHint executionHint) {
+    public ElasticBoxPlotAggregation withExecutionHint(TDigestSpec.ExecutionHint executionHint) {
         return withBody(original -> new BoxPlotBody(
             original.field,
             original.compression,
@@ -61,7 +61,7 @@ public final class ElasticBoxPlotAggregation extends ElasticAggregations {
         @JsonProperty("compression")
         Integer compression,
         @JsonProperty("execution_hint")
-        ExecutionHint executionHint,
+        TDigestSpec.ExecutionHint executionHint,
         @JsonProperty("missing")
         Float missing
     ) {}

@@ -3,6 +3,7 @@ package tech.habegger.elastic.aggregation;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import tech.habegger.elastic.shared.HDRSpec;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,8 +77,4 @@ public final class ElasticPercentileRanksAggregation extends ElasticAggregations
             String missing
     ) { }
 
-    record HDRSpec(
-        @JsonProperty("number_of_significant_value_digits")
-        Integer numberOfSignificantValueDigits
-    ) {}
 }
