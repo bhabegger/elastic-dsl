@@ -17,10 +17,10 @@ public final class ElasticValueCountAggregation extends ElasticAggregations {
         this.valueCount = valueCount;
     }
 
-    public static ElasticAggregations valueCount(String field) {
+    public static ElasticValueCountAggregation valueCount(String field) {
         return new ElasticValueCountAggregation(new StatsBody(field, null));
     }
-    public static ElasticAggregations valueCount(String field, Integer missing) {
+    public static ElasticValueCountAggregation valueCount(String field, Integer missing) {
         return new ElasticValueCountAggregation(new StatsBody(field, missing));
     }
 }

@@ -24,7 +24,7 @@ public final class ElasticPercentilesAggregation extends ElasticAggregations {
     ) {
         this.percentiles = percentiles;
     }
-    public ElasticAggregations withTDigest(int compression, TDigestSpec.ExecutionHint executionHint) {
+    public ElasticPercentilesAggregation withTDigest(int compression, TDigestSpec.ExecutionHint executionHint) {
         return withBody((original) ->
             new PercentilesBody(
                 original.field,
@@ -35,7 +35,7 @@ public final class ElasticPercentilesAggregation extends ElasticAggregations {
                 original.missing
             ));
     }
-    public ElasticAggregations withTDigest(int compression) {
+    public ElasticPercentilesAggregation withTDigest(int compression) {
         return withBody((original) ->
             new PercentilesBody(
                 original.field,
@@ -46,7 +46,7 @@ public final class ElasticPercentilesAggregation extends ElasticAggregations {
                 original.missing
             ));
     }
-    public ElasticAggregations withTDigest(TDigestSpec.ExecutionHint executionHint) {
+    public ElasticPercentilesAggregation withTDigest(TDigestSpec.ExecutionHint executionHint) {
         return withBody((original) ->
             new PercentilesBody(
                 original.field,
@@ -57,7 +57,7 @@ public final class ElasticPercentilesAggregation extends ElasticAggregations {
                 original.missing
             ));
     }
-    public ElasticAggregations withHdr(int numberOfSignificantValueDigits) {
+    public ElasticPercentilesAggregation withHdr(int numberOfSignificantValueDigits) {
         return withBody((original) ->
                 new PercentilesBody(
                     original.field,
@@ -68,7 +68,7 @@ public final class ElasticPercentilesAggregation extends ElasticAggregations {
                     original.missing
                 ));
     }
-    public ElasticAggregations withKeyed() {
+    public ElasticPercentilesAggregation withKeyed() {
         return withBody((original) ->
             new PercentilesBody(
                 original.field,
@@ -80,7 +80,7 @@ public final class ElasticPercentilesAggregation extends ElasticAggregations {
             ));
     }
 
-    public ElasticAggregations withMissing(String missing) {
+    public ElasticPercentilesAggregation withMissing(String missing) {
         return withBody((original) ->
                 new PercentilesBody(
                     original.field,

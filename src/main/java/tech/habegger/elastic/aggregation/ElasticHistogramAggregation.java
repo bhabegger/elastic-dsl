@@ -22,7 +22,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
         this.histogram = histogram;
     }
 
-    public ElasticAggregations withOffset(int offset) {
+    public ElasticHistogramAggregation withOffset(int offset) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -36,7 +36,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticAggregations withMinDocCount(int minDocCount) {
+    public ElasticHistogramAggregation withMinDocCount(int minDocCount) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -51,7 +51,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
             ));
     }
 
-    public ElasticAggregations withExtendedBounds(float min, float max) {
+    public ElasticHistogramAggregation withExtendedBounds(float min, float max) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -66,7 +66,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
             ));
     }
 
-    public ElasticAggregations withHardBounds(float min, float max) {
+    public ElasticHistogramAggregation withHardBounds(float min, float max) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -81,7 +81,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
             ));
     }
 
-    public ElasticAggregations withOrder(String field, OrderDirection direction) {
+    public ElasticHistogramAggregation withOrder(String field, OrderDirection direction) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -95,7 +95,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticAggregations withMissing(Float missing) {
+    public ElasticHistogramAggregation withMissing(Float missing) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -109,7 +109,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticAggregations withKeyed() {
+    public ElasticHistogramAggregation withKeyed() {
         return withBody((original) ->
             new HistogramBody(
                 original.field,

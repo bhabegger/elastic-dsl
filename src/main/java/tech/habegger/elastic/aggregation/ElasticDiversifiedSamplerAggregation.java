@@ -41,10 +41,10 @@ public final class ElasticDiversifiedSamplerAggregation extends ElasticAggregati
         return new ElasticDiversifiedSamplerAggregation(update.apply(this.diversifiedSampler));
     }
 
-    public static ElasticAggregations diversifiedSampler(String field, int shardSize) {
+    public static ElasticDiversifiedSamplerAggregation diversifiedSampler(String field, int shardSize) {
         return new ElasticDiversifiedSamplerAggregation(new DiversifiedSamplerBody(field, shardSize, null, null));
     }
-    public static ElasticAggregations diversifiedSampler(String field, int shardSize, Map<String, ElasticAggregations> aggregations) {
+    public static ElasticDiversifiedSamplerAggregation diversifiedSampler(String field, int shardSize, Map<String, ElasticAggregations> aggregations) {
         return new ElasticDiversifiedSamplerAggregation(new DiversifiedSamplerBody(field, shardSize, null, null));
     }
     @JsonInclude(JsonInclude.Include.NON_NULL)

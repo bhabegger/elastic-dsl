@@ -17,10 +17,10 @@ public final class ElasticMinAggregation extends ElasticAggregations {
         this.min = min;
     }
 
-    public static ElasticAggregations min(String field) {
+    public static ElasticMinAggregation min(String field) {
         return new ElasticMinAggregation(new StatsBody(field, null));
     }
-    public static ElasticAggregations min(String field, Integer missing) {
+    public static ElasticMinAggregation min(String field, Integer missing) {
         return new ElasticMinAggregation(new StatsBody(field, missing));
     }
 }

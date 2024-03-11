@@ -15,10 +15,10 @@ public final class ElasticTermsAggregation extends ElasticAggregations {
     ) {
         this.terms = terms;
     }
-    public static ElasticAggregations termsAgg(String field, int size) {
+    public static ElasticTermsAggregation termsAgg(String field, int size) {
         return new ElasticTermsAggregation(new TermsBody(field, size));
     }
-    public static ElasticAggregations termsAgg(String field) {
+    public static ElasticTermsAggregation termsAgg(String field) {
         return new ElasticTermsAggregation(new TermsBody(field, null));
     }
 

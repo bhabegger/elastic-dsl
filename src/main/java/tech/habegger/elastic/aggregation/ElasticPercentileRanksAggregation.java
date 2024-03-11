@@ -23,7 +23,7 @@ public final class ElasticPercentileRanksAggregation extends ElasticAggregations
     ) {
         this.percentileRanks = percentileRanks;
     }
-    public ElasticAggregations withHdr(int numberOfSignificantValueDigits) {
+    public ElasticPercentileRanksAggregation withHdr(int numberOfSignificantValueDigits) {
         return withBody((original) ->
                 new PercentileRankBody(
                     original.field,
@@ -33,7 +33,7 @@ public final class ElasticPercentileRanksAggregation extends ElasticAggregations
                     original.missing
                 ));
     }
-    public ElasticAggregations withKeyed() {
+    public ElasticPercentileRanksAggregation withKeyed() {
         return withBody((original) ->
             new PercentileRankBody(
                 original.field,
@@ -44,7 +44,7 @@ public final class ElasticPercentileRanksAggregation extends ElasticAggregations
             ));
     }
 
-    public ElasticAggregations withMissing(String missing) {
+    public ElasticPercentileRanksAggregation withMissing(String missing) {
         return withBody((original) ->
                 new PercentileRankBody(
                     original.field,

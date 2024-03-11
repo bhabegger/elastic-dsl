@@ -54,7 +54,7 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
                 ));
     }
 
-    public ElasticAggregations withTimeZone(ZoneOffset zoneOffset) {
+    public ElasticDateRangeAggregation withTimeZone(ZoneOffset zoneOffset) {
         return withBody((original) ->
                 new DateRangeBody(
                         original.field,
@@ -66,7 +66,7 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
                         original.keyed
                 ));
     }
-    public ElasticAggregations withTimeZone(ZoneId zoneId) {
+    public ElasticDateRangeAggregation withTimeZone(ZoneId zoneId) {
         return withBody((original) ->
             new DateRangeBody(
                 original.field,
@@ -78,7 +78,7 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticAggregations withKeyed() {
+    public ElasticDateRangeAggregation withKeyed() {
         return withBody((original) ->
                 new DateRangeBody(
                         original.field,
@@ -90,7 +90,7 @@ public final class ElasticDateRangeAggregation extends ElasticAggregations {
                         true
                 ));
     }
-    public ElasticAggregations withMissing(String defaultValue) {
+    public ElasticDateRangeAggregation withMissing(String defaultValue) {
         return withBody((original) ->
                 new DateRangeBody(
                         original.field,

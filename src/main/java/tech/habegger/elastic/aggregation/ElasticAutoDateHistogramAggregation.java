@@ -32,7 +32,7 @@ public final class ElasticAutoDateHistogramAggregation extends ElasticAggregatio
            ));
     }
 
-    public ElasticAggregations withMinimumInterval(DateTimeUnit minimumInterval) {
+    public ElasticAutoDateHistogramAggregation withMinimumInterval(DateTimeUnit minimumInterval) {
         return withBody((original) ->
             new AutoDateHistogramBody(
                 original.field,
@@ -43,7 +43,7 @@ public final class ElasticAutoDateHistogramAggregation extends ElasticAggregatio
             ));
     }
 
-    public ElasticAggregations withMissing(String defaultValue) {
+    public ElasticAutoDateHistogramAggregation withMissing(String defaultValue) {
         return withBody((original) ->
                 new AutoDateHistogramBody(
                         original.field,

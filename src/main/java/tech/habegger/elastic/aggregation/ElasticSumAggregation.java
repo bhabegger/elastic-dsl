@@ -16,11 +16,11 @@ public final class ElasticSumAggregation extends ElasticAggregations {
     ) {
         this.sum = sum;
     }
-    public static ElasticAggregations sum(String field) {
+    public static ElasticSumAggregation sum(String field) {
         return new ElasticSumAggregation(new StatsBody(field, null));
     }
 
-    public static ElasticAggregations sum(String field, Integer missing) {
+    public static ElasticSumAggregation sum(String field, Integer missing) {
         return new ElasticSumAggregation(new StatsBody(field, missing));
     }
 }

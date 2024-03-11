@@ -20,7 +20,7 @@ public final class ElasticIpPrefixAggregation extends ElasticAggregations {
         this.ipPrefix = ipPrefix;
     }
 
-    public ElasticAggregations withIpV6() {
+    public ElasticIpPrefixAggregation withIpV6() {
         return withBody((original) ->
             new IpPrefixBody(
                 original.field,
@@ -32,7 +32,7 @@ public final class ElasticIpPrefixAggregation extends ElasticAggregations {
             ));
     }
 
-    public ElasticAggregations withAppendPrefixLength() {
+    public ElasticIpPrefixAggregation withAppendPrefixLength() {
         return withBody((original) ->
             new IpPrefixBody(
                 original.field,
@@ -43,7 +43,7 @@ public final class ElasticIpPrefixAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticAggregations withMinDocCount(int minDocCount) {
+    public ElasticIpPrefixAggregation withMinDocCount(int minDocCount) {
         return withBody((original) ->
             new IpPrefixBody(
                 original.field,
@@ -54,7 +54,7 @@ public final class ElasticIpPrefixAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticAggregations withKeyed() {
+    public ElasticIpPrefixAggregation withKeyed() {
         return withBody((original) ->
             new IpPrefixBody(
                 original.field,

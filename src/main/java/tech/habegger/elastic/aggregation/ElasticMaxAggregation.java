@@ -17,10 +17,10 @@ public final class ElasticMaxAggregation extends ElasticAggregations {
         this.max = max;
     }
 
-    public static ElasticAggregations max(String field) {
+    public static ElasticMaxAggregation max(String field) {
         return new ElasticMaxAggregation(new StatsBody(field, null));
     }
-    public static ElasticAggregations max(String field, Integer missing) {
+    public static ElasticMaxAggregation max(String field, Integer missing) {
         return new ElasticMaxAggregation(new StatsBody(field, missing));
     }
 }
