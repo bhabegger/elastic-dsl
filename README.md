@@ -266,7 +266,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Max                       | ✅             | maxAggregation                    |
 | Median absolute deviation | ✅             | medianAbsolutDeviationAggregation |
 | Min                       | ✅             | minAggregation                    |
-| Percentile ranks          | 🔲            |                                   |
+| Percentile ranks          | ✅             | percentileRanksAggregation        |
 | Percentiles               | 🔲            |                                   |
 | Rate                      | 🔲            |                                   |
 | Scripted metric           | 🔲            |                                   |

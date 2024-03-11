@@ -19,6 +19,7 @@ import static tech.habegger.elastic.aggregation.ElasticMatrixStatsAggregation.ma
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMedianAbsoluteDeviationAggregation.medianAbsoluteDeviation;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
+import static tech.habegger.elastic.aggregation.ElasticPercentileRanksAggregation.percentileRanks;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
 import static tech.habegger.elastic.aggregation.ElasticSumAggregation.sum;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
@@ -406,6 +407,37 @@ public class ElasticMetricsAggregationsTest {
                       "median_absolute_deviation": {
                         "field": "rating",
                         "compression": 100
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void percentileRanksAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("load_time_ranks",
+                percentileRanks("load_time", 500.0, 600.0)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "load_time_ranks": {
+                      "percentile_ranks": {
+                        "field": "load_time",
+                        "values": [ 500.0, 600.0 ]
                       }
                     }
                   }
