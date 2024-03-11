@@ -277,7 +277,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Top hits                  | ✅             | topHitsAggregation                |
 | Top metrics               | 🔲            |                                   |
 | Value count               | ✅             | valueCountAggregation             |
-| Weighted avg              | 🔲            |                                   |
+| Weighted avg              | ✅             | weightAvgAggregation,...          |
 
 ### [Pipeline aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-pipeline.html)
 | **Aggregation Type**   | **Supported** |

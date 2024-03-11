@@ -35,6 +35,8 @@ import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.tTest;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.aggregation.ElasticTopHitsAggregation.topHits;
 import static tech.habegger.elastic.aggregation.ElasticValueCountAggregation.valueCount;
+import static tech.habegger.elastic.aggregation.ElasticWeightedAvgAggregation.fieldSpec;
+import static tech.habegger.elastic.aggregation.ElasticWeightedAvgAggregation.weightedAvg;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.shared.SortSpec.desc;
@@ -960,6 +962,77 @@ public class ElasticMetricsAggregationsTest {
                 {
                   "aggregations" : {
                     "types_count" : { "value_count" : { "field" : "type" } }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void weightedAvgAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("weighted_grade", weightedAvg("grade", "weight"))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "weighted_grade": {
+                      "weighted_avg": {
+                        "value": {
+                          "field": "grade"
+                        },
+                        "weight": {
+                          "field": "weight"
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void weightedAvgAggregationWithMissing() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("weighted_grade", weightedAvg(
+                fieldSpec("grade").withMissing(2.0),
+                fieldSpec("weight").withMissing(3.0)
+            ))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "weighted_grade": {
+                      "weighted_avg": {
+                        "value": {
+                          "field": "grade",
+                          "missing": 2.0
+                        },
+                        "weight": {
+                          "field": "weight",
+                          "missing": 3.0
+                        }
+                      }
+                    }
                   }
                 }
                 """
