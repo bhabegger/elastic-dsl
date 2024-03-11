@@ -9,6 +9,7 @@ import static tech.habegger.elastic.TestUtils.MAPPER;
 import static tech.habegger.elastic.aggregation.ElasticAvgAggregation.avg;
 import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlot;
 import static tech.habegger.elastic.aggregation.ElasticCardinalityAggregation.cardinality;
+import static tech.habegger.elastic.aggregation.ElasticCartesianBoundsAggregation.cartesianBounds;
 import static tech.habegger.elastic.aggregation.ElasticExtendedStatsAggregation.extendedStats;
 import static tech.habegger.elastic.aggregation.ElasticGeoBoundsAggregation.geoBounds;
 import static tech.habegger.elastic.aggregation.ElasticGeoCentroidAggregation.geoCentroid;
@@ -261,6 +262,40 @@ public class ElasticMetricsAggregationsTest {
                       "geo_line": {
                         "point": {"field": "my_location"},
                         "sort":  {"field": "@timestamp"}
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void cartesianBoundsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(
+                match("name", "musée")
+            )
+            .aggregation("viewport",
+                cartesianBounds("location")
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "match": { "name": "musée" }
+                  },
+                  "aggregations": {
+                    "viewport": {
+                      "cartesian_bounds": {
+                        "field": "location"
                       }
                     }
                   }

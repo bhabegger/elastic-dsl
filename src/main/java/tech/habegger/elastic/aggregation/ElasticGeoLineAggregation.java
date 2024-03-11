@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import tech.habegger.elastic.shared.OrderDirection;
+import tech.habegger.elastic.shared.SingleFieldSpec;
 
 import java.util.function.Function;
 
@@ -70,5 +71,4 @@ public final class ElasticGeoLineAggregation extends ElasticAggregations {
         Integer size) {
     }
 
-    record SingleFieldSpec(String field) { }
 }
