@@ -3,6 +3,8 @@ package tech.habegger.elastic.aggregation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import tech.habegger.elastic.search.ElasticSearchRequest;
+import tech.habegger.elastic.shared.CalendarUnit;
+import tech.habegger.elastic.shared.RateUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static tech.habegger.elastic.TestUtils.MAPPER;
@@ -11,10 +13,12 @@ import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlo
 import static tech.habegger.elastic.aggregation.ElasticCardinalityAggregation.cardinality;
 import static tech.habegger.elastic.aggregation.ElasticCartesianBoundsAggregation.cartesianBounds;
 import static tech.habegger.elastic.aggregation.ElasticCartesianCentroidAggregation.cartesianCentroid;
+import static tech.habegger.elastic.aggregation.ElasticDateHistogramAggregation.dateHistogram;
 import static tech.habegger.elastic.aggregation.ElasticExtendedStatsAggregation.extendedStats;
 import static tech.habegger.elastic.aggregation.ElasticGeoBoundsAggregation.geoBounds;
 import static tech.habegger.elastic.aggregation.ElasticGeoCentroidAggregation.geoCentroid;
 import static tech.habegger.elastic.aggregation.ElasticGeoLineAggregation.geoLine;
+import static tech.habegger.elastic.aggregation.ElasticIpRateAggregation.rate;
 import static tech.habegger.elastic.aggregation.ElasticMatrixStatsAggregation.matrixStats;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMedianAbsoluteDeviationAggregation.medianAbsoluteDeviation;
@@ -543,6 +547,128 @@ public class ElasticMetricsAggregationsTest {
                         "percents": [ 95.0, 99.0, 99.9 ],
                         "hdr": {
                           "number_of_significant_value_digits": 3
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void rateAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("by_date",
+                dateHistogram("date", CalendarUnit.month)
+                    .aggregation("my_rate", rate(RateUnit.year))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "by_date": {
+                      "date_histogram": {
+                        "field": "date",
+                        "calendar_interval": "month"
+                      },
+                      "aggregations": {
+                        "my_rate": {
+                          "rate": {
+                            "unit": "year"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void rateAggregationWithField() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("by_date",
+                dateHistogram("date", CalendarUnit.month)
+                    .aggregation("avg_price", rate("price", RateUnit.day))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "by_date": {
+                      "date_histogram": {
+                        "field": "date",
+                        "calendar_interval": "month"
+                      },
+                      "aggregations": {
+                        "avg_price": {
+                          "rate": {
+                            "field": "price",
+                            "unit": "day"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void rateAggregationWithValueCount() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("by_date",
+                dateHistogram("date", CalendarUnit.month)
+                    .aggregation("avg_number_of_sales_per_year",
+                        rate("price", RateUnit.year, ElasticIpRateAggregation.RateMode.value_count))
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "by_date": {
+                      "date_histogram": {
+                        "field": "date",
+                        "calendar_interval": "month"
+                      },
+                      "aggregations": {
+                        "avg_number_of_sales_per_year": {
+                          "rate": {
+                            "field": "price",
+                            "unit": "year",
+                            "mode": "value_count"
+                          }
                         }
                       }
                     }

@@ -268,11 +268,11 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Min                       | ✅             | minAggregation                    |
 | Percentile ranks          | ✅             | percentileRanksAggregation        |
 | Percentiles               | ✅             | percentilesAggregation,...        |
-| Rate                      | 🔲            |                                   |
+| Rate                      | ✅             | rateAggregation,...               |
 | Scripted metric           | 🔲            |                                   |
 | Stats                     | ✅             |                                   |
-| String stats              | 🔲            | sumAggregation                    |
-| Sum                       | ✅             |                                   |
+| String stats              | 🔲            |                                   |
+| Sum                       | ✅             | sumAggregation                    |
 | T-test                    | 🔲            |                                   |
 | Top hits                  | ✅             |                                   |
 | Top metrics               | 🔲            |                                   |
