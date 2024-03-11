@@ -12,10 +12,10 @@ public record ElasticRankFeatureClause(
         return new ElasticRankFeatureClause(new RankFeatureBody(field, null));
     }
 
-    public static ElasticRankFeatureClause rankFeature(String field, float boost) {
+    public static ElasticRankFeatureClause rankFeature(String field, double boost) {
         return new ElasticRankFeatureClause(new RankFeatureBody(field, boost));
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    record RankFeatureBody(String field, Float boost) {}
+    record RankFeatureBody(String field, Double boost) {}
 }

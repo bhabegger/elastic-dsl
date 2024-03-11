@@ -758,10 +758,10 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .withSize(0)
             .aggregation("rings",
-                geoDistance("location", geoCoord(4.894f, 52.3760f),
-                    Range.to(100f),
-                    Range.between(100f, 300f),
-                    Range.from(300f)
+                geoDistance("location", geoCoord(4.894, 52.3760),
+                    Range.to(100.0),
+                    Range.between(100.0, 300.0),
+                    Range.from(300.0)
                 )
                     .withUnit(kilometers)
             )
@@ -802,10 +802,10 @@ public class ElasticBucketAggregationsTest {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("rings",
-                geoDistance("location", geoCoord(4.894f, 52.3760f),
-                    Range.to(100f),
-                    Range.between(100f, 300f),
-                    Range.from(300f)
+                geoDistance("location", geoCoord(4.894, 52.3760),
+                    Range.to(100.0),
+                    Range.between(100.0, 300.0),
+                    Range.from(300.0)
                 )
                     .withUnit(kilometers)
                     .withDistanceType(plane)
@@ -848,10 +848,10 @@ public class ElasticBucketAggregationsTest {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("rings_around_amsterdam",
-                geoDistance("location", geoCoord(4.894f, 52.3760f),
-                    Range.to(100000f).withKey("first_ring"),
-                    Range.between(100000f, 300000f).withKey("second_ring"),
-                    Range.from(300000f).withKey("third_ring")
+                geoDistance("location", geoCoord(4.894, 52.3760),
+                    Range.to(100000.0).withKey("first_ring"),
+                    Range.between(100000.0, 300000.0).withKey("second_ring"),
+                    Range.from(300000.0).withKey("third_ring")
                 )
                     .withKeyed()
 
@@ -1145,7 +1145,7 @@ public class ElasticBucketAggregationsTest {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("prices",
-                histogram("price", 50.0f)
+                histogram("price", 50.0)
             )
         .build();
 
@@ -1175,7 +1175,7 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .withQuery(constantScore(range("price", null, 500)))
             .aggregation("prices",
-                histogram("price", 50f)
+                histogram("price", 50.0)
                     .withExtendedBounds(0,500)
             )
             .build();
@@ -1213,7 +1213,7 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .withQuery(constantScore(range("price", null, 500)))
             .aggregation("prices",
-                histogram("price", 50f)
+                histogram("price", 50.0)
                     .withHardBounds(100,200)
             )
             .build();
@@ -1251,7 +1251,7 @@ public class ElasticBucketAggregationsTest {
         // Given
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("quantity",
-                histogram("quantity", 10f)
+                histogram("quantity", 10.0)
                     .withMissing(0f)
             )
             .build();
@@ -1634,9 +1634,9 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("price_ranges",
                 rangeAgg("price",
-                    Range.to(100.0f),
-                    Range.between(100.f, 200.0f),
-                    Range.from(200.0f)
+                    Range.to(100.0),
+                    Range.between(100.0, 200.0),
+                    Range.from(200.0)
                 )
             )
             .build();
@@ -1671,9 +1671,9 @@ public class ElasticBucketAggregationsTest {
         var query = ElasticSearchRequest.requestBuilder()
             .aggregation("price_ranges",
                 rangeAgg("price",
-                    Range.to(100.0f),
-                    Range.between(100.f, 200.0f),
-                    Range.from(200.0f)
+                    Range.to(100.0),
+                    Range.between(100.0, 200.0),
+                    Range.from(200.0)
                 ).withKeyed()
             )
             .build();

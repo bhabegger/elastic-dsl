@@ -31,7 +31,7 @@ public final class ElasticMedianAbsoluteDeviationAggregation extends ElasticAggr
     }
 
 
-    public ElasticMedianAbsoluteDeviationAggregation withMissing(float missing) {
+    public ElasticMedianAbsoluteDeviationAggregation withMissing(double missing) {
         return withBody(original -> new MedianAbsoluteDeviationBody(
             original.field,
             original.compression,
@@ -50,6 +50,6 @@ public final class ElasticMedianAbsoluteDeviationAggregation extends ElasticAggr
         @JsonProperty("compression")
         Integer compression,
         @JsonProperty("missing")
-        Float missing
+        Double missing
     ) {}
 }

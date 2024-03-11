@@ -55,8 +55,8 @@ class ElasticSearchGeoQueryTest {
                     .filter(
                         geoBoundingBox(
                         "pin.location",
-                            geoCoord(40.73f, -74.1f),
-                            geoCoord(40.01f, -71.12f)
+                            geoCoord(40.73, -74.1),
+                            geoCoord(40.01, -71.12)
                         )
                     )
                 .build()

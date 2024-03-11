@@ -1,6 +1,6 @@
 package tech.habegger.elastic.shared;
 
 public record BoundsSpec(
-    float min,
-    float max
+    double min,
+    double max
 ) { }

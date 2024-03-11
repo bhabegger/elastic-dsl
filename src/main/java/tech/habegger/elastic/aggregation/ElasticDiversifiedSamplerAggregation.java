@@ -49,7 +49,7 @@ public final class ElasticDiversifiedSamplerAggregation extends ElasticAggregati
     }
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private record DiversifiedSamplerBody(
-        @JsonProperty("point")
+        @JsonProperty("field")
         String field,
         @JsonProperty("shard_size")
         Integer shardSize,

@@ -38,7 +38,7 @@ public record ElasticGeoShapeClause(
             FieldInstanceReference indexedShape,
             GeoShapeRelation relation
     ) {}
-    public record GeoInlineShapeDefinition(String type, List<List<Float>> coordinates) {
+    public record GeoInlineShapeDefinition(String type, List<List<Double>> coordinates) {
         public static GeoInlineShapeDefinition geoEnvelop(GeoCoord topLeft, GeoCoord bottomRight) {
             return new GeoInlineShapeDefinition(
                     "envelope",

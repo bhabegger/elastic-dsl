@@ -12,6 +12,6 @@ public record ElasticBoostingClause(BoostingBody boosting) implements ElasticSea
         ElasticSearchClause positive,
         ElasticSearchClause negative,
         @JsonProperty("negative_boost")
-        float negativeBoost) {
+        double negativeBoost) {
     }
 }

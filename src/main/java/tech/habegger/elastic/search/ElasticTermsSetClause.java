@@ -22,7 +22,7 @@ public record ElasticTermsSetClause(
         return new ElasticTermsSetClause(Map.of(field, new TermsSetBody(Arrays.asList(terms), null, minimumShouldMatchScript, null)));
     }
 
-    public ElasticTermsSetClause withBoost(float boost) {
+    public ElasticTermsSetClause withBoost(double boost) {
         return withBody((original) -> new TermsSetBody(
             original.terms,
             original.minimumShouldMatchField,
@@ -53,7 +53,7 @@ public record ElasticTermsSetClause(
             ScriptExpression minimumShouldMatchScript,
 
             @JsonProperty("boost")
-            Float boost
+            Double boost
 
     ) {
     }

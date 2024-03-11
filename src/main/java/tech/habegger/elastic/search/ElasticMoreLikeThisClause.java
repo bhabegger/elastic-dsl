@@ -52,7 +52,7 @@ public record ElasticMoreLikeThisClause(
             @JsonProperty("include")
             Boolean include,
             @JsonProperty("boost")
-            Float boost
+            Double boost
 ) {
 }
 
@@ -73,7 +73,7 @@ public record ElasticMoreLikeThisClause(
         private Boolean failOnUnsupportedField;
         private Float boostTerms;
         private Boolean include;
-        private Float boost;
+        private Double boost;
 
         public Builder fields(String... fields) {
             this.fields.addAll(Arrays.asList(fields));
@@ -145,7 +145,7 @@ public record ElasticMoreLikeThisClause(
             this.include = true;
             return this;
         }
-        public Builder withBoost(float boost) {
+        public Builder withBoost(double boost) {
             this.boost = boost;
             return this;
         }

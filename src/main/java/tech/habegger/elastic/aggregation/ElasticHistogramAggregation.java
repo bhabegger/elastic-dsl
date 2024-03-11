@@ -51,7 +51,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
             ));
     }
 
-    public ElasticHistogramAggregation withExtendedBounds(float min, float max) {
+    public ElasticHistogramAggregation withExtendedBounds(double min, double max) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -66,7 +66,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
             ));
     }
 
-    public ElasticHistogramAggregation withHardBounds(float min, float max) {
+    public ElasticHistogramAggregation withHardBounds(double min, double max) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -95,7 +95,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
                 original.keyed
             ));
     }
-    public ElasticHistogramAggregation withMissing(Float missing) {
+    public ElasticHistogramAggregation withMissing(double missing) {
         return withBody((original) ->
             new HistogramBody(
                 original.field,
@@ -128,7 +128,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
         return new ElasticHistogramAggregation(update.apply(this.histogram));
     }
 
-    public static ElasticHistogramAggregation histogram(String field, Float interval) {
+    public static ElasticHistogramAggregation histogram(String field, Double interval) {
         return new ElasticHistogramAggregation(
             new HistogramBody(field, interval,
                 null, null, null, null, null, null, null)
@@ -140,9 +140,9 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
         @JsonProperty("field")
         String field,
         @JsonProperty("interval")
-        Float interval,
+        Double interval,
         @JsonProperty("offset")
-        Float offset,
+        Double offset,
         @JsonProperty("min_doc_count")
         Integer minDocCount,
         @JsonProperty("extended_bounds")
@@ -152,7 +152,7 @@ public final class ElasticHistogramAggregation extends ElasticAggregations {
         @JsonProperty("order")
         Map<String, OrderDirection> order,
         @JsonProperty("missing")
-        Float missing,
+        Double missing,
         @JsonProperty("keyed")
         Boolean keyed
     ) {

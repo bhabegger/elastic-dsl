@@ -12,7 +12,7 @@ public record ElasticWildcardClause(Map<String, WildcardBody> wildcard) implemen
         return new ElasticWildcardClause(Map.of(field, new WildcardBody(value, null, null, null)));
     }
 
-    public ElasticWildcardClause withBoost(float boost) {
+    public ElasticWildcardClause withBoost(double boost) {
         return withBody(original ->
                 new WildcardBody(
                         original.value,
@@ -60,7 +60,7 @@ public record ElasticWildcardClause(Map<String, WildcardBody> wildcard) implemen
     @JsonInclude(JsonInclude.Include.NON_NULL)
     record WildcardBody(
             String value,
-            Float boost,
+            Double boost,
             @JsonProperty("case_insensitive")
             Boolean caseInsensitive,
             @JsonProperty("rewrite")

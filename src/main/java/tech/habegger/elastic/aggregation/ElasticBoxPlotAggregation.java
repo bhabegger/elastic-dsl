@@ -41,7 +41,7 @@ public final class ElasticBoxPlotAggregation extends ElasticAggregations {
         ));
     }
 
-    public ElasticBoxPlotAggregation withMissing(float missing) {
+    public ElasticBoxPlotAggregation withMissing(double missing) {
         return withBody(original -> new BoxPlotBody(
             original.field,
             original.compression,
@@ -63,6 +63,6 @@ public final class ElasticBoxPlotAggregation extends ElasticAggregations {
         @JsonProperty("execution_hint")
         TDigestSpec.ExecutionHint executionHint,
         @JsonProperty("missing")
-        Float missing
+        Double missing
     ) {}
 }

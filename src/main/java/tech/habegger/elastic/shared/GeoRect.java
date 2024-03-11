@@ -8,7 +8,7 @@ public record GeoRect(
     @JsonProperty("bottom_right")
     GeoCoord bottomRight) {
 
-    public static GeoRect geoRect(float top, float left, float bottom, float right) {
+    public static GeoRect geoRect(double top, double left, double bottom, double right) {
         return geoRect(new GeoCoord(top,left), new GeoCoord(bottom, right));
     }
 

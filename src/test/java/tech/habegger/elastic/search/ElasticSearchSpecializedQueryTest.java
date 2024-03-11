@@ -101,7 +101,7 @@ class ElasticSearchSpecializedQueryTest {
         var query = ElasticSearchRequest.query(
                 newBool()
                     .must(match("name", "chocolate"))
-                    .should(distanceFeature("location", "1000m", geoCoord(-71.3f, 41.15f)))
+                    .should(distanceFeature("location", "1000m", geoCoord(-71.3, 41.15)))
                 .build()
         );
 
@@ -266,8 +266,8 @@ class ElasticSearchSpecializedQueryTest {
             newBool()
                 .must(match("content", "2016"))
                 .should(rankFeature("pagerank"))
-                .should(rankFeature("url_length",0.1f))
-                .should(rankFeature("topics.sports", 0.4f))
+                .should(rankFeature("url_length",0.1))
+                .should(rankFeature("topics.sports", 0.4))
             .build()
         );
 
