@@ -28,9 +28,14 @@ import static tech.habegger.elastic.aggregation.ElasticPercentilesAggregation.pe
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
 import static tech.habegger.elastic.aggregation.ElasticStringStatsAggregation.stringStats;
 import static tech.habegger.elastic.aggregation.ElasticSumAggregation.sum;
+import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.FilterableFieldSpec.field;
+import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.TTestType.heteroscedastic;
+import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.TTestType.paired;
+import static tech.habegger.elastic.aggregation.ElasticTTestAggregation.tTest;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.aggregation.ElasticValueCountAggregation.valueCount;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
+import static tech.habegger.elastic.search.ElasticTermClause.term;
 import static tech.habegger.elastic.shared.TDigestSpec.ExecutionHint.high_accuracy;
 
 public class ElasticMetricsAggregationsTest {
@@ -796,6 +801,88 @@ public class ElasticMetricsAggregationsTest {
                       "string_stats": {
                         "field": "message.keyword",
                         "missing": "[empty message]"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void tTestAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("startup_time_ttest", tTest(
+                "startup_time_before",
+                "startup_time_after",
+                paired
+            ))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "startup_time_ttest": {
+                      "t_test": {
+                        "a": { "field": "startup_time_before" },
+                        "b": { "field": "startup_time_after" },
+                        "type": "paired"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void tTestAggregationWithFilters() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withSize(0)
+            .aggregation("startup_time_ttest", tTest(
+                field("startup_time_before").withFilter(term("group", "A")),
+                field("startup_time_before").withFilter(term("group", "B")),
+                heteroscedastic
+            ))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "size": 0,
+                  "aggregations": {
+                    "startup_time_ttest": {
+                      "t_test": {
+                        "a": {
+                          "field": "startup_time_before",
+                          "filter": {
+                            "term": {
+                              "group": "A"
+                            }
+                          }
+                        },
+                        "b": {
+                          "field": "startup_time_before",
+                          "filter": {
+                            "term": {
+                              "group": "B"
+                            }
+                          }
+                        },
+                        "type": "heteroscedastic"
                       }
                     }
                   }
