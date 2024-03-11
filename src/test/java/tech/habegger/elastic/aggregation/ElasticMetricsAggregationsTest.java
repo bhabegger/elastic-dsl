@@ -10,6 +10,7 @@ import static tech.habegger.elastic.aggregation.ElasticAvgAggregation.avg;
 import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlot;
 import static tech.habegger.elastic.aggregation.ElasticCardinalityAggregation.cardinality;
 import static tech.habegger.elastic.aggregation.ElasticCartesianBoundsAggregation.cartesianBounds;
+import static tech.habegger.elastic.aggregation.ElasticCartesianCentroidAggregation.cartesianCentroid;
 import static tech.habegger.elastic.aggregation.ElasticExtendedStatsAggregation.extendedStats;
 import static tech.habegger.elastic.aggregation.ElasticGeoBoundsAggregation.geoBounds;
 import static tech.habegger.elastic.aggregation.ElasticGeoCentroidAggregation.geoCentroid;
@@ -295,6 +296,34 @@ public class ElasticMetricsAggregationsTest {
                   "aggregations": {
                     "viewport": {
                       "cartesian_bounds": {
+                        "field": "location"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void cartesianCentroidAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("centroid",
+                cartesianCentroid("location")
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "centroid": {
+                      "cartesian_centroid": {
                         "field": "location"
                       }
                     }
