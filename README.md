@@ -257,7 +257,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Boxplot                   | ✅             | boxPlotAggregation,...   |
 | Cardinality               | ✅             | cardinalityAggregation   |
 | Extended stats            | ✅             | extendedStatsAggregation |
-| Geo-bounds                | 🔲            |                          |
+| Geo-bounds                | ✅             | geoBoundsAggregation     |
 | Geo-centroid              | 🔲            |                          |
 | Geo-line                  | 🔲            |                          |
 | Cartesian-bounds          | 🔲            |                          |

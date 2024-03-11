@@ -10,6 +10,7 @@ import static tech.habegger.elastic.aggregation.ElasticAvgAggregation.avg;
 import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlot;
 import static tech.habegger.elastic.aggregation.ElasticCardinalityAggregation.cardinality;
 import static tech.habegger.elastic.aggregation.ElasticExtendedStatsAggregation.extendedStats;
+import static tech.habegger.elastic.aggregation.ElasticGeoBoundsAggregation.geoBounds;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
@@ -155,6 +156,43 @@ public class ElasticMetricsAggregationsTest {
                       "extended_stats": {
                         "field": "grade",
                         "sigma": 3.0
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void geoBoundsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .withQuery(
+                match("name", "musée")
+            )
+            .aggregation("viewport",
+                geoBounds("location")
+                    .withWrapLongitude()
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "query": {
+                    "match": { "name": "musée" }
+                  },
+                  "aggregations": {
+                    "viewport": {
+                      "geo_bounds": {
+                        "field": "location",
+                        "wrap_longitude": true
                       }
                     }
                   }
