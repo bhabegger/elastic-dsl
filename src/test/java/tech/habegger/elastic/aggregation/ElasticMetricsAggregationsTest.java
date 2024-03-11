@@ -26,6 +26,7 @@ import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticPercentileRanksAggregation.percentileRanks;
 import static tech.habegger.elastic.aggregation.ElasticPercentilesAggregation.percentiles;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
+import static tech.habegger.elastic.aggregation.ElasticStringStatsAggregation.stringStats;
 import static tech.habegger.elastic.aggregation.ElasticSumAggregation.sum;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.aggregation.ElasticValueCountAggregation.valueCount;
@@ -742,6 +743,61 @@ public class ElasticMetricsAggregationsTest {
                 {
                   "aggregations": {
                     "grades_stats": { "stats": { "field": "grade" } }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void stringStatsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("message_stats", stringStats("message.keyword").withShowDistribution())
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "message_stats": {
+                      "string_stats": {
+                        "field": "message.keyword",
+                        "show_distribution": true
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void stringStatsAggregationWithMissing() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("message_stats", stringStats("message.keyword").withMissing("[empty message]"))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "message_stats": {
+                      "string_stats": {
+                        "field": "message.keyword",
+                        "missing": "[empty message]"
+                      }
+                    }
                   }
                 }
                 """

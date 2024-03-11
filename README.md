@@ -271,7 +271,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Rate                      | ✅             | rateAggregation,...               |
 | Scripted metric           | 🔲            |                                   |
 | Stats                     | ✅             |                                   |
-| String stats              | 🔲            |                                   |
+| String stats              | ✅             | stringStatsAggregation,...        |
 | Sum                       | ✅             | sumAggregation                    |
 | T-test                    | 🔲            |                                   |
 | Top hits                  | ✅             |                                   |
