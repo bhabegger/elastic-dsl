@@ -45,23 +45,23 @@ For example, instead of having to (cumbersomely) write:
 
 The Java DSL allows to express this as:
 ```
-var query = ElasticSearchRequest.query(
-        ElasticBooleanClause.newBool()
-            .must(term("firstname", "benjamin"))
-            .should(range("birthdate", LocalDate.parse("1990-01-01"), LocalDate.parse("2000-01-01")))
-            .filter(term("city", "biel"))
-            .build()
+var query = query(
+    newBool()
+        .must(term("firstname", "benjamin"))
+        .should(range("birthdate", LocalDate.parse("1990-01-01"), LocalDate.parse("2000-01-01")))
+        .filter(term("city", "biel"))
+    .build()
 );
 ```
 
 ## Usage
 
-### At the maven dependency
+### Add the maven dependency
 ```
 <dependency>
     <groupId>tech.habegger.elastic</groupId>
     <artifactId>elastic-dsl</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
 </dependency> 
 ```
 
@@ -86,6 +86,21 @@ var elasticQuery = query(
 );
 var queryAsString = mapper.writeValue(elasticQuery);
 ```
+
+### Check out the tests
+
+Most constructs made available through the DSL should have a unit tests. Please have a look in the test suite for example syntax.
+
+## Design
+
+The DSL has been designed with an effort to find a good compromise between completeness (being able to express any Elastic query or aggregation) and conciseness (being able to do so easily).
+In order to do this, the following principles have been tried to be followed.
+
+* Mandatory (or very frequently used) parameters are included in the main builder method (e.g. `terms` must have a field name and values so those are passed as direct arguments of the `terms` method).
+* Optional less frequent parameters changing the behavior use modifying methods (e.g.  the `boxPlot` aggregation takes the field as single argument and has a modifier method `withCompression` to set the `compression` when needed).
+* Only really complex situations use a more advanced "Builder" pattern requiring a final `build()` method call to return the serializable version of the Elastic expression. In this case, the initial building method is prefixed with new. (e.g. `newBool()` starts a bool expression builder).
+* In some cases, the initial newXX Builder will take mandatory parameters (e.g. `newPinned` method takes an Elastic clause as argument to define the query of the "organic" documents and differs the "pinning" to later calls)
+
 
 ## Advantages
 
