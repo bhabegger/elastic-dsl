@@ -258,7 +258,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Cardinality               | ✅             | cardinalityAggregation   |
 | Extended stats            | ✅             | extendedStatsAggregation |
 | Geo-bounds                | ✅             | geoBoundsAggregation     |
-| Geo-centroid              | 🔲            |                          |
+| Geo-centroid              | ✅             | geoCentroidAggregation   |
 | Geo-line                  | 🔲            |                          |
 | Cartesian-bounds          | 🔲            |                          |
 | Cartesian-centroid        | 🔲            |                          |

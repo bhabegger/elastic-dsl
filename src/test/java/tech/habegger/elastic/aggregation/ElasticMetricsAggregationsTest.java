@@ -11,10 +11,12 @@ import static tech.habegger.elastic.aggregation.ElasticBoxPlotAggregation.boxPlo
 import static tech.habegger.elastic.aggregation.ElasticCardinalityAggregation.cardinality;
 import static tech.habegger.elastic.aggregation.ElasticExtendedStatsAggregation.extendedStats;
 import static tech.habegger.elastic.aggregation.ElasticGeoBoundsAggregation.geoBounds;
+import static tech.habegger.elastic.aggregation.ElasticGeoCentroidAggregation.geoCentroid;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
 import static tech.habegger.elastic.aggregation.ElasticSumAggregation.sum;
+import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.aggregation.ElasticValueCountAggregation.valueCount;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
 
@@ -194,6 +196,41 @@ public class ElasticMetricsAggregationsTest {
                         "field": "location",
                         "wrap_longitude": true
                       }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+
+    @Test
+    void geoCentroidAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("cities",
+                termsAgg("city.keyword")
+                    .aggregation("centroid",
+                        geoCentroid("location")
+                    )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "cities": {
+                      "aggregations": {
+                        "centroid": {
+                          "geo_centroid": { "field": "location" }
+                        }
+                      },
+                      "terms": { "field": "city.keyword" }
                     }
                   }
                 }
