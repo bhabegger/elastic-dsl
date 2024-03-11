@@ -15,6 +15,7 @@ import static tech.habegger.elastic.aggregation.ElasticExtendedStatsAggregation.
 import static tech.habegger.elastic.aggregation.ElasticGeoBoundsAggregation.geoBounds;
 import static tech.habegger.elastic.aggregation.ElasticGeoCentroidAggregation.geoCentroid;
 import static tech.habegger.elastic.aggregation.ElasticGeoLineAggregation.geoLine;
+import static tech.habegger.elastic.aggregation.ElasticMatrixStatsAggregation.matrixStats;
 import static tech.habegger.elastic.aggregation.ElasticMaxAggregation.max;
 import static tech.habegger.elastic.aggregation.ElasticMinAggregation.min;
 import static tech.habegger.elastic.aggregation.ElasticStatsAggregation.stats;
@@ -325,6 +326,32 @@ public class ElasticMetricsAggregationsTest {
                     "centroid": {
                       "cartesian_centroid": {
                         "field": "location"
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
+
+    @Test
+    void matrixStatsAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("statistics", matrixStats("poverty", "income"))
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "statistics": {
+                      "matrix_stats": {
+                        "fields": [ "poverty", "income" ]
                       }
                     }
                   }

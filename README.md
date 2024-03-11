@@ -262,7 +262,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 | Geo-line                  | ✅             | geoLineAggregation           |
 | Cartesian-bounds          | ✅             | cartesianBoundsAggregation   |
 | Cartesian-centroid        | ✅             | cartesianCentroidAggregation |
-| Matrix stats              | 🔲            |                              |
+| Matrix stats              | ✅             | matrixStatsAggregation       |
 | Max                       | ✅             | maxAggregation               |
 | Median absolute deviation | 🔲            |                              |
 | Min                       | ✅             | minAggregation               |
