@@ -57,6 +57,11 @@ public final class ElasticTopHitsAggregation extends ElasticAggregations {
         return new ElasticTopHitsAggregation(new TopHitsBody(size, null, null));
     }
 
+    public static ElasticTopHitsAggregation topHits() {
+        return new ElasticTopHitsAggregation(new TopHitsBody(null, null, null));
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private record TopHitsBody(
         Integer size,
         List<Map<String, OrderSpec>> sort,

@@ -946,6 +946,44 @@ public class ElasticMetricsAggregationsTest {
                 """
         );
     }
+
+    @Test
+    void topHitsAggregationAlone() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("top_tags",
+                termsAgg("type", 3)
+                    .aggregation("top_sales_hits",
+                        topHits()
+                    )
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+                {
+                  "aggregations": {
+                    "top_tags": {
+                      "aggregations": {
+                        "top_sales_hits": {
+                          "top_hits": {
+                          }
+                        }
+                      },
+                      "terms": {
+                        "field": "type",
+                        "size": 3
+                      }
+                    }
+                  }
+                }
+                """
+        );
+    }
     @Test
     void valueCountAggregation() throws JsonProcessingException {
         // Given
