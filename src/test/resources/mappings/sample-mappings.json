@@ -1,0 +1,250 @@
+{
+  "default": {
+    "mappings": {
+      "properties": {
+        "dHash": {
+          "type": "unsigned_long"
+        },
+        "date": {
+          "type": "date",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "geo": {
+          "properties": {
+            "address": {
+              "properties": {
+                "ISO3166-2-lvl4": {
+                  "type": "keyword"
+                },
+                "ISO3166-2-lvl6": {
+                  "type": "keyword"
+                },
+                "amenity": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "city": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "country": {
+                  "type": "keyword"
+                },
+                "country_code": {
+                  "type": "keyword"
+                },
+                "county": {
+                  "type": "keyword"
+                },
+                "hamlet": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "historic": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "house_number": {
+                  "type": "keyword"
+                },
+                "isolated_dwelling": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "leisure": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "municipality": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 512
+                    }
+                  }
+                },
+                "neighbourhood": {
+                  "type": "keyword"
+                },
+                "postcode": {
+                  "type": "keyword"
+                },
+                "quarter": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "region": {
+                  "type": "keyword"
+                },
+                "road": {
+                  "type": "keyword"
+                },
+                "shop": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "state": {
+                  "type": "keyword"
+                },
+                "state_district": {
+                  "type": "keyword"
+                },
+                "suburb": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "tourism": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "town": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "village": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "addresstype": {
+              "type": "keyword"
+            },
+            "boundingbox": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "class": {
+              "type": "keyword"
+            },
+            "display_name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 512
+                }
+              }
+            },
+            "importance": {
+              "type": "keyword"
+            },
+            "lat": {
+              "type": "keyword"
+            },
+            "licence": {
+              "type": "keyword"
+            },
+            "lon": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "keyword"
+            },
+            "oms_id": {
+              "type": "keyword"
+            },
+            "oms_type": {
+              "type": "keyword"
+            },
+            "osm_id": {
+              "type": "long"
+            },
+            "osm_type": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "place_id": {
+              "type": "keyword"
+            },
+            "place_rank": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword"
+            }
+          }
+        },
+        "location": {
+          "type": "geo_point"
+        }
+      }
+    }
+  }
+}
