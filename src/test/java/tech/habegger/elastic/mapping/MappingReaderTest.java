@@ -19,7 +19,8 @@ public class MappingReaderTest {
         try(InputStream is = MappingReaderTest.class.getResourceAsStream("/mappings/sample-mappings.json")) {
 
             // When
-            Map<String, ElasticSettings> indexSettings = MAPPER.readValue(is, new TypeReference<Map<String, ElasticSettings>>(){});
+            Map<String, ElasticSettings> indexSettings = MAPPER.readValue(is, new TypeReference<>() {
+            });
 
             // Then
             assertThat(indexSettings)

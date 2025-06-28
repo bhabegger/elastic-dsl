@@ -31,9 +31,8 @@ public interface ElasticProperty {
                 var fieldName = parser.getValueAsString();
                 parser.nextToken();
                 Object value = switch(fieldName) {
-                    case "properties" -> codec.readValue(parser, new TypeReference<Map<String, ElasticProperty>>(){});
+                    case "properties", "fields" -> codec.readValue(parser, new TypeReference<Map<String, ElasticProperty>>(){});
                     case "type", "format" -> codec.readValue(parser, String.class);
-                    case "fields" -> codec.readValue(parser, new TypeReference<Map<String, ElasticFieldProperty>>(){});
                     case "ignore_above" -> codec.readValue(parser, Integer.class);
                     default -> null;
                 };
