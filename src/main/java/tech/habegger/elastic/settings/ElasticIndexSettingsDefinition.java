@@ -12,10 +12,10 @@ public record ElasticIndexSettingsDefinition(
     @JsonProperty("number_of_replicas")
     Integer numberOfReplicas,
     @JsonProperty("refresh_interval")
-    Integer refreshInterval
+    Long refreshInterval
 ) {
 
-    public Builder index() {
+    public static Builder index() {
         return new Builder();
     }
 
@@ -37,6 +37,10 @@ public record ElasticIndexSettingsDefinition(
         public Builder withRefreshInterval(Duration refreshInterval) {
             this.refreshInterval = refreshInterval.toSeconds();
             return this;
+        }
+
+        public ElasticIndexSettingsDefinition build() {
+            return new ElasticIndexSettingsDefinition(numberOfShards, numberOfReplicas, refreshInterval);
         }
     }
 }

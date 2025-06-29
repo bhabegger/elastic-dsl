@@ -17,10 +17,13 @@ public class ElasticSearchResponse<T> {
     ShardStats _shards;
     @JsonProperty("hits")
     InternalHits<T> hits;
-
     @JsonProperty("aggregations")
     Map<String, AggregationResponse> aggregations;
-    
+    @JsonProperty("status")
+    Integer status;
+    @JsonProperty("error")
+    ElasticSearchError error;
+
     private record ShardStats(Integer total, Integer successful, Integer skipped, Integer failed) { }
 
     private record InternalHits<T>(TotalStats total, Integer max_score, List<ElasticHit<T>> hits) { }
@@ -41,11 +44,11 @@ public class ElasticSearchResponse<T> {
     ) { }
 
     public List<ElasticHit<T>> getHits() {
-        return hits.hits;
+        return hits == null ? null : hits.hits;
     }
 
     public long getTotalHits() {
-        return hits.total().value;
+        return hits == null ? 0 : hits.total().value;
     }
 
     public String getAggregationValueAsString(String aggregationName) {

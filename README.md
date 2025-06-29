@@ -4,9 +4,24 @@
 
 ---------
 
-# Elastic Query Java DSL
+# Lightweight User-friendly Elastic/OpenSearch Query Java DSL
 
-This project provides a Java DSL library allowing to build elastic queries serializable to the Elastic JSON DSL using Jackson.
+This project provides a **usability-first** Java DSL library allowing to build elastic queries serializable to the Elastic JSON DSL using Jackson.
+It has user usability and concision in mind. As a DSL it provides type safety and avoids mistakes, but it also has been designed
+to be more straightforward in expressing standard situations. 
+
+It's a (quasi) *self-contained* library with no direct dependency to either Elastic or OpenSearch clients or even an 
+HTTP client (the choice is yours) and therefore can be integrated seamlessly into your project with a tiny overhead.
+
+It's only non-testing dependency ia jackson to be able to help serialization and deserialization. Usage of Jackson should be reduced 
+enough to very stable aspects of it to allow overriding the version without hassle.
+All other dependencies (junit and assertJ) are only for testing.
+
+> NOTE: The DSL also works for both *Elastic* and *OpenSearch* as the APIs follow each other closely 
+> 
+> This DSL is more straight forward than the standard OpenSearch DSL abusing lambdas. It is also somewhat easier than Elastic's
+> DSL which strictly follows the API structure (and therefore inherits some of its complexities)
+>
 
 For example, instead of having to (cumbersomely) write:
 
@@ -87,6 +102,18 @@ var elasticQuery = query(
 var queryAsString = mapper.writeValue(elasticQuery);
 ```
 
+>
+> For a complete example, checkout [SampleIndexAndSearch](src/test/java/tech/habegger/elastic/examples/SampleIndexAndSearch.java)
+> Which demonstrates how to use the DSL with Java's embedded HTTP client on an index named `playground`.
+> The example:
+> * Creates a settings item using the DSL
+> * Deletes the playground index
+> * Creates the playground index using the serialization of the DSL settings
+> * Pushes an example document (using plain old java record)
+> * Creates a query using the DSL
+> * Searches the index using the serialized query.
+>
+> 
 ### Check out the tests
 
 Most constructs made available through the DSL should have a unit tests. Please have a look in the test suite for example syntax.
@@ -104,12 +131,14 @@ In order to do this, the following principles have been tried to be followed.
 
 ## Advantages
 
-* Removes most of the JSON-related boiler plate
+* Removes most of the JSON-related boilerplate
 * Avoids typos and structural mistakes when writing the queries
+* Usability driven 
+* More straightforward than the API structure (and the official DSLs which strictly follow this structure) 
 
 ## Current query support
 
-This is an initial version of the DSL, therefore all query shapes are not yet supported. However there is a support for *custom* clauses to compensate a bit for the places where support is not there yet. But do feel free to propose a merge request to get the unsupported clauses ;)
+This is an initial version of the DSL, therefore all query shapes are not yet supported. However, there is a support for *custom* clauses to compensate a bit for the places where support is not there yet. But do feel free to propose a merge request to get the unsupported clauses ;)
 
 ### [Compound queries](https://www.elastic.co/guide/en/elasticsearch/reference/current/compound-queries.html)
 
@@ -219,7 +248,7 @@ See test class [ElasticSearchOtherQueryTest](src/test/java/tech/habegger/elastic
 | [Shape](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-shape-query.html)         | 🔲            |               |
 | [Match All](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html) | ✅             | matchAllQuery |
 | Text expansion query                                                                                        | 🔲            |               |
-
+ 
 ## Current aggregation support
 
 ### [Bucket aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket.html)
@@ -321,7 +350,7 @@ See test class [ElasticMetricsAggregationsTest](src/test/java/tech/habegger/elas
 
 ## Current query response support
 
-The current library also provides a minimal templated support for deserializing Elastic responses.
+The current version also provides a minimal templated support for deserializing Elastic responses.
 
 For example, given the domain model record:
 ```
@@ -352,7 +381,143 @@ ElasticSearchResponse<Person> actual = mapper.readValue(rawResponse, new TypeRef
 > mapper.registerModule(new JavaTimeModule());
 > ```
 
+## Current index settings support
+
+### Static settings
+
+| **Setting **                              | **Supported** |
+|-------------------------------------------|---------------|
+| index.number_of_shards                    | ✅             |
+| index.number_of_routing_shards            | 🔲            |
+| index.codec                               | 🔲            |
+| index.routing_partition_size              | 🔲            |
+| index.soft_deletes.retention_lease.period | 🔲            |
+| index.load_fixed_bitset_filters_eagerly   | 🔲            |
+| index.shard.check_on_startup              | 🔲            |
+
+### Dynamic settings
+
+| **Setting **                                   | **Supported** |
+|------------------------------------------------|---------------|
+| index.number_of_replicas                       | ✅             |
+| index.auto_expand_replicas                     | 🔲            |
+| index.search.idle.after                        | 🔲            |
+| index.refresh_interval                         | ✅             |
+| index.max_result_window                        | 🔲            |
+| index.max_inner_result_window                  | 🔲            |
+| index.max_rescore_window                       | 🔲            |
+| index.max_docvalue_fields_search               | 🔲            |
+| index.max_script_fields                        | 🔲            |
+| index.max_ngram_diff                           | 🔲            |
+| index.max_shingle_diff                         | 🔲            |
+| index.max_refresh_listeners                    | 🔲            |
+| index.analyze.max_token_count                  | 🔲            |
+| index.highlight.max_analyzed_offset            | 🔲            |
+| index.max_terms_count                          | 🔲            |
+| index.max_regex_length                         | 🔲            |
+| index.query.default_field                      | 🔲            |
+| index.routing.allocation.enable                | 🔲            |
+| index.gc_deletes                               | 🔲            |
+| index.default_pipeline                         | 🔲            |
+| index.final_pipeline                           | 🔲            |
+| index.hidden                                   | 🔲            |
+| index.dense_vector.hnsw_filter_heuristic       | 🔲            |
+| index.esql.stored_fields_sequential_proportion | 🔲            |
+
+## Current analysis definition support
+
+### Customizable Token filters
+
+ | **Token Filter**         | **Supported** |
+ |--------------------------|---------------|
+ | CJK bigram               | 🔲            |
+ | Common grams             | 🔲            |
+ | Conditional              | ✅             |
+ | Delimited payload        | 🔲            |
+ | Dictionary decompounder  | ✅             |
+ | Edge n-gram              | 🔲            |
+ | Elision                  | 🔲            |
+ | Fingerprint              | 🔲            |
+ | Flatten graph            | 🔲            |
+ | Hunspell                 | 🔲            |
+ | Hyphenation decompounder | 🔲            |
+ | Keep types               | 🔲            |
+ | Keep words               | 🔲            |
+ | Keyword marker           | 🔲            |
+ | Length                   | 🔲            |
+ | Limit token count        | 🔲            |
+ | Lowercase                | 🔲            |
+ | MinHash                  | 🔲            |
+ | Multiplexer              | 🔲            |
+ | N-gram                   | 🔲            |
+ | Pattern capture          | 🔲            |
+ | Pattern replace          | 🔲            |
+ | Predicate script         | 🔲            |
+ | Shingle                  | ✅             |
+ | Stemmer                  | 🔲            |
+ | Stemmer override         | 🔲            |
+ | Stop                     | 🔲            |
+ | Synonym                  | 🔲            |
+ | Synonym graph            | 🔲            |
+ | Truncate                 | 🔲            |
+ | Unique                   | 🔲            |
+ | Word delimiter           | 🔲            |
+ | Word delimiter graph     | 🔲            |
+
+
+## Current mapping support
+
+The current version also provides a (still limited) DSL for mapping definitions.
+
+### [Supported field types](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/field-data-types)
+| **Type**                | **Supported** |
+|-------------------------|---------------|
+| binary                  | ✅             |
+| boolean                 | ✅             |
+| keyword                 | ✅             |
+| constant_keyword        | 🔲            |
+| wildcard                | 🔲            |
+| long                    | ✅             |
+| integer                 | ✅             |
+| short                   | ✅             |
+| byte                    | ✅             |
+| double                  | ✅             |
+| float                   | ✅             |
+| half_float              | ✅             |
+| scaled_float            | ✅             |
+| unsigned_long           | ✅             |
+| date                    | ✅             |
+| date_nanos              | ✅             |
+| object                  | ✅             |
+| flattened               | 🔲            |
+| nested                  | 🔲            |
+| join                    | 🔲            |
+| passthrough             | 🔲            |
+| integer_range           | 🔲            |
+| float_range             | 🔲            |
+| long_range              | 🔲            |
+| double_range            | 🔲            |
+| date_range              | 🔲            |
+| ip_range                | 🔲            |
+| ip                      | 🔲            |
+| version                 | 🔲            |
+| aggregate_metric_double | 🔲            |
+| histogram               | 🔲            |
+| text                    | ✅             |
+| match_only_text         | 🔲            |
+| search_as_you_type      | 🔲            |
+| semantic_text           | 🔲            |
+| token_count             | 🔲            |
+| dense_vector            | 🔲            |
+| sparse_vector           | 🔲            |
+| rank_feature            | 🔲            |
+| rank_features           | 🔲            |
+| geo_point               | 🔲            |
+| geo_shape               | 🔲            |
+| point                   | 🔲            |
+| shape                   | 🔲            |
+
 ## Not yet supported
 
-* Mapping DSL to defined index mappings
 * Indexing requests
+* Ensuring field compatibility between index mappings and queries (using type-safety)
