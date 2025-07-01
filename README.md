@@ -490,8 +490,8 @@ The current version also provides a (still limited) DSL for mapping definitions.
 | date_nanos              | ✅             |
 | object                  | ✅             |
 | flattened               | 🔲            |
-| nested                  | 🔲            |
-| join                    | 🔲            |
+| nested                  | ✅             |
+| join                    | ✅             |
 | passthrough             | 🔲            |
 | integer_range           | 🔲            |
 | float_range             | 🔲            |
