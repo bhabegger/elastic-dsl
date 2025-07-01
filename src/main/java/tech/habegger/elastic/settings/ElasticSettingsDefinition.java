@@ -8,7 +8,9 @@ import tech.habegger.elastic.mapping.ElasticMappingsDefinition;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ElasticSettingsDefinition(
     @JsonProperty("settings")
-    ElasticSettingsDefinitionBody settingsBody
+    ElasticSettingsDefinitionBody settingsBody,
+    @JsonProperty("mappings")
+    ElasticMappingsDefinition mappings
 ) {
     public static Builder settings() {
         return new Builder();
@@ -35,7 +37,7 @@ public record ElasticSettingsDefinition(
          }
 
         public ElasticSettingsDefinition build() {
-            return new ElasticSettingsDefinition(new ElasticSettingsDefinitionBody(index, analysis, mappings));
+            return new ElasticSettingsDefinition(new ElasticSettingsDefinitionBody(index, analysis), mappings);
         }
 
     }
@@ -43,7 +45,6 @@ public record ElasticSettingsDefinition(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     record ElasticSettingsDefinitionBody(
         ElasticIndexSettingsDefinition index,
-        ElasticAnalysisDefinition analysis,
-        ElasticMappingsDefinition mappings) {
+        ElasticAnalysisDefinition analysis) {
     }
 }

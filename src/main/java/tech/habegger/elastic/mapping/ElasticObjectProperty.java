@@ -6,14 +6,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record ElasticObjectProperty(Map<String, ElasticProperty> properties) implements ElasticProperty {
+public record ElasticObjectProperty(String type, Map<String, ElasticProperty> properties) implements ElasticProperty {
 
     public static Builder objectProperty() {
-        return new Builder();
+        return new Builder(null);
     }
 
+    public static Builder nestedObjectProperty() {
+        return new Builder("nested");
+    }
+
+
     public static class Builder {
+        String type;
         Map<String, ElasticProperty> properties = new LinkedHashMap<>();
+
+        public Builder(String type) {
+            this.type = type;
+        }
 
         public Builder withProperty(String name, ElasticProperty property) {
             properties.put(name, property);
@@ -21,7 +31,7 @@ public record ElasticObjectProperty(Map<String, ElasticProperty> properties) imp
         }
 
         public ElasticObjectProperty build() {
-            return new ElasticObjectProperty(properties);
+            return new ElasticObjectProperty(type, properties);
         }
     }
 

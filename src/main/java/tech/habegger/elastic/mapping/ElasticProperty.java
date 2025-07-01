@@ -1,6 +1,5 @@
 package tech.habegger.elastic.mapping;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -23,7 +22,7 @@ public interface ElasticProperty {
         }
 
         @Override
-        public ElasticProperty deserialize(JsonParser parser, DeserializationContext context) throws IOException, JacksonException {
+        public ElasticProperty deserialize(JsonParser parser, DeserializationContext context) throws IOException {
             var codec = parser.getCodec();
             Map<String, Object> rawData = new LinkedHashMap<>();
             var token = parser.nextToken();
@@ -40,7 +39,10 @@ public interface ElasticProperty {
                 token = parser.nextToken();
             }
             if(rawData.containsKey("properties")) {
-                return new ElasticObjectProperty((Map<String, ElasticProperty>) rawData.get("properties"));
+                return new ElasticObjectProperty(
+                    (String)rawData.get("type"),
+                    (Map<String, ElasticProperty>) rawData.get("properties")
+                );
             } else {
                 return new ElasticFieldProperty(
                     (String)rawData.get("type"),

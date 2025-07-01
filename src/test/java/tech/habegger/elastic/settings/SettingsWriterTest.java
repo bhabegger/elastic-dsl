@@ -45,12 +45,13 @@ public class SettingsWriterTest {
         // Then
         assertThat(json).isEqualToIgnoringWhitespace("""
             {
-               "settings": {
-                  "index" : {
-                    "number_of_shards" : 6,
-                    "number_of_replicas" : 1
-                  },
-                  "mappings" : {
+                "settings": {
+                    "index" : {
+                        "number_of_shards" : 6,
+                        "number_of_replicas" : 1
+                    }
+                },
+                "mappings" : {
                     "properties" : {
                       "firstname" : {
                         "type" : "text",
@@ -73,7 +74,6 @@ public class SettingsWriterTest {
                         "format" : "YYYY-MM-DD"
                       }
                     }
-                  }
                 }
             }
             """);
