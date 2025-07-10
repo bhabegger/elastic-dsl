@@ -385,7 +385,7 @@ ElasticSearchResponse<Person> actual = mapper.readValue(rawResponse, new TypeRef
 
 ### Static settings
 
-| **Setting **                              | **Supported** |
+| **Setting**                               | **Supported** |
 |-------------------------------------------|---------------|
 | index.number_of_shards                    | ✅             |
 | index.number_of_routing_shards            | 🔲            |
@@ -397,7 +397,7 @@ ElasticSearchResponse<Person> actual = mapper.readValue(rawResponse, new TypeRef
 
 ### Dynamic settings
 
-| **Setting **                                   | **Supported** |
+| **Setting**                                    | **Supported** |
 |------------------------------------------------|---------------|
 | index.number_of_replicas                       | ✅             |
 | index.auto_expand_replicas                     | 🔲            |

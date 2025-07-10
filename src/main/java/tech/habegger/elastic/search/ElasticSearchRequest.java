@@ -3,18 +3,20 @@ package tech.habegger.elastic.search;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import tech.habegger.elastic.mapping.ElasticFieldProperty;
 import tech.habegger.elastic.shared.OrderSpec;
 import tech.habegger.elastic.shared.SortSpec;
 import tech.habegger.elastic.shared.SourceSpec;
 import tech.habegger.elastic.aggregation.ElasticAggregations;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static tech.habegger.elastic.shared.Helpers.nullIfEmpty;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record ElasticSearchRequest(
+    @JsonProperty("runtime_mappings")
+    Map<String, ElasticFieldProperty> runtimeMappings,
     ElasticSearchClause query,
     ElasticKnn knn,
     @JsonProperty("_source")
@@ -25,7 +27,9 @@ public record ElasticSearchRequest(
     @JsonProperty("min_score")
     Double minScore,
     @JsonPropertyOrder(alphabetic = true)
-    Map<String, ElasticAggregations> aggregations) {
+    Map<String, ElasticAggregations> aggregations,
+    List<ElasticSearchField> fields
+    ) {
     public static ElasticSearchRequest query(ElasticSearchClause clause, int pageSize) {
         return ElasticSearchRequest.requestBuilder()
                 .withQuery(clause)
@@ -54,6 +58,8 @@ public record ElasticSearchRequest(
 
         Double minScore = null;
         Map<String, ElasticAggregations> aggregations = new HashMap<>();
+        Map<String, ElasticFieldProperty> runtimeMapping = new HashMap<>();
+        List<ElasticSearchField> fields = new ArrayList<>();
 
         private Builder() {}
 
@@ -102,12 +108,37 @@ public record ElasticSearchRequest(
             this.minScore = minScore;
             return this;
         }
+
+        public Builder withField(String... field) {
+            Arrays.stream(field).forEach(f -> fields.add(new ElasticSearchField(f)));
+            return this;
+        }
+
+        public Builder withFields(String... fields) {
+            return withField(fields);
+        }
+
         public ElasticSearchRequest build() {
-            return new ElasticSearchRequest(query,knn,source,SortSpec.toOutput(sort),from,size,minScore, aggregations);
+            return new ElasticSearchRequest(
+                nullIfEmpty(runtimeMapping),
+                query,
+                knn,
+                source,
+                SortSpec.toOutput(sort),
+                from,
+                size,
+                minScore,
+                nullIfEmpty(aggregations),
+                nullIfEmpty(fields));
         }
 
         public Builder aggregation(String name, ElasticAggregations aggregation) {
             this.aggregations.put(name,aggregation);
+            return this;
+        }
+
+        public Builder withRuntimeMapping(String field, ElasticFieldProperty mapping) {
+            this.runtimeMapping.put(field, mapping);
             return this;
         }
     }

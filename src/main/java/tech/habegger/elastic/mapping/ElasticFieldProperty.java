@@ -1,6 +1,7 @@
 package tech.habegger.elastic.mapping;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import tech.habegger.elastic.shared.ScriptExpression;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,7 +11,8 @@ public record ElasticFieldProperty(
     String type,
     Map<String, ElasticFieldProperty> fields,
     Integer ignore_above,
-    String format
+    String format,
+    ScriptExpression script
 ) implements ElasticProperty {
 
     public static class Builder {
@@ -18,13 +20,14 @@ public record ElasticFieldProperty(
         Map<String, ElasticFieldProperty> fields = new LinkedHashMap<>();
         Integer ignore_above;
         String format;
+        ScriptExpression script;
 
         public Builder(String type) {
             this.type = type;
         }
 
         public ElasticFieldProperty build() {
-            return new ElasticFieldProperty(type, fields.isEmpty() ? null : fields, ignore_above, format);
+            return new ElasticFieldProperty(type, fields.isEmpty() ? null : fields, ignore_above, format, script);
         }
 
         public Builder withIgnoreAbove(int ignoreAbove) {
@@ -39,6 +42,11 @@ public record ElasticFieldProperty(
 
         public Builder withField(String keyword, ElasticFieldProperty property) {
             this.fields.put(keyword, property);
+            return this;
+        }
+
+        public Builder withScript(ScriptExpression script) {
+            this.script = script;
             return this;
         }
     }

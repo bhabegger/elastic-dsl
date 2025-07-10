@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import tech.habegger.elastic.shared.ScriptExpression;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -48,7 +49,8 @@ public interface ElasticProperty {
                     (String)rawData.get("type"),
                     (Map<String, ElasticFieldProperty>)rawData.get("fields"),
                     (Integer)rawData.get("ignore_above"),
-                    (String)rawData.get("format")
+                    (String)rawData.get("format"),
+                    (ScriptExpression)rawData.get("script")
                 );
             }
         }

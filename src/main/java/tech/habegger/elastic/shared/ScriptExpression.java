@@ -15,6 +15,12 @@ public record ScriptExpression(
         return scriptInline(null, source, null);
     }
 
+
+    public static ScriptExpression scriptInline(ScriptLang lang, String source) {
+        return scriptInline(lang, source, null);
+    }
+
+
     public static ScriptExpression scriptInline(String source, Map<String, Object> params) {
         return scriptInline(null, source, params);
     }
@@ -22,6 +28,7 @@ public record ScriptExpression(
     public static ScriptExpression scriptInline(ScriptLang lang, String source, Map<String, Object> params) {
         return new ScriptExpression(lang, source, null, params);
     }
+
     public static ScriptExpression scriptReference(String id) {
         return scriptReference(null, id, null);
     }

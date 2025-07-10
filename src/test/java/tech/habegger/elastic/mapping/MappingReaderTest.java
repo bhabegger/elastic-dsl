@@ -38,9 +38,10 @@ public class MappingReaderTest {
                                     .isEqualTo(
                                         new ElasticFieldProperty(
                                         "date",
-                                        Map.of("keyword", new ElasticFieldProperty("keyword", null,256, null)),
+                                        Map.of("keyword", new ElasticFieldProperty("keyword", null,256, null, null)),
                                         null,
-                                        null
+                                        null,
+                                            null
                                         )
                                     )
                             )
@@ -51,7 +52,7 @@ public class MappingReaderTest {
                                 assertThat(geo.properties()).extractingByKey("address")
                                     .isInstanceOfSatisfying(ElasticObjectProperty.class, address ->
                                         assertThat(address.properties()).extractingByKey("country").isEqualTo(
-                                            new ElasticFieldProperty("keyword", null, null, null)
+                                            new ElasticFieldProperty("keyword", null, null, null, null)
                                         ))
                             );
 
