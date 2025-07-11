@@ -289,7 +289,7 @@ See test class [ElasticBucketAggregationsTest](src/test/java/tech/habegger/elast
 | Significant text             | ✅             | significantTextAggregation                                            |           |
 | Terms                        | ✅             | termsAggregation                                                      |           |
 | Time series                  | ✅             | timeSeriesAggregation                                                 |           |
-| Variable width histogram     | 🔲            |                                                                       |           |
+| Variable width histogram     | ✅             | variableWidthHistogramAggregation                                     |           |
 
 ### [Metrics aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html)
 

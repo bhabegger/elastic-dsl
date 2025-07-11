@@ -55,6 +55,10 @@ public record ElasticBooleanClause(BooleanBody bool) implements ElasticSearchCla
             return this;
         }
 
+        public boolean isEmpty() {
+            return should.isEmpty() && must.isEmpty() && filter.isEmpty() && mustNot.isEmpty();
+        }
+
         public ElasticSearchClause build() {
             return new ElasticBooleanClause(new BooleanBody(
                 nullIfEmpty(should),

@@ -41,6 +41,7 @@ import static tech.habegger.elastic.aggregation.ElasticSignificantTermsAggregati
 import static tech.habegger.elastic.aggregation.ElasticSignificantTextAggregation.significantText;
 import static tech.habegger.elastic.aggregation.ElasticTermsAggregation.termsAgg;
 import static tech.habegger.elastic.aggregation.ElasticTimeSeriesAggregation.timeSeries;
+import static tech.habegger.elastic.aggregation.ElasticVariableWidthHistogramAggregation.variableWidthHistogram;
 import static tech.habegger.elastic.search.ElasticBooleanClause.newBool;
 import static tech.habegger.elastic.search.ElasticConstantScoreClause.constantScore;
 import static tech.habegger.elastic.search.ElasticMatchClause.match;
@@ -1275,6 +1276,34 @@ public class ElasticBucketAggregationsTest {
                 }
                 """
         );
+    }
+
+    @Test
+    void variableWidthHistogramAggregation() throws JsonProcessingException {
+        // Given
+        var query = ElasticSearchRequest.requestBuilder()
+            .aggregation("prices",
+                variableWidthHistogram("price").withBuckets(2)
+            )
+            .build();
+
+        // When
+        var actual = MAPPER.writeValueAsString(query);
+
+        // Then
+        assertThat(actual).isEqualToIgnoringWhitespace(
+            """
+            {
+              "aggregations": {
+                "prices": {
+                  "variable_width_histogram": {
+                    "field": "price",
+                    "buckets": 2
+                  }
+                }
+              }
+            }
+            """);
     }
 
     @Test

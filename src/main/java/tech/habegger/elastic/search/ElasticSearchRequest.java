@@ -28,6 +28,8 @@ public record ElasticSearchRequest(
     Double minScore,
     @JsonPropertyOrder(alphabetic = true)
     Map<String, ElasticAggregations> aggregations,
+    @JsonProperty("post_filter")
+    ElasticSearchClause postFilter,
     List<ElasticSearchField> fields
     ) {
     public static ElasticSearchRequest query(ElasticSearchClause clause, int pageSize) {
@@ -59,6 +61,8 @@ public record ElasticSearchRequest(
         Double minScore = null;
         Map<String, ElasticAggregations> aggregations = new HashMap<>();
         Map<String, ElasticFieldProperty> runtimeMapping = new HashMap<>();
+
+        ElasticSearchClause postFilter = null;
         List<ElasticSearchField> fields = new ArrayList<>();
 
         private Builder() {}
@@ -118,6 +122,11 @@ public record ElasticSearchRequest(
             return withField(fields);
         }
 
+        public Builder withPostFilter(ElasticSearchClause filter) {
+            this.postFilter = filter;
+            return this;
+        }
+
         public ElasticSearchRequest build() {
             return new ElasticSearchRequest(
                 nullIfEmpty(runtimeMapping),
@@ -129,6 +138,7 @@ public record ElasticSearchRequest(
                 size,
                 minScore,
                 nullIfEmpty(aggregations),
+                postFilter,
                 nullIfEmpty(fields));
         }
 
