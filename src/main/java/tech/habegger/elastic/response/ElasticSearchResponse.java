@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @SuppressWarnings("unused")
-public class ElasticSearchResponse<T> {
+public class ElasticSearchResponse<T> implements ElasticAggregationResponseContainer {
     @JsonProperty("took")
     String took;
     @JsonProperty("timed_out")
@@ -18,7 +17,7 @@ public class ElasticSearchResponse<T> {
     @JsonProperty("hits")
     InternalHits<T> hits;
     @JsonProperty("aggregations")
-    Map<String, AggregationResponse> aggregations;
+    Map<String, ElasticAggregationResponse> aggregations;
     @JsonProperty("status")
     Integer status;
     @JsonProperty("error")
@@ -30,19 +29,6 @@ public class ElasticSearchResponse<T> {
 
     private record TotalStats(Integer value, String relation) { }
 
-    private record AggregationResponse(
-            Long value,
-            String value_as_string,
-            List<Map<String, ?>> buckets,
-            Long doc_count_error_upper_bound,
-            Long sum_other_doc_count,
-            Long count,
-            Double max,
-            Double sum,
-            Double avg,
-            Double min
-    ) { }
-
     public List<ElasticHit<T>> getHits() {
         return hits == null ? null : hits.hits;
     }
@@ -52,17 +38,34 @@ public class ElasticSearchResponse<T> {
     }
 
     public String getAggregationValueAsString(String aggregationName) {
-        return aggregations.get(aggregationName).value_as_string();
+        var agg = aggregations.get(aggregationName);
+        if(agg instanceof ElasticMetricsAggregationResponse metricAgg) {
+            return metricAgg.value_as_string();
+        }
+        return null;
     }
     public Instant getAggregationValueAsInstant(String aggregationName) {
-        return Optional.ofNullable(aggregations.get(aggregationName))
-                .map(AggregationResponse::value)
-                .map(Instant::ofEpochMilli)
-                .orElse(null);
+        var agg = aggregations.get(aggregationName);
+        if(agg instanceof ElasticMetricsAggregationResponse metricAgg) {
+            var rawValue = metricAgg.value();
+            if(rawValue instanceof Long longValue) {
+                return Instant.ofEpochMilli(longValue);
+            }
+        }
+        return null;
     }
 
     public List<Map<String, ?>> getAggregationBuckets(String aggregationName) {
-        return aggregations.get(aggregationName).buckets();
+        var agg = aggregations.get(aggregationName);
+        if(agg instanceof ElasticBucketsAggregationResponse bucketAgg) {
+            return bucketAgg.buckets();
+        } else {
+            return null;
+        }
+    }
+
+    public Map<String, ElasticAggregationResponse> getAggregations() {
+        return aggregations;
     }
 
 }
