@@ -37,6 +37,10 @@ public class ElasticSearchResponse<T> implements ElasticAggregationResponseConta
         return hits == null ? 0 : hits.total().value;
     }
 
+    public boolean isHitCountExact() {
+        return hits != null && "eq".equals(hits.total().relation);
+    }
+
     public String getAggregationValueAsString(String aggregationName) {
         var agg = aggregations.get(aggregationName);
         if(agg instanceof ElasticMetricsAggregationResponse metricAgg) {
@@ -68,4 +72,15 @@ public class ElasticSearchResponse<T> implements ElasticAggregationResponseConta
         return aggregations;
     }
 
+    public boolean hasError() {
+        return error != null;
+    }
+
+    public ElasticSearchError getError() {
+        return error;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
 }

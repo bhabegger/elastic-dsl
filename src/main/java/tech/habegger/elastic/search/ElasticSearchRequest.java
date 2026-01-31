@@ -30,7 +30,9 @@ public record ElasticSearchRequest(
     Map<String, ElasticAggregations> aggregations,
     @JsonProperty("post_filter")
     ElasticSearchClause postFilter,
-    List<ElasticSearchField> fields
+    List<ElasticSearchField> fields,
+    @JsonProperty("track_total_hits")
+    Boolean trackTotalHits
     ) {
     public static ElasticSearchRequest query(ElasticSearchClause clause, int pageSize) {
         return ElasticSearchRequest.requestBuilder()
@@ -64,6 +66,8 @@ public record ElasticSearchRequest(
 
         ElasticSearchClause postFilter = null;
         List<ElasticSearchField> fields = new ArrayList<>();
+
+        Boolean trackTotalHits = null;
 
         private Builder() {}
 
@@ -127,6 +131,11 @@ public record ElasticSearchRequest(
             return this;
         }
 
+        public Builder withTrackTotalHits(boolean trackTotalHits) {
+            this.trackTotalHits = trackTotalHits;
+            return this;
+        }
+
         public ElasticSearchRequest build() {
             return new ElasticSearchRequest(
                 nullIfEmpty(runtimeMapping),
@@ -139,7 +148,9 @@ public record ElasticSearchRequest(
                 minScore,
                 nullIfEmpty(aggregations),
                 postFilter,
-                nullIfEmpty(fields));
+                nullIfEmpty(fields),
+                trackTotalHits
+            );
         }
 
         public Builder aggregation(String name, ElasticAggregations aggregation) {

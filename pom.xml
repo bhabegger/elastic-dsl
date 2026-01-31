@@ -23,7 +23,7 @@
             <name>Benjamin Habegger</name>
             <email>benjamin@habegger.tech</email>
             <organization>Habegger</organization>
-            <organizationUrl>http://habegger.fr/</organizationUrl>
+            <organizationUrl>http://habegger.tech/</organizationUrl>
         </developer>
     </developers>
 
@@ -92,7 +92,7 @@
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>3.21.0</version>
+                <version>3.27.7</version>
                 <scope>test</scope>
             </dependency>
 
@@ -144,7 +144,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 
     <build>
         <plugins>
